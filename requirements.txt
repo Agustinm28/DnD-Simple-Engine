@@ -1,0 +1,4 @@
+pygame
+colorama
+Pillow
+tqdm
