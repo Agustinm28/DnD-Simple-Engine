@@ -1,5 +1,6 @@
 import pygame
 import pygame.gfxdraw
+from modules.audio import Audio
 import sys
 import os
 
@@ -18,6 +19,7 @@ class Screen:
         
         pygame.init()
         self.screen = self.set_screen(self.resolution, self.mode, self.caption)
+        self.audio = Audio()
         self.add_image("./images/generic/main/start.jpg")
 
     def set_screen(self, resolution:tuple = None, mode = pygame.FULLSCREEN, caption:str = "Board"):
@@ -68,6 +70,7 @@ class Screen:
         garden = pygame.Rect(450, 50, 400, 100)
         temple_outside = pygame.Rect(450, 150, 400, 100)
         temple = pygame.Rect(450, 250, 400, 100)
+        sanctorum = pygame.Rect(450, 350, 400, 100)
 
         # Draw buttons
         pygame.gfxdraw.box(self.screen, tavern, (0, 0, 0, 0))
@@ -82,6 +85,7 @@ class Screen:
         pygame.gfxdraw.box(self.screen, garden, (0, 0, 0, 0))
         pygame.gfxdraw.box(self.screen, temple_outside, (0, 0, 0, 0))
         pygame.gfxdraw.box(self.screen, temple, (0, 0, 0, 0))
+        pygame.gfxdraw.box(self.screen, sanctorum, (0, 0, 0, 0))
 
         # Add images to buttons
         tavern_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/tavern.png")
@@ -96,6 +100,7 @@ class Screen:
         garden_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/herbalist_garden.png")
         temple_outside_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/temple_out.png")
         temple_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/pelor_temple.png")
+        sanctorum_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/sanctorum.png")
 
         # Resize images
         tavern_image = pygame.transform.scale(tavern_image, (400,100))
@@ -110,6 +115,7 @@ class Screen:
         garden_image = pygame.transform.scale(garden_image, (400,100))
         temple_outside_image = pygame.transform.scale(temple_outside_image, (400,100))
         temple_image = pygame.transform.scale(temple_image, (400,100))
+        sanctorum_image = pygame.transform.scale(sanctorum_image, (400,100))
 
         # Add images to buttons
         self.screen.blit(tavern_image, (50,50))
@@ -124,6 +130,7 @@ class Screen:
         self.screen.blit(garden_image, (450,50))
         self.screen.blit(temple_outside_image, (450,150))
         self.screen.blit(temple_image, (450,250))
+        self.screen.blit(sanctorum_image, (450,350))
 
         # Get mouse position
         mouse_pos = pygame.mouse.get_pos()
@@ -133,7 +140,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/tavern.jpeg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/Tavern.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Tavern selected")
@@ -141,7 +152,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/travel_path.jpg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/travel_path.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Travel selected")
@@ -149,7 +164,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/betian.png")
+                    self.audio.play("./audio/personalized/El culto a Pharos/betian.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Betian selected")
@@ -157,7 +176,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/posada.jpeg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/posada.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Posada selected")
@@ -165,7 +188,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/bedroom.jpg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/posada.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Bedroom selected")
@@ -173,7 +200,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/field.jpeg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/field.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Field selected")
@@ -181,7 +212,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/fence.jpeg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/fence.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Farm outside selected")
@@ -189,7 +224,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/farm.png")
+                    self.audio.play("./audio/personalized/El culto a Pharos/farm.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Morwen farm selected")
@@ -197,7 +236,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/herbalist.jpeg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/herbalist.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Herbolist selected")
@@ -205,7 +248,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/herbalist.jpeg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/herbalist.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Garden selected")
@@ -213,7 +260,11 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/temple_out.jpg")
+                    self.audio.play("./audio/personalized/El culto a Pharos/temple_out.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Temple outside selected")
@@ -221,10 +272,26 @@ class Screen:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
                     self.add_image("./images/personalized/El culto a Pharos/scenes/temple.png")
+                    self.audio.play("./audio/personalized/El culto a Pharos/temple.mp3")
                     self.SCENES = False
                     self.SCENE = True
                     print("Temple selected")
+        elif sanctorum.collidepoint(mouse_pos):
+            for event in pygame.event.get(): 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.reset_buffer()
+                    music = self.audio.check()
+                    if music is not None:
+                        self.audio.stop()
+                    self.add_image("./images/personalized/El culto a Pharos/scenes/temple.png")
+                    self.audio.play("./audio/personalized/El culto a Pharos/sanctorum.mp3")
+                    self.SCENES = False
+                    self.SCENE = True
+                    print("Sanctorum selected")
 
     def show_main_menu(self):
         start = pygame.Rect(50, 50, 400, 100)
@@ -296,9 +363,17 @@ class Screen:
                     elif event.key==pygame.K_h:
                         self.SCENES = False
                         self.SCENE = False
+                        music = self.audio.check()
+                        if music is not None:
+                            self.audio.stop()
                         self.return_home()
                     elif event.key==pygame.K_ESCAPE:
                         self.RUNNING = False
+                    elif event.key==pygame.K_a:
+                        music = self.audio.check()
+                        if music is not None:
+                            self.audio.stop()
+                        self.audio.play("./audio/personalized/El culto a Pharos/battle.mp3")
             
             self.screen.fill((0,0,0))
             if self.SCENES:

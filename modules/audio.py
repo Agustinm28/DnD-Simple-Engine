@@ -1,13 +1,22 @@
+import pygame
+
 class Audio:
 
+    MUSIC = None
+
     def __init__(self):
-        pass
+        pygame.mixer.init()
 
-    def play(self, audio):
-        pass
+    def play(self, audio_path:str):
 
-    def stop(self, audio):
-        pass
+        self.MUSIC = pygame.mixer.Sound(audio_path)
+        self.MUSIC.play()
+
+    def stop(self):
+        self.MUSIC.stop()
+
+    def check(self):
+        return self.MUSIC
 
     def pause(self, audio):
         pass
