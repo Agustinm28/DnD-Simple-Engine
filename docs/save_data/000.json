@@ -1,0 +1,51 @@
+{
+    "id": "000",
+    "name": "El culto a Pharos",
+    "description": "",
+    "characters": {
+        "Eric Knitah": {
+            "player": "Agustin Palacios",
+            "race": "Humano",
+            "subrace": "",
+            "background": "Comerciante",
+            "class": "Explorador",
+            "level": "1",
+            "description":""
+        },
+        "Kekule Morrison": {
+            "player": "Lucila Gutierrez",
+            "race": "Semielfo",
+            "subrace": "",
+            "background": "Artesano",
+            "class": "Picaro",
+            "level": "1",
+            "description":""
+        },
+        "Black Lopez": {
+            "player": "Jazmin Romera",
+            "race": "Alto Elfo",
+            "subrace": "Bastarre",
+            "background": "De buena familia",
+            "class": "Hechicero",
+            "level": "1",
+            "description":""
+        },
+        "Eracles Lopez": {
+            "player": "Facundo Araya",
+            "race": "Draconido",
+            "subrace": "",
+            "background": "Combatiente",
+            "class": "Barbaro",
+            "level": "1",
+            "description":""
+        }
+    },
+    "scenes": {
+        "Taverna": {
+            "image_path": "./images/personalized/El culto a Pharos/scenes/tavern.jpeg",
+            "audio_path": "./audio/personalized/El culto a Pharos/Tavern.mp3",
+            "description": ""
+        }
+
+    }
+}

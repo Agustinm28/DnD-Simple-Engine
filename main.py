@@ -1,8 +1,8 @@
-from modules.screen import Screen
+from modules.game import Game
 
 def main():
     
-    Screen(resolution=(1920,1080)).run()
+    Game().run()
 
 if __name__ == "__main__":
     main()
