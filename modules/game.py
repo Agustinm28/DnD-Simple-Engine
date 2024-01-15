@@ -30,6 +30,8 @@ class Game:
             self.LOAD = True
         #!##############################################################################
 
+        names = list(self.engine.SCENES_BUFFER.keys())
+
         for _ in range(len(self.engine.SCENES_BUFFER)):
             coordenates.append((x, y, widht, height))
             y += 100
@@ -38,7 +40,7 @@ class Game:
                 y = 50
                 x += 400
 
-        rects = {f'button{i+1}': pygame.Rect(coordenates) for i, coordenates in enumerate(coordenates)}
+        rects = {f'{names[i]}': pygame.Rect(coordenates) for i, coordenates in enumerate(coordenates)}
 
         for rect in rects.values():
             pygame.gfxdraw.box(self.engine.screen, rect, (0, 0, 0, 0))
@@ -48,6 +50,7 @@ class Game:
 
         for name, rect in rects.items():
             self.engine.screen.blit(scene_image, rect.topleft)
+            
 
         ##############################################################
 
