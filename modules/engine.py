@@ -76,6 +76,9 @@ class Engine:
         # Load main menu image
         self.add_to_engine_buffer("main_menu", "./images/generic/main/start.jpg")
 
+        # Load loading image
+        self.add_to_engine_buffer("loading", "./images/generic/main/loading.jpg")
+
         # Load main menu buttons images
         self.add_to_engine_buffer("start", "./images/assets/start.png")
         self.add_to_engine_buffer("options", "./images/assets/options.png")

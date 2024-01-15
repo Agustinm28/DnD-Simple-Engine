@@ -31,6 +31,9 @@ class Game:
         #!##############################################################################
 
         names = list(self.engine.SCENES_BUFFER.keys())
+        font = pygame.font.Font("./assets/fonts/ancient.ttf", 36)
+        outline = 2
+        color = (44, 33, 46)
 
         for _ in range(len(self.engine.SCENES_BUFFER)):
             coordenates.append((x, y, widht, height))
@@ -48,85 +51,13 @@ class Game:
         # Resize scene buttons image
         scene_image = pygame.transform.scale(self.engine.ENGINE_BUFFER["scene"][0], (400,100))
 
+        # Add images to buttons
         for name, rect in rects.items():
+            text = font.render(name, True, color)
+            text_rect = text.get_rect(center=rect.center)
+
             self.engine.screen.blit(scene_image, rect.topleft)
-            
-
-        ##############################################################
-
-        # tavern = pygame.Rect(50, 50, 400, 100)
-        # travel_path = pygame.Rect(50, 150, 400, 100)
-        # betian = pygame.Rect(50, 250, 400, 100)
-        # posada = pygame.Rect(50, 350, 400, 100)
-        # bedroom = pygame.Rect(50, 450, 400, 100)
-        # field = pygame.Rect(50, 550, 400, 100)
-        # farm_outside = pygame.Rect(50, 650, 400, 100)
-        # morwen_farm = pygame.Rect(50, 750, 400, 100)
-        # herbolist = pygame.Rect(50, 850, 400, 100)
-        # garden = pygame.Rect(450, 50, 400, 100)
-        # temple_outside = pygame.Rect(450, 150, 400, 100)
-        # temple = pygame.Rect(450, 250, 400, 100)
-        # sanctorum = pygame.Rect(450, 350, 400, 100)
-
-        # # Draw buttons
-        # pygame.gfxdraw.box(self.screen, tavern, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, travel_path, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, betian, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, posada, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, bedroom, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, field, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, farm_outside, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, morwen_farm, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, herbolist, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, garden, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, temple_outside, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, temple, (0, 0, 0, 0))
-        # pygame.gfxdraw.box(self.screen, sanctorum, (0, 0, 0, 0))
-
-        # # Add images to buttons
-        # tavern_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/tavern.png")
-        # travel_path_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/travel_path.png")
-        # betian_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/betian.png")
-        # posada_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/posada.png")
-        # bedroom_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/bedroom.png")
-        # field_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/field_path.png")
-        # farm_outside_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/farm_out.png")
-        # morwen_farm_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/morwen_farm.png")
-        # herbolist_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/herbalist.png")
-        # garden_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/herbalist_garden.png")
-        # temple_outside_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/temple_out.png")
-        # temple_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/pelor_temple.png")
-        # sanctorum_image = pygame.image.load("./images/personalized/El culto a Pharos/assets/sanctorum.png")
-
-        # # Resize images
-        # tavern_image = pygame.transform.scale(tavern_image, (400,100))
-        # travel_path_image = pygame.transform.scale(travel_path_image, (400,100))
-        # betian_image = pygame.transform.scale(betian_image, (400,100))
-        # posada_image = pygame.transform.scale(posada_image, (400,100))
-        # bedroom_image = pygame.transform.scale(bedroom_image, (400,100))
-        # field_image = pygame.transform.scale(field_image, (400,100))
-        # farm_outside_image = pygame.transform.scale(farm_outside_image, (400,100))
-        # morwen_farm_image = pygame.transform.scale(morwen_farm_image, (400,100))
-        # herbolist_image = pygame.transform.scale(herbolist_image, (400,100))
-        # garden_image = pygame.transform.scale(garden_image, (400,100))
-        # temple_outside_image = pygame.transform.scale(temple_outside_image, (400,100))
-        # temple_image = pygame.transform.scale(temple_image, (400,100))
-        # sanctorum_image = pygame.transform.scale(sanctorum_image, (400,100))
-
-        # # Add images to buttons
-        # self.screen.blit(tavern_image, (50,50))
-        # self.screen.blit(travel_path_image, (50,150))
-        # self.screen.blit(betian_image, (50,250))
-        # self.screen.blit(posada_image, (50,350))
-        # self.screen.blit(bedroom_image, (50,450))
-        # self.screen.blit(field_image, (50,550))
-        # self.screen.blit(farm_outside_image, (50,650))
-        # self.screen.blit(morwen_farm_image, (50,750))
-        # self.screen.blit(herbolist_image, (50,850))
-        # self.screen.blit(garden_image, (450,50))
-        # self.screen.blit(temple_outside_image, (450,150))
-        # self.screen.blit(temple_image, (450,250))
-        # self.screen.blit(sanctorum_image, (450,350))
+            self.engine.screen.blit(text, text_rect)
 
         # Get mouse position
         mouse_pos = pygame.mouse.get_pos()
@@ -318,6 +249,7 @@ class Game:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     print("Start button clicked")
+                    self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
                     self.MAIN_MENU = False
                     self.SCENES_MENU = True
         elif options.collidepoint(mouse_pos):
@@ -336,6 +268,7 @@ class Game:
         self.SCENES = False
         self.SCENE = False
         self.LOAD = False
+        self.LOAD_SCREEN = False
 
         while self.RUNNING:
             for event in pygame.event.get():
@@ -343,23 +276,24 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.RUNNING = False
                 elif event.type==pygame.KEYDOWN:
-                    if event.key==pygame.K_m:
-                        self.SCENES = not self.SCENES
+                    if event.key==pygame.K_m: #! Aca tambien, poner una flag o algo para que no pueda activarse si no se cargo antes desde el menu principal
+                        self.MAIN_MENU = False
                         self.SCENE = False
+                        self.SCENES_MENU = True
                     elif event.key==pygame.K_h:
                         self.SCENES = False
                         self.SCENE = False
                         self.MAIN_MENU = True
-                        music = self.audio.check()
+                        music = self.engine.audio.check()
                         if music is not None:
-                            self.audio.stop()
+                            self.engine.audio.stop()
                     elif event.key==pygame.K_ESCAPE:
                         self.RUNNING = False
                     elif event.key==pygame.K_a: #! Ver para que esto funcione solo durante la partida (se peude poner desde el menu)
-                        music = self.audio.check()
+                        music = self.engine.audio.check()
                         if music is not None:
-                            self.audio.stop()
-                        self.audio.play("./audio/personalized/El culto a Pharos/battle.mp3")
+                            self.engine.audio.stop()
+                        self.engine.audio.play("./audio/personalized/El culto a Pharos/battle.mp3")
             
             ### SHOW SCREENS FROM BUFFER
             self.engine.screen.fill((0,0,0))
