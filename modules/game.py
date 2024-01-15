@@ -8,9 +8,10 @@ class Game:
 
     RUNNING = False # Check if game is running
     MAIN_MENU = False # Check if main menu is running
-    SCENES = False # Check if scenes menu is running
+    SCENES_MENU = False # Check if scenes menu is running
     SCENE = False # Check if scene is running
     LOAD = False # Check if campaign data is loaded
+    LOAD_SCREEN = False # Check if load screen is running
     SCENE_NAME = None 
 
     def __init__(self):
@@ -63,162 +64,26 @@ class Game:
         mouse_pos = pygame.mouse.get_pos()
 
         # Check if mouse is over a button
-        # if tavern.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/tavern.jpeg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/Tavern.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Tavern selected")
-        # elif travel_path.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/travel_path.jpg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/travel_path.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Travel selected")
-        # elif betian.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/betian.png")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/betian.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Betian selected")
-        # elif posada.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/posada.jpeg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/posada.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Posada selected")
-        # elif bedroom.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/bedroom.jpg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/posada.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Bedroom selected")
-        # elif field.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/field.jpeg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/field.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Field selected")
-        # elif farm_outside.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/fence.jpeg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/fence.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Farm outside selected")
-        # elif morwen_farm.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/farm.png")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/farm.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Morwen farm selected")
-        # elif herbolist.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/herbalist.jpeg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/herbalist.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Herbolist selected")
-        # elif garden.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/herbalist.jpeg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/herbalist.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Garden selected")
-        # elif temple_outside.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/temple_out.jpg")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/temple_out.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Temple outside selected")
-        # elif temple.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/temple.png")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/temple.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Temple selected")
-        # elif sanctorum.collidepoint(mouse_pos):
-        #     for event in pygame.event.get(): 
-        #         if event.type == pygame.MOUSEBUTTONDOWN:
-        #             self.reset_buffer()
-        #             music = self.audio.check()
-        #             if music is not None:
-        #                 self.audio.stop()
-        #             self.add_image("./images/personalized/El culto a Pharos/scenes/temple.png")
-        #             self.audio.play("./audio/personalized/El culto a Pharos/sanctorum.mp3")
-        #             self.SCENES = False
-        #             self.SCENE = True
-        #             print("Sanctorum selected")
+        for name, rect in rects.items():
+            self.handle_button_event(name, rect, mouse_pos)
+
+    def handle_button_event(self, button_name, button, mouse_pos):
+        if button.collidepoint(mouse_pos):
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    music = self.engine.audio.check()
+                    if music is not None:
+                        self.engine.audio.stop()
+                    self.engine.audio.play(self.engine.SCENES_BUFFER[f"{button_name}"][1])
+                    self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.SCENES_BUFFER[f"{button_name}"][0]
+                    self.show_scene(button_name)
+                    print(f"{button_name} selected")
+
+    def show_scene(self, scene_name):
+        self.MAIN_MENU = False
+        self.SCENES_MENU = False
+        self.SCENE = True
+        self.SCENE_NAME = scene_name
 
     def show_main_menu(self):
 
@@ -265,7 +130,7 @@ class Game:
     def run(self):
         self.RUNNING = True
         self.MAIN_MENU = True
-        self.SCENES = False
+        self.SCENES_MENU = False
         self.SCENE = False
         self.LOAD = False
         self.LOAD_SCREEN = False
@@ -277,11 +142,16 @@ class Game:
                     self.RUNNING = False
                 elif event.type==pygame.KEYDOWN:
                     if event.key==pygame.K_m: #! Aca tambien, poner una flag o algo para que no pueda activarse si no se cargo antes desde el menu principal
-                        self.MAIN_MENU = False
-                        self.SCENE = False
-                        self.SCENES_MENU = True
+                        if self.SCENES_MENU:
+                            self.MAIN_MENU = False
+                            self.SCENE = True
+                            self.SCENES_MENU = False
+                        else:
+                            self.MAIN_MENU = False
+                            self.SCENE = False
+                            self.SCENES_MENU = True
                     elif event.key==pygame.K_h:
-                        self.SCENES = False
+                        self.SCENES_MENU = False
                         self.SCENE = False
                         self.MAIN_MENU = True
                         music = self.engine.audio.check()
@@ -300,9 +170,10 @@ class Game:
 
             if self.MAIN_MENU:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
+                self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.ENGINE_BUFFER["main_menu"][0]
                 self.show_main_menu()
             elif self.SCENES_MENU:
-                self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
+                self.engine.screen.blit(self.engine.ENGINE_BUFFER["scenes_menu"][0], (0,0))
                 self.show_scene_menu()
             elif self.SCENE:
                 self.engine.screen.blit(self.engine.SCENES_BUFFER[self.SCENE_NAME][0], (0,0))

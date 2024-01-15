@@ -52,17 +52,16 @@ class Engine:
                 print("Unsupported file type")
 
     def add_to_engine_buffer(self, name:str, image_path:str, audio_path:str = None):
-        if image_path is None or image_path is "":
+        if image_path is None or image_path == "":
             raise Exception("Scene path is required")
         self.add_to_buffer("ENGINE", name, image_path, audio_path)
         print(f"Element {name} added to engine buffer")
 
     def add_to_scenes_buffer(self, name:str, image_path:str, audio_path:str = None):
-        if image_path is None or image_path is "":
+        if image_path is None or image_path == "":
             raise Exception("Scene path is required")
         self.add_to_buffer("SCENES", name, image_path, audio_path)
         print(f"Element {name} added to scene buffer")
-        print(self.SCENES_BUFFER)
 
     def restart_buffer(self, buffer:str):
         if buffer == "SCENES":
@@ -75,6 +74,7 @@ class Engine:
     def load_engine_assets(self):
         # Load main menu image
         self.add_to_engine_buffer("main_menu", "./images/generic/main/start.jpg")
+        self.add_to_engine_buffer("scenes_menu", "./images/generic/main/start.jpg")
 
         # Load loading image
         self.add_to_engine_buffer("loading", "./images/generic/main/loading.jpg")
