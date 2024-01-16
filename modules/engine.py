@@ -73,19 +73,19 @@ class Engine:
     
     def load_engine_assets(self):
         # Load main menu image
-        self.add_to_engine_buffer("main_menu", "./images/generic/main/start.jpg")
-        self.add_to_engine_buffer("scenes_menu", "./images/generic/main/start.jpg")
+        self.add_to_engine_buffer("main_menu", "./assets/images/generic/main/start.jpg")
+        self.add_to_engine_buffer("scenes_menu", "./assets/images/generic/main/start.jpg")
 
         # Load loading image
-        self.add_to_engine_buffer("loading", "./images/generic/main/loading.jpg")
+        self.add_to_engine_buffer("loading", "./assets/images/generic/main/loading.jpg")
 
         # Load main menu buttons images
-        self.add_to_engine_buffer("start", "./images/assets/start.png")
-        self.add_to_engine_buffer("options", "./images/assets/options.png")
-        self.add_to_engine_buffer("exit", "./images/assets/exit.png")
+        self.add_to_engine_buffer("start", "./assets/images/buttons/start.png")
+        self.add_to_engine_buffer("options", "./assets/images/buttons/options.png")
+        self.add_to_engine_buffer("exit", "./assets/images/buttons/exit.png")
 
         # Load scenes menu buttons image
-        self.add_to_engine_buffer("scene", "./images/assets/scene.png")
+        self.add_to_engine_buffer("scene", "./assets/images/buttons/scene.png")
 
     def load_saved_game(self, save_path:str):
         #! Por el momento solo carga las escenas y sus audios

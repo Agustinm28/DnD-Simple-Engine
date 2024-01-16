@@ -163,7 +163,7 @@ class Game:
                         music = self.engine.audio.check()
                         if music is not None:
                             self.engine.audio.stop()
-                        self.engine.audio.play("./audio/personalized/El culto a Pharos/battle.mp3")
+                        self.engine.audio.play("./assets/audio/personalized/El culto a Pharos/battle.mp3")
             
             ### SHOW SCREENS FROM BUFFER
             self.engine.screen.fill((0,0,0))

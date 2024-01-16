@@ -42,13 +42,13 @@
     },
     "scenes": {
         "Taverna": {
-            "image_path": "./images/personalized/El culto a Pharos/scenes/tavern.jpeg",
-            "audio_path": "./audio/personalized/El culto a Pharos/Tavern.mp3",
+            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/tavern.jpeg",
+            "audio_path": "./assets/audio/personalized/El culto a Pharos/Tavern.mp3",
             "description": ""
         },
         "Field path": {
-            "image_path": "./images/personalized/El culto a Pharos/scenes/travel_path.jpg",
-            "audio_path": "./audio/personalized/El culto a Pharos/travel_path.mp3",
+            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/travel_path.jpg",
+            "audio_path": "./assets/audio/personalized/El culto a Pharos/travel_path.mp3",
             "description": ""
         }
 

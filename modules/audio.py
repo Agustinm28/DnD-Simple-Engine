@@ -17,6 +17,3 @@ class Audio:
 
     def check(self):
         return self.MUSIC
-
-    def pause(self, audio):
-        pass
