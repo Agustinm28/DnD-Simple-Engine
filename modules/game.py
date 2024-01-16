@@ -46,13 +46,13 @@ class Game:
         font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
         color = (44, 33, 46)
 
-        for i in range(len(self.engine.SCENES_BUFFER)):
+        for l in range(len(self.engine.SCENES_BUFFER)):
             coordenates.append((x, y, widht, height))
-            y += y * (i+2)
+            y += height
 
             if y > max_y:
-                y = y
-                x += x
+                y = int(50 * scale_y)
+                x += widht
 
         rects = {f'{names[i]}': pygame.Rect(coordenates) for i, coordenates in enumerate(coordenates)}
 
