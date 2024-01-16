@@ -12,18 +12,28 @@ class Game:
     SCENE = False # Check if scene is running
     LOAD = False # Check if campaign data is loaded
     LOAD_SCREEN = False # Check if load screen is running
+    OPTIONS = False # Check if options menu is running
     SCENE_NAME = None 
 
-    def __init__(self):
-        self.engine = Engine()
+    def __init__(self, resolution:tuple = None, mode = None):
+        self.engine = Engine(
+            resolution=resolution, 
+            mode=mode
+            )
 
     def show_scene_menu(self):
 
+        scale_x = self.engine.resolution[0] / 1920
+        scale_y = self.engine.resolution[1] / 1080
+
+        #max_x = int(400 * scale_x) Este la verdad no se
+        max_y = int(850 * scale_y)
+
         coordenates = []
-        x = 50
-        y = 50
-        widht = 400
-        height = 100
+        x = int(50 * scale_x)
+        y = int(50 * scale_y)
+        widht = int(400 * scale_x)
+        height = int(100 * scale_y)
 
         #! ACA SE CARGAN LOS ASSETS DE LAS ESCENAS DE PHAROS EN BUFFER == DESPUES QUITAR
         if not self.LOAD:
@@ -32,17 +42,17 @@ class Game:
         #!##############################################################################
 
         names = list(self.engine.SCENES_BUFFER.keys())
-        font = pygame.font.Font("./assets/fonts/ancient.ttf", 36)
-        outline = 2
+        font_size = int(36 * min(scale_x, scale_y))
+        font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
         color = (44, 33, 46)
 
-        for _ in range(len(self.engine.SCENES_BUFFER)):
+        for i in range(len(self.engine.SCENES_BUFFER)):
             coordenates.append((x, y, widht, height))
-            y += 100
+            y += y * (i+2)
 
-            if y > 850:
-                y = 50
-                x += 400
+            if y > max_y:
+                y = y
+                x += x
 
         rects = {f'{names[i]}': pygame.Rect(coordenates) for i, coordenates in enumerate(coordenates)}
 
@@ -50,7 +60,7 @@ class Game:
             pygame.gfxdraw.box(self.engine.screen, rect, (0, 0, 0, 0))
 
         # Resize scene buttons image
-        scene_image = pygame.transform.scale(self.engine.ENGINE_BUFFER["scene"][0], (400,100))
+        scene_image = pygame.transform.scale(self.engine.ENGINE_BUFFER["scene"][0], (widht,height))
 
         # Add images to buttons
         for name, rect in rects.items():
@@ -87,9 +97,18 @@ class Game:
 
     def show_main_menu(self):
 
-        start = pygame.Rect(50, 50, 400, 100)
-        options = pygame.Rect(50, 150, 400, 100)
-        exit_game = pygame.Rect(50, 250, 400, 100)
+        scale_x = self.engine.resolution[0] / 1920
+        scale_y = self.engine.resolution[1] / 1080
+
+        widht = int(400 * scale_x)
+        height = int(100 * scale_y)
+
+        position_x = int(50 * scale_x)
+        position_y = int(50 * scale_y)
+
+        start = pygame.Rect(position_x, position_y, widht, height)
+        options = pygame.Rect(position_x, position_y*3, widht, height)
+        exit_game = pygame.Rect(position_x, position_y*5, widht, height)
 
         # Draw buttons
         pygame.gfxdraw.box(self.engine.screen, start, (0, 0, 0, 0))
@@ -97,14 +116,14 @@ class Game:
         pygame.gfxdraw.box(self.engine.screen, exit_game, (0, 0, 0, 0))
 
         # Resize images
-        image_button_1 = pygame.transform.scale(self.engine.ENGINE_BUFFER["start"][0], (400,100))
-        image_button_2 = pygame.transform.scale(self.engine.ENGINE_BUFFER["options"][0], (400,100))
-        image_button_3 = pygame.transform.scale(self.engine.ENGINE_BUFFER["exit"][0], (400,100))
+        image_button_1 = pygame.transform.scale(self.engine.ENGINE_BUFFER["start"][0], (widht, height))
+        image_button_2 = pygame.transform.scale(self.engine.ENGINE_BUFFER["options"][0], (widht, height))
+        image_button_3 = pygame.transform.scale(self.engine.ENGINE_BUFFER["exit"][0], (widht, height))
 
         # Add images to buttons
-        self.engine.screen.blit(image_button_1, (50,50))
-        self.engine.screen.blit(image_button_2, (50,150))
-        self.engine.screen.blit(image_button_3, (50,250))
+        self.engine.screen.blit(image_button_1, (position_x,position_y))
+        self.engine.screen.blit(image_button_2, (position_x,position_y*3))
+        self.engine.screen.blit(image_button_3, (position_x,position_y*5))
 
         # Get mouse position
         mouse_pos = pygame.mouse.get_pos()
@@ -121,11 +140,50 @@ class Game:
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     print("Options button clicked")
+                    self.MAIN_MENU = False
+                    self.OPTIONS = True
         elif exit_game.collidepoint(mouse_pos):
             for event in pygame.event.get(): 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.RUNNING = False
 
+    def show_option_menu(self):
+        scale_x = self.engine.resolution[0] / 1920
+        scale_y = self.engine.resolution[1] / 1080
+
+        widht = int(400 * scale_x)
+        height = int(100 * scale_y)
+
+        position_x = int(50 * scale_x)
+        position_y = int(50 * scale_y)
+
+        resolution = pygame.Rect(position_x, position_y, widht, height)
+        mode = pygame.Rect(position_x, position_y*3, widht, height)
+
+        # Draw buttons
+        pygame.gfxdraw.box(self.engine.screen, resolution, (0, 0, 0, 0))
+        pygame.gfxdraw.box(self.engine.screen, mode, (0, 0, 0, 0))
+
+        # Resize images
+        image_button_1 = pygame.transform.scale(self.engine.ENGINE_BUFFER["scene"][0], (widht, height))
+        image_button_2 = pygame.transform.scale(self.engine.ENGINE_BUFFER["scene"][0], (widht, height))
+
+        # Add images to buttons
+        self.engine.screen.blit(image_button_1, (position_x,position_y))
+        self.engine.screen.blit(image_button_2, (position_x,position_y*3))
+
+        # Get mouse position
+        mouse_pos = pygame.mouse.get_pos()
+
+        # Check if mouse is over a button
+        if resolution.collidepoint(mouse_pos):
+            for event in pygame.event.get(): 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    print("Resolution button clicked")
+        elif mode.collidepoint(mouse_pos):
+            for event in pygame.event.get(): 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    print("Mode button clicked")
 
     def run(self):
         self.RUNNING = True
@@ -134,6 +192,7 @@ class Game:
         self.SCENE = False
         self.LOAD = False
         self.LOAD_SCREEN = False
+        self.OPTIONS = False
 
         while self.RUNNING:
             for event in pygame.event.get():
@@ -141,24 +200,22 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.RUNNING = False
                 elif event.type==pygame.KEYDOWN:
-                    if event.key==pygame.K_m: #! Aca tambien, poner una flag o algo para que no pueda activarse si no se cargo antes desde el menu principal
-                        if self.SCENES_MENU:
-                            self.MAIN_MENU = False
-                            self.SCENE = True
-                            self.SCENES_MENU = False
-                        else:
-                            self.MAIN_MENU = False
-                            self.SCENE = False
-                            self.SCENES_MENU = True
-                    elif event.key==pygame.K_h:
+                    if event.key==pygame.K_m:
+                        if not self.MAIN_MENU:
+                            if self.SCENES_MENU and self.SCENE:
+                                self.SCENES_MENU = False
+                            elif not self.SCENES_MENU and self.SCENE:
+                                self.SCENES_MENU = True
+                            elif self.SCENES_MENU and not self.SCENE:
+                                pass
+                    elif event.key==pygame.K_ESCAPE: #! Si se sale al menu principal, que se descargue la memoria, cartel para usuario
                         self.SCENES_MENU = False
                         self.SCENE = False
+                        self.OPTIONS = False
                         self.MAIN_MENU = True
                         music = self.engine.audio.check()
                         if music is not None:
                             self.engine.audio.stop()
-                    elif event.key==pygame.K_ESCAPE:
-                        self.RUNNING = False
                     elif event.key==pygame.K_a: #! Ver para que esto funcione solo durante la partida (se peude poner desde el menu)
                         music = self.engine.audio.check()
                         if music is not None:
@@ -172,11 +229,17 @@ class Game:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
                 self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.ENGINE_BUFFER["main_menu"][0]
                 self.show_main_menu()
+            elif self.SCENES_MENU and self.SCENE:
+                self.engine.screen.blit(self.engine.SCENES_BUFFER[self.SCENE_NAME][0], (0,0))
+                self.show_scene_menu()
             elif self.SCENES_MENU:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["scenes_menu"][0], (0,0))
                 self.show_scene_menu()
             elif self.SCENE:
                 self.engine.screen.blit(self.engine.SCENES_BUFFER[self.SCENE_NAME][0], (0,0))
+            elif self.OPTIONS:
+                self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
+                self.show_option_menu()
 
             pygame.display.flip()
 

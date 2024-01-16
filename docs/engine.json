@@ -1,3 +1,13 @@
 {
-    
+    "assets": {
+        "images":{
+            "main_menu": "./assets/images/generic/main/start.jpg",
+            "scenes_menu":"./assets/images/generic/main/start.jpg",
+            "loading":"./assets/images/generic/main/loading.jpg",
+            "start":"./assets/images/buttons/start.png",
+            "options":"./assets/images/buttons/options.png",
+            "exit":"./assets/images/buttons/exit.png",
+            "scene":"./assets/images/buttons/scene.png"
+        }
+    }
 }

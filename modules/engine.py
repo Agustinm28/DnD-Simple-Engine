@@ -1,3 +1,4 @@
+import traceback
 import pygame
 import pygame.gfxdraw
 from modules.audio import Audio
@@ -7,25 +8,42 @@ class Engine:
 
     SCENES_BUFFER = {}
     ENGINE_BUFFER = {}
+    AVAILABLE_RESOLUTIONS = []
 
-    def __init__(self, resolution:tuple = (1920, 1080), mode = pygame.FULLSCREEN, caption:str = "Board"):
+    def __init__(self, resolution:tuple = None, mode = None, caption:str = "Board"):
         self.resolution = resolution
         self.mode = mode
         self.caption = caption
 
-        self.SCENES_BUFFER = {}
-        self.ENGINE_BUFFER = {}
-        
         pygame.init() # Initialize pygame
+
         self.screen = self.set_screen(self.resolution, self.mode, self.caption)
         self.audio = Audio() # Initialize audio module
 
         self.load_engine_assets()
 
-    def set_screen(self, resolution:tuple = None, mode = pygame.FULLSCREEN, caption:str = "Board"):
-        if resolution is None:
-            screen_width, screen_height = pygame.display.get_surface().get_size()
-            resolution = (screen_width, screen_height)
+    def set_screen(self, resolution:tuple = None, mode = None, caption:str = "Board"):
+
+        # Setting resolution
+        try:
+            info = pygame.display.Info()
+            native_resolution = (info.current_w, info.current_h)
+            all_resolutions = pygame.display.list_modes()
+            self.AVAILABLE_RESOLUTIONS = [res for res in all_resolutions if res[0] <= native_resolution[0] and res[1] <= native_resolution[1]]
+            if resolution == None:
+                resolution = native_resolution
+            elif resolution != None and resolution in self.AVAILABLE_RESOLUTIONS:
+                pass
+            else:
+                resolution = self.AVAILABLE_RESOLUTIONS[-1] # Set resolution to the last available
+        except Exception:
+            print("Error getting available resolutions")
+            traceback.print_exc()
+
+        # Setting mode
+        if mode == None:
+            mode = pygame.FULLSCREEN
+
         screen = pygame.display.set_mode(resolution, mode)
         pygame.display.set_caption(caption)
 
@@ -43,6 +61,7 @@ class Engine:
             scene_extension = scene_path.split(".")[-1]
             if scene_extension in SUPPORTED:
                 memory_scene = pygame.image.load(scene_path)
+                memory_scene = pygame.transform.scale(memory_scene, self.resolution)
                 if audio_path is not None and audio_path.split(".")[-1] in SUPPORTED:
                     memory_audio = pygame.mixer.Sound(audio_path)
                 else:
@@ -71,21 +90,15 @@ class Engine:
         else:
             raise Exception("Buffer not found")
     
-    def load_engine_assets(self):
-        # Load main menu image
-        self.add_to_engine_buffer("main_menu", "./assets/images/generic/main/start.jpg")
-        self.add_to_engine_buffer("scenes_menu", "./assets/images/generic/main/start.jpg")
+    def load_engine_assets(self, engine_config_path:str = "./docs/engine.json"):
 
-        # Load loading image
-        self.add_to_engine_buffer("loading", "./assets/images/generic/main/loading.jpg")
+        with open(engine_config_path, "r") as save_file:
+            engine_data = json.load(save_file)
 
-        # Load main menu buttons images
-        self.add_to_engine_buffer("start", "./assets/images/buttons/start.png")
-        self.add_to_engine_buffer("options", "./assets/images/buttons/options.png")
-        self.add_to_engine_buffer("exit", "./assets/images/buttons/exit.png")
+        images = engine_data["assets"]["images"]
 
-        # Load scenes menu buttons image
-        self.add_to_engine_buffer("scene", "./assets/images/buttons/scene.png")
+        for image_name, image_path in images.items():
+            self.add_to_engine_buffer(image_name, image_path)
 
     def load_saved_game(self, save_path:str):
         #! Por el momento solo carga las escenas y sus audios
