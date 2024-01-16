@@ -1,3 +1,4 @@
+import time
 import pygame
 import pygame.gfxdraw
 from modules.audio import Audio
@@ -37,8 +38,11 @@ class Game:
 
         #! ACA SE CARGAN LOS ASSETS DE LAS ESCENAS DE PHAROS EN BUFFER == DESPUES QUITAR
         if not self.LOAD:
+            start = time.time()
             self.engine.load_saved_game("./docs/save_data/000.json")
             self.LOAD = True
+            end = time.time()
+            print(f"Time to load: {end - start}")  
         #!##############################################################################
 
         names = list(self.engine.SCENES_BUFFER.keys())

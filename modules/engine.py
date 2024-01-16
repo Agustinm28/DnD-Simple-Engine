@@ -15,6 +15,7 @@ class Engine:
         self.mode = mode
         self.caption = caption
 
+        pygame.mixer.pre_init(44100, -16, 2, 4096)
         pygame.init() # Initialize pygame
 
         self.screen = self.set_screen(self.resolution, self.mode, self.caption)
@@ -42,9 +43,9 @@ class Engine:
 
         # Setting mode
         if mode == None:
-            mode = pygame.FULLSCREEN
+            mode = pygame.FULLSCREEN | pygame.DOUBLEBUF
 
-        screen = pygame.display.set_mode(resolution, mode)
+        screen = pygame.display.set_mode(resolution, mode, 16)
         pygame.display.set_caption(caption)
 
         return screen
@@ -60,7 +61,7 @@ class Engine:
         if name not in buffer:
             scene_extension = scene_path.split(".")[-1]
             if scene_extension in SUPPORTED:
-                memory_scene = pygame.image.load(scene_path)
+                memory_scene = pygame.image.load(scene_path).convert_alpha()
                 memory_scene = pygame.transform.scale(memory_scene, self.resolution)
                 if audio_path is not None and audio_path.split(".")[-1] in SUPPORTED:
                     memory_audio = pygame.mixer.Sound(audio_path)
