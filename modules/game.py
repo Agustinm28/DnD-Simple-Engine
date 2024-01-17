@@ -104,5 +104,4 @@ class Game:
             pygame.display.flip()
 
         self.engine.audio.quit_mixer()
-        pygame.quit()
-        sys.exit()
+        self.engine.quit_engine()

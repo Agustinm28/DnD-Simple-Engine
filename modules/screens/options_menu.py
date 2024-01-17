@@ -71,11 +71,11 @@ class OptionsMenu:
                         self.game.RES_OPTIONS = True
                         print("Resolution button clicked")
                     elif button_name == "Fullscreen":
-                        if self.engine.mode == pygame.FULLSCREEN | pygame.DOUBLEBUF:
+                        if self.engine.ENGINE_BUFFER["fullscreen"]:
                             print("Windowed mode")  
-                            self.engine.update_screen(self.engine.resolution, pygame.RESIZABLE | pygame.DOUBLEBUF)
+                            self.engine.toggle_fullscreen(mode=False)
                         else:
-                            self.engine.update_screen(self.engine.resolution, pygame.FULLSCREEN | pygame.DOUBLEBUF)
+                            self.engine.toggle_fullscreen(mode=True)
                         print("Fullscreen button clicked")
                     print(f"{button_name} selected")
 
