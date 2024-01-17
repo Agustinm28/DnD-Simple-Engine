@@ -9,11 +9,15 @@ class Audio:
 
     def play(self, audio_path):
         pygame.mixer.music.load(audio_path)
-        pygame.mixer.music.play(-1)
+        pygame.mixer.music.play(loops=-1, fade_ms=1500)
         self.MUSIC = True
 
     def stop(self):
         pygame.mixer.music.stop()
+        self.MUSIC = False
+
+    def stop_fading(self):
+        pygame.mixer.music.fadeout(1500)
         self.MUSIC = False
     
     def quit_mixer(self):
