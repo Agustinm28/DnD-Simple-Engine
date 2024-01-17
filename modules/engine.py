@@ -36,7 +36,13 @@ class Engine:
             all_resolutions = pygame.display.list_modes()
             self.AVAILABLE_RESOLUTIONS = [res for res in all_resolutions if res[0] <= native_resolution[0] and res[1] <= native_resolution[1]]
             if resolution == None:
-                resolution = (self.ENGINE_BUFFER["resolution"][0], self.ENGINE_BUFFER["resolution"][1])
+                x = self.ENGINE_BUFFER["resolution"][0]
+                y = self.ENGINE_BUFFER["resolution"][1]
+                if (x, y) == (None, None):
+                    resolution = native_resolution
+                    self.ENGINE_BUFFER["resolution"] = [resolution[0], resolution[1]]
+                else:
+                    resolution = (x, y)
             elif resolution != None and resolution in self.AVAILABLE_RESOLUTIONS:
                 resolution = resolution
             else:
