@@ -3,6 +3,7 @@ import traceback
 import pygame
 import pygame.gfxdraw
 from modules.audio import Audio
+from modules.image import ImageUtils
 import json
 
 class Engine:
@@ -23,6 +24,7 @@ class Engine:
 
         self.screen = self.set_screen(self.resolution, self.mode, self.caption)
         self.audio = Audio() # Initialize audio module
+        self.image = ImageUtils()
 
         self.load_engine_assets(mode="ASSETS")
 
@@ -82,7 +84,7 @@ class Engine:
         print(self.ENGINE_BUFFER)
     
     def add_to_buffer(self, buffer:str, name:str, scene_path:str, audio_path:str = None, value:str = None):
-        SUPPORTED = ["jpg", "jpeg", "png", "webp", "mp3", "wav", "ogg"]
+        SUPPORTED = ["webp", "mp3", "wav", "ogg"]
 
         if buffer == "SCENES":
             buffer = self.SCENES_BUFFER
@@ -94,16 +96,15 @@ class Engine:
                 buffer[name] = scene_path
             elif value == "IMAGE":
                 scene_extension = scene_path.split(".")[-1]
-                if scene_extension in SUPPORTED:
-                    memory_scene = pygame.image.load(scene_path).convert_alpha()
-                    memory_scene = pygame.transform.scale(memory_scene, self.resolution)
-                    if audio_path is not None and audio_path.split(".")[-1] in SUPPORTED:
-                        memory_audio = audio_path
-                    else:
-                        memory_audio = None
-                    buffer[name] = [memory_scene, memory_audio]
+                if scene_extension not in SUPPORTED:
+                    scene_path = self.image.convert(scene_path, scene_extension)
+                memory_scene = pygame.image.load(scene_path).convert_alpha()
+                memory_scene = pygame.transform.scale(memory_scene, self.resolution)
+                if audio_path is not None and audio_path.split(".")[-1] in SUPPORTED:
+                    memory_audio = audio_path
                 else:
-                    print("Unsupported file type")
+                    memory_audio = None
+                buffer[name] = [memory_scene, memory_audio]
 
     def add_to_engine_buffer(self, name:str, image_path:str = None, audio_path:str = None, value:str = None):
         if image_path is None or image_path == "":
@@ -114,7 +115,7 @@ class Engine:
     def add_to_scenes_buffer(self, name:str, image_path:str, audio_path:str = None):
         if image_path is None or image_path == "":
             raise Exception("Scene path is required")
-        self.add_to_buffer("SCENES", name, image_path, audio_path)
+        self.add_to_buffer("SCENES", name, image_path, audio_path, value="IMAGE")
         print(f"Element {name} added to scene buffer")
 
     def restart_buffer(self, buffer:str):

@@ -8,13 +8,13 @@
     },
     "assets": {
         "images": {
-            "main_menu": "./assets/images/generic/main/start.jpg",
-            "scenes_menu": "./assets/images/generic/main/start.jpg",
-            "loading": "./assets/images/generic/main/loading.jpg",
-            "start": "./assets/images/buttons/start.png",
-            "options": "./assets/images/buttons/options.png",
-            "exit": "./assets/images/buttons/exit.png",
-            "scene": "./assets/images/buttons/scene.png"
+            "main_menu": "./assets/images/generic/main/start.webp",
+            "scenes_menu": "./assets/images/generic/main/start.webp",
+            "loading": "./assets/images/generic/main/loading.webp",
+            "start": "./assets/images/buttons/start.webp",
+            "options": "./assets/images/buttons/options.webp",
+            "exit": "./assets/images/buttons/exit.webp",
+            "scene": "./assets/images/buttons/scene.webp"
         }
     }
 }
