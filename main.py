@@ -3,7 +3,7 @@ from modules.game import Game
 def main():
     
     Game(
-        resolution = (1920, 1080),
+        resolution = None,
         mode = None
     ).run()
 

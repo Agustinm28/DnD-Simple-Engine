@@ -10,7 +10,7 @@ class Engine:
     ENGINE_BUFFER = {}
     AVAILABLE_RESOLUTIONS = []
 
-    def __init__(self, resolution:tuple = None, mode = None, caption:str = "Board"):
+    def __init__(self, resolution:tuple = None, mode = None, caption:str = "Simple DnD Engine"):
         self.resolution = resolution
         self.mode = mode
         self.caption = caption
@@ -23,10 +23,11 @@ class Engine:
 
         self.load_engine_assets()
 
-    def set_screen(self, resolution:tuple = None, mode = None, caption:str = "Board"):
+    def set_screen(self, resolution:tuple = None, mode = None, caption:str = "Simple DnD Engine"):
 
         # Setting resolution
         try:
+            pygame.display.init()
             info = pygame.display.Info()
             native_resolution = (info.current_w, info.current_h)
             all_resolutions = pygame.display.list_modes()
@@ -34,7 +35,7 @@ class Engine:
             if resolution == None:
                 resolution = native_resolution
             elif resolution != None and resolution in self.AVAILABLE_RESOLUTIONS:
-                pass
+                resolution = resolution
             else:
                 resolution = self.AVAILABLE_RESOLUTIONS[-1] # Set resolution to the last available
         except Exception:
@@ -44,14 +45,23 @@ class Engine:
         # Setting mode
         if mode == None:
             mode = pygame.FULLSCREEN | pygame.DOUBLEBUF
-
+        
+        print("Resolution set to", resolution)
+        
         screen = pygame.display.set_mode(resolution, mode, 16)
         pygame.display.set_caption(caption)
 
+        self.resolution = resolution
+
         return screen
     
+    def update_screen(self, resolution:tuple = None, mode = None, caption:str = "Simple DnD Engine"):
+        pygame.display.quit()
+        self.screen = self.set_screen(resolution, mode, caption)
+        self.restart_buffer("ENGINE")
+    
     def add_to_buffer(self, buffer:str, name:str, scene_path:str, audio_path:str = None):
-        SUPPORTED = ["jpg", "jpeg", "png", "mp3", "wav", "ogg"]
+        SUPPORTED = ["jpg", "jpeg", "png", "webp", "mp3", "wav", "ogg"]
 
         if buffer == "SCENES":
             buffer = self.SCENES_BUFFER
@@ -64,7 +74,7 @@ class Engine:
                 memory_scene = pygame.image.load(scene_path).convert_alpha()
                 memory_scene = pygame.transform.scale(memory_scene, self.resolution)
                 if audio_path is not None and audio_path.split(".")[-1] in SUPPORTED:
-                    memory_audio = pygame.mixer.Sound(audio_path)
+                    memory_audio = audio_path
                 else:
                     memory_audio = None
                 buffer[name] = [memory_scene, memory_audio]
@@ -88,6 +98,7 @@ class Engine:
             self.SCENES_BUFFER = {}
         elif buffer == "ENGINE":
             self.ENGINE_BUFFER = {}
+            self.load_engine_assets()
         else:
             raise Exception("Buffer not found")
     
@@ -103,8 +114,6 @@ class Engine:
 
     def load_saved_game(self, save_path:str):
         #! Por el momento solo carga las escenas y sus audios
-        # Load json file
-
         #! Aca deberia mostrarse una pantalla de carga
         with open(save_path, "r") as save_file:
             save = json.load(save_file)

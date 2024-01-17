@@ -52,7 +52,7 @@
             "description": ""
         },
         "Betian": {
-            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/betian.png",
+            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/betian.webp",
             "audio_path": "./assets/audio/personalized/El culto a Pharos/betian.mp3",
             "description": ""
         },
@@ -91,7 +91,7 @@
             "audio_path": "./assets/audio/personalized/El culto a Pharos/farm.mp3",
             "description": ""
         },
-        "Temple_out": {
+        "Temple out": {
             "image_path": "./assets/images/personalized/El culto a Pharos/scenes/temple_out.jpg",
             "audio_path": "./assets/audio/personalized/El culto a Pharos/temple_out.mp3",
             "description": ""
