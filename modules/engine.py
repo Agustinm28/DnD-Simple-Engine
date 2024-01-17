@@ -97,7 +97,7 @@ class Engine:
             elif value == "IMAGE":
                 scene_extension = scene_path.split(".")[-1]
                 if scene_extension not in SUPPORTED:
-                    scene_path = self.image.convert(scene_path, scene_extension)
+                    scene_path = self.image.convert(scene_path, scene_extension, name, "./docs/save_data/000.json")
                 memory_scene = pygame.image.load(scene_path).convert_alpha()
                 memory_scene = pygame.transform.scale(memory_scene, self.resolution)
                 if audio_path is not None and audio_path.split(".")[-1] in SUPPORTED:

@@ -10,7 +10,7 @@
             "background": "Comerciante",
             "class": "Explorador",
             "level": "1",
-            "description":""
+            "description": ""
         },
         "Kekule Morrison": {
             "player": "Lucila Gutierrez",
@@ -19,7 +19,7 @@
             "background": "Artesano",
             "class": "Picaro",
             "level": "1",
-            "description":""
+            "description": ""
         },
         "Black Lopez": {
             "player": "Jazmin Romera",
@@ -28,7 +28,7 @@
             "background": "De buena familia",
             "class": "Hechicero",
             "level": "1",
-            "description":""
+            "description": ""
         },
         "Eracles Lopez": {
             "player": "Facundo Araya",
@@ -37,7 +37,7 @@
             "background": "Combatiente",
             "class": "Barbaro",
             "level": "1",
-            "description":""
+            "description": ""
         }
     },
     "scenes": {
@@ -106,6 +106,5 @@
             "audio_path": "./assets/audio/personalized/El culto a Pharos/sanctorum.mp3",
             "description": ""
         }
-
     }
 }
