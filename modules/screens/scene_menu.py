@@ -71,11 +71,9 @@ class SceneMenu:
         if button.collidepoint(mouse_pos):
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    music = self.engine.audio.check()
-                    if music is not None:
+                    if self.engine.audio.MUSIC:
                         self.engine.audio.stop()
                     self.engine.audio.play(self.engine.SCENES_BUFFER[f"{button_name}"][1])
-                    print(self.engine.SCENES_BUFFER)
                     self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.SCENES_BUFFER[f"{button_name}"][0]
                     self.game.show_scene(button_name)
                     print(f"{button_name} selected")

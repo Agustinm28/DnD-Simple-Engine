@@ -2,7 +2,7 @@ import pygame
 
 class Audio:
 
-    MUSIC = None
+    MUSIC = False
 
     def __init__(self):
         pygame.mixer.init()
@@ -10,12 +10,11 @@ class Audio:
     def play(self, audio_path):
         pygame.mixer.music.load(audio_path)
         pygame.mixer.music.play(-1)
+        self.MUSIC = True
 
     def stop(self):
         pygame.mixer.music.stop()
-
-    def check(self):
-        return self.MUSIC
+        self.MUSIC = False
     
     def quit_mixer(self):
         pygame.mixer.music.unload()

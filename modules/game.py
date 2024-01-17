@@ -20,6 +20,7 @@ class Game:
     RES_OPTIONS = False # Check if resolution options are running
     RES_CHANGE = False # Check if resolution is changed
     SCENE_NAME = None 
+    MUSIC = False
 
     def __init__(self, resolution:tuple = None, mode = None):
         self.engine = Engine(
@@ -46,6 +47,7 @@ class Game:
         self.OPTIONS = False
         self.RES_OPTIONS = False
         self.RES_CHANGE = False
+        self.MUSIC = False
 
         while self.RUNNING:
             for event in pygame.event.get():
@@ -66,13 +68,9 @@ class Game:
                         self.SCENE = False
                         self.OPTIONS = False
                         self.MAIN_MENU = True
-                        music = self.engine.audio.check()
-                        if music is not None:
+                        if self.engine.audio.MUSIC:
                             self.engine.audio.stop()
                     elif event.key==pygame.K_a: #! Ver para que esto funcione solo durante la partida (se puede poner desde el menu)
-                        music = self.engine.audio.check()
-                        if music is not None:
-                            self.engine.audio.stop()
                         self.engine.audio.play("./assets/audio/personalized/El culto a Pharos/battle.mp3")
             
             ### SHOW SCREENS FROM BUFFER

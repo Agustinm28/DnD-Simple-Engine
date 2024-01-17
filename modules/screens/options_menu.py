@@ -64,8 +64,7 @@ class OptionsMenu:
         if button.collidepoint(mouse_pos):
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    music = self.engine.audio.check()
-                    if music is not None:
+                    if self.engine.audio.MUSIC:
                         self.engine.audio.stop()
                     if button_name == "Resolution":
                         self.game.OPTIONS = False
@@ -142,8 +141,7 @@ class OptionsMenu:
         if button.collidepoint(mouse_pos):
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    music = self.engine.audio.check()
-                    if music is not None:
+                    if self.engine.audio.MUSIC:
                         self.engine.audio.stop()
                     self.RES = resolution
                     self.game.RES_CHANGE = True
