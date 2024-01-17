@@ -4,6 +4,7 @@ import pygame
 import pygame.gfxdraw
 from modules.audio import Audio
 from modules.image import ImageUtils
+from colorama import Fore as c
 import json
 
 class Engine:
@@ -97,7 +98,7 @@ class Engine:
             elif value == "IMAGE":
                 scene_extension = scene_path.split(".")[-1]
                 if scene_extension not in SUPPORTED:
-                    scene_path = self.image.convert(scene_path, scene_extension, name, "./docs/save_data/000.json")
+                    raise Exception("Unsupported file type")
                 memory_scene = pygame.image.load(scene_path).convert_alpha()
                 memory_scene = pygame.transform.scale(memory_scene, self.resolution)
                 if audio_path is not None and audio_path.split(".")[-1] in SUPPORTED:
@@ -144,14 +145,19 @@ class Engine:
                 self.add_to_engine_buffer(image_name, image_path, value="IMAGE")
 
     def load_saved_game(self, save_path:str):
-        #! Por el momento solo carga las escenas y sus audios
-        #! Aca deberia mostrarse una pantalla de carga
         with open(save_path, "r") as save_file:
             save = json.load(save_file)
 
         scenes = save["scenes"]
+        scenes_data = []
+
         for scene_name, scene_data in scenes.items():
-            self.add_to_scenes_buffer(scene_name, scene_data["image_path"], scene_data["audio_path"])
+            scenes_data.append([scene_name, scene_data["image_path"], scene_data["audio_path"]])
+
+        data = self.image.check(scenes_data, save_path)
+
+        for value in data:
+            self.add_to_scenes_buffer(value[0], value[1], value[2])
 
     def quit_engine(self):
 
