@@ -1,3 +1,4 @@
+import os
 import sys
 import traceback
 import pygame
@@ -145,10 +146,23 @@ class Engine:
                 self.add_to_engine_buffer(image_name, image_path, value="IMAGE")
 
     def load_saved_game(self, save_path:str):
+
+        # IF path does not exist
+        if not os.path.exists(save_path):
+            raise Exception("Save path does not exist")
+
         with open(save_path, "r") as save_file:
             save = json.load(save_file)
 
-        scenes = save["scenes"]
+        try:
+            id_num = save["id"]
+            c_name = save["name"]
+            description = save["description"]
+            characters = save["characters"]
+            scenes = save["scenes"]
+        except Exception:
+            raise Exception("Save file is not complete")
+        
         scenes_data = []
 
         for scene_name, scene_data in scenes.items():
