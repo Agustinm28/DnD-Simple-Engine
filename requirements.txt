@@ -2,3 +2,6 @@ pygame
 colorama
 Pillow
 tqdm
+pydub
+ffmpeg
+ffmpeg-python

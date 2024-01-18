@@ -12,7 +12,7 @@ class ImageUtils:
     def check(self, paths:list, save_path:str):
         try:
 
-            print("Optimizing scenes...")
+            print("Optimizing images...")
 
             with open(save_path, "r") as save_file:
                 data = json.load(save_file)

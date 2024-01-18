@@ -85,7 +85,7 @@ class Engine:
         print(self.ENGINE_BUFFER)
     
     def add_to_buffer(self, buffer:str, name:str, scene_path:str, audio_path:str = None, value:str = None):
-        SUPPORTED = ["webp", "mp3", "wav", "ogg"]
+        SUPPORTED = ["webp", "mp3"]
 
         if buffer == "SCENES":
             buffer = self.SCENES_BUFFER
@@ -155,6 +155,7 @@ class Engine:
             scenes_data.append([scene_name, scene_data["image_path"], scene_data["audio_path"]])
 
         data = self.image.check(scenes_data, save_path)
+        data = self.audio.check(data, save_path)
 
         for value in data:
             self.add_to_scenes_buffer(value[0], value[1], value[2])
