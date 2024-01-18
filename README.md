@@ -55,7 +55,7 @@ The idea of the project is to provide a simple story generation engine, in which
 
 ## ⚡Requirements
 
-- **CPU*:** 1.6 GHz or higher processor
+- **CPU:** 1.6 GHz or higher processor
 - **RAM:** 1 GB 
 - **Hard Disk:** 200 MB
 - **OS:** Windows 10 or higher
