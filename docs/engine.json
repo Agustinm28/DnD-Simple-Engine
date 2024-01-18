@@ -1,0 +1,21 @@
+{
+    "config": {
+        "resolution": [
+            1280,
+            720
+        ],
+        "fullscreen": false
+    },
+    "assets": {
+        "images": {
+            "main_menu": "./assets/images/generic/main/start.webp",
+            "scenes_menu": "./assets/images/generic/main/start.webp",
+            "loading": "./assets/images/generic/main/loading.webp",
+            "start": "./assets/images/buttons/start.webp",
+            "options": "./assets/images/buttons/options.webp",
+            "exit": "./assets/images/buttons/exit.webp",
+            "scene": "./assets/images/buttons/scene.webp",
+            "icon": "./assets/images/icons/icon.webp"
+        }
+    }
+}

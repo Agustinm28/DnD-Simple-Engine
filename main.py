@@ -1,8 +1,12 @@
-from modules.screen import Screen
+from modules.game import Game
 
 def main():
     
-    Screen(resolution=(1920,1080)).run()
+    Game(
+        resolution = None,
+        mode = None,
+        save_path = "./docs/save_data/000.json"
+    ).run()
 
 if __name__ == "__main__":
     main()
