@@ -10,7 +10,7 @@ The idea of the project is to provide a simple story generation engine, in which
 
 ## 🔧 Setup:
 
-1. In the engine folder, go to the `assets/images/personalized` folder and create a folder with the name of your campaign, for example: `my-campaign`.
+1. Download de latest release. In the engine folder, go to the `assets/images/personalized` folder and create a folder with the name of your campaign, for example: `my-campaign`.
 
 2. Put the images you want to use in the folder you just created.
 
