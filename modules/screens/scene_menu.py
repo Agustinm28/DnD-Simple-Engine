@@ -22,15 +22,6 @@ class SceneMenu:
         widht = int(400 * scale_x)
         height = int(100 * scale_y)
 
-        #! ACA SE CARGAN LOS ASSETS DE LAS ESCENAS DE PHAROS EN BUFFER == DESPUES QUITAR
-        if not self.game.LOAD:
-            start = time.time()
-            self.engine.load_saved_game("./docs/save_data/000.json")
-            self.game.LOAD = True
-            end = time.time()
-            print(f"Time to load: {end - start}")  
-        #!##############################################################################
-
         names = list(self.engine.SCENES_BUFFER.keys())
         font_size = int(36 * min(scale_x, scale_y))
         font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)

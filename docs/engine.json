@@ -4,7 +4,7 @@
             1280,
             720
         ],
-        "fullscreen": false
+        "fullscreen": true
     },
     "assets": {
         "images": {

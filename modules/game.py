@@ -1,12 +1,11 @@
 import time
 import pygame
 import pygame.gfxdraw
-from modules.audio import Audio
 from modules.engine import Engine
 from modules.screens.scene_menu import SceneMenu
 from modules.screens.main_menu import MainMenu
 from modules.screens.options_menu import OptionsMenu
-import sys
+from utils.debugger import info, error
 
 class Game:
 
@@ -22,7 +21,7 @@ class Game:
     SCENE_NAME = None 
     MUSIC = False
 
-    def __init__(self, resolution:tuple = None, mode = None):
+    def __init__(self, resolution:tuple = None, mode = None, save_path:str = None):
         self.engine = Engine(
             resolution=resolution, 
             mode=mode
@@ -30,14 +29,37 @@ class Game:
         self.main_menu = MainMenu(self.engine, self)
         self.options_menu = OptionsMenu(self.engine, self)
         self.scene_menu = SceneMenu(self.engine, self)
+        self.save_path = save_path
 
     def show_scene(self, scene_name):
+        '''
+        Method to show a scene. Where:
+            - scene_name: name of the scene to show.
+        '''
         self.MAIN_MENU = False
         self.SCENES_MENU = False
         self.SCENE = True
         self.SCENE_NAME = scene_name
 
+    def load_game(self, save_path:str):
+        '''
+        Method to load a saved game. Where:
+            - save_path: path to saved game.
+        '''
+        try:
+            if not self.LOAD:
+                start = time.time()
+                self.engine.load_saved_game(save_path)
+                self.LOAD = True
+                end = time.time()
+                info(f"Time to load: {end - start}") 
+        except Exception:
+            error("Error loading saved game")
+
     def run(self):
+        '''
+        Method to run the game.
+        '''
         self.RUNNING = True
         self.MAIN_MENU = True
         self.SCENES_MENU = False
@@ -88,9 +110,11 @@ class Game:
                 self.OPTIONS = True
             elif self.SCENES_MENU and self.SCENE:
                 self.engine.screen.blit(self.engine.SCENES_BUFFER[self.SCENE_NAME][0], (0,0))
+                self.load_game(self.save_path)
                 self.scene_menu.show()
             elif self.SCENES_MENU:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["scenes_menu"][0], (0,0))
+                self.load_game(self.save_path)
                 self.scene_menu.show()
             elif self.SCENE:
                 self.engine.screen.blit(self.engine.SCENES_BUFFER[self.SCENE_NAME][0], (0,0))
