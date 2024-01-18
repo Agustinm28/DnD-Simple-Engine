@@ -4,7 +4,7 @@ import pygame
 import pygame.gfxdraw
 from modules.audio import Audio
 from modules.image import ImageUtils
-from utils.debugger import dprint, error
+from utils.debugger import dprint, error, set_break
 import json
 
 class Engine:
@@ -31,6 +31,8 @@ class Engine:
         self.image = ImageUtils()
 
         self.load_engine_assets(mode="ASSETS")
+
+        pygame.display.set_icon(self.ENGINE_BUFFER["icon"][0])
 
     def set_screen(self, resolution:tuple = None, mode = None, caption:str = "Simple DnD Engine"):
         '''
@@ -125,7 +127,7 @@ class Engine:
             - value: value of the element. -> [CONFIG, IMAGE]
         '''
         try:
-            SUPPORTED = ["webp", "mp3"]
+            SUPPORTED = ["webp", "png", "mp3"]
 
             if buffer == "SCENES":
                 buffer = self.SCENES_BUFFER
