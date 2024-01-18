@@ -1,4 +1,4 @@
-# DnD-Simple-Engine
+# Simple-DnD-Engine
 
 Sometimes you want to set up an RPG game or campaign in which the scenarios are shown through a screen, to give more immersion music is added to those images, but it can be clumsy to do it separately, one by one, when the game should be dynamic, also, the solutions that are out there often require too much preparation time or are very complex.
 
