@@ -1,3 +1,4 @@
+import json
 import os
 import pygame
 from utils.debugger import dprint, error
@@ -25,10 +26,16 @@ class SavesMenu:
             widht = int(400 * scale_x)
             height = int(100 * scale_y)
 
-            saves = os.listdir("./docs/save_data")
+            paths = ['./docs/save_data/' + save for save in os.listdir('./docs/save_data')]
+            saves = []
 
-            if len(saves) == 0:
-                saves = ["No saves available"]
+            # Read every save file and get the name, then append it to saves list in the format (name, path)
+            for path in paths:
+                with open(path, "r") as save_file:
+                    data = json.load(save_file)
+                    saves.append((data["name"], path))
+
+            saves.append(("+ New campaign", None))
 
             font_size = int(36 * min(scale_x, scale_y))
             font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
@@ -42,10 +49,10 @@ class SavesMenu:
                     y = int(50 * scale_y)
                     x += widht
 
-            rects = {f'{saves[i]}': pygame.Rect(coordenates) for i, coordenates in enumerate(coordenates)}
+            rects = {f'{saves[i][0]}': [pygame.Rect(coordenates), saves[i][1]] for i, coordenates in enumerate(coordenates)}
 
             for rect in rects.values():
-                pygame.gfxdraw.box(self.engine.screen, rect, (0, 0, 0, 0))
+                pygame.gfxdraw.box(self.engine.screen, rect[0], (0, 0, 0, 0))
 
             # Resize scene buttons image
             scene_image = pygame.transform.scale(self.engine.ENGINE_BUFFER["scene"][0], (widht,height))
@@ -53,9 +60,10 @@ class SavesMenu:
             # Add images to buttons
             for name, rect in rects.items():
                 text = font.render(name, True, color)
-                text_rect = text.get_rect(center=rect.center)
+                rect_value = rect[0]
+                text_rect = text.get_rect(center=rect_value.center)
 
-                self.engine.screen.blit(scene_image, rect.topleft)
+                self.engine.screen.blit(scene_image, rect_value.topleft)
                 self.engine.screen.blit(text, text_rect)
 
             # Get mouse position
@@ -63,11 +71,11 @@ class SavesMenu:
 
             # Check if mouse is over a button
             for name, rect in rects.items():
-                self.handle_button_event(name, rect, mouse_pos)
+                self.handle_button_event(name, rect[0], mouse_pos, rect[1])
         except Exception:
             error("Error showing saves menu")
 
-    def handle_button_event(self, button_name, button, mouse_pos):
+    def handle_button_event(self, button_name, button, mouse_pos, save_path):
         '''
         Method to handle button events. Where:
             - button_name: name of the button.
@@ -80,7 +88,13 @@ class SavesMenu:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.engine.audio.MUSIC:
                             self.engine.audio.stop()
-                        #! MANEJAR LOGICA DE ESTO
+                        if button_name == "+ New campaign":
+                            dprint("SAVES MENU", f"New campaign", "BLUE")
+                        else:
+                            self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
+                            self.game.save_path = save_path
+                            self.game.SAVE_MENU = False
+                            self.game.SCENES_MENU = True
                             
         except Exception:
             error("Error handling button event")

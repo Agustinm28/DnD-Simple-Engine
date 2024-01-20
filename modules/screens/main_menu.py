@@ -48,9 +48,8 @@ class MainMenu:
                 for event in pygame.event.get(): 
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         dprint("MAIN MENU", "Start button clicked.", "BLUE")
-                        self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
                         self.game.MAIN_MENU = False
-                        self.game.SCENES_MENU = True
+                        self.game.SAVE_MENU = True
             elif options.collidepoint(mouse_pos):
                 for event in pygame.event.get(): 
                     if event.type == pygame.MOUSEBUTTONDOWN:

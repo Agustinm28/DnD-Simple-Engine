@@ -1,6 +1,7 @@
 import json
 import pygame
 import time
+from utils.debugger import dprint, error, info
 
 class SceneMenu:
 
@@ -9,6 +10,9 @@ class SceneMenu:
         self.game = game
 
     def show(self):
+        '''
+        Method to show scenes menu.
+        '''
 
         scale_x = self.engine.resolution[0] / 1920
         scale_y = self.engine.resolution[1] / 1080
@@ -59,6 +63,12 @@ class SceneMenu:
             self.handle_button_event(name, rect, mouse_pos)
 
     def handle_button_event(self, button_name, button, mouse_pos):
+        '''
+        Method to handle button events. Where:
+            - button_name: name of the button.
+            - button: button rect.
+            - mouse_pos: mouse position.
+        '''
         if button.collidepoint(mouse_pos):
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -67,4 +77,4 @@ class SceneMenu:
                     self.engine.audio.play(self.engine.SCENES_BUFFER[f"{button_name}"][1])
                     self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.SCENES_BUFFER[f"{button_name}"][0]
                     self.game.show_scene(button_name)
-                    print(f"{button_name} selected")
+                    dprint("SCENES MENU", f"{button_name} selected", "CYAN")

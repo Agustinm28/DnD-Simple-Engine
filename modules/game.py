@@ -5,7 +5,8 @@ from modules.engine import Engine
 from modules.screens.scene_menu import SceneMenu
 from modules.screens.main_menu import MainMenu
 from modules.screens.options_menu import OptionsMenu
-from utils.debugger import info, error
+from modules.screens.saves_menu import SavesMenu
+from utils.debugger import info, error, dprint
 
 class Game:
 
@@ -30,6 +31,7 @@ class Game:
         self.main_menu = MainMenu(self.engine, self)
         self.options_menu = OptionsMenu(self.engine, self)
         self.scene_menu = SceneMenu(self.engine, self)
+        self.saves_menu = SavesMenu(self.engine, self)
         self.save_path = save_path
 
     def show_scene(self, scene_name):
@@ -89,12 +91,13 @@ class Game:
                                 pass
                     elif event.key==pygame.K_ESCAPE: #! Si se sale al menu principal, que se descargue la memoria, cartel para usuario
                         self.SCENES_MENU = False
+                        self.SAVE_MENU = False
                         self.SCENE = False
                         self.OPTIONS = False
                         self.MAIN_MENU = True
                         if self.engine.audio.MUSIC:
                             self.engine.audio.stop()
-                    elif event.key==pygame.K_a: #! Ver para que esto funcione solo durante la partida (se puede poner desde el menu)
+                    elif event.key==pygame.K_a and self.SCENE:
                         self.engine.audio.play("./assets/audio/personalized/El culto a Pharos/battle.mp3")
             
             ### SHOW SCREENS FROM BUFFER
@@ -104,6 +107,8 @@ class Game:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
                 self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.ENGINE_BUFFER["main_menu"][0]
                 self.main_menu.show()
+                self.engine.restart_buffer(buffer="SCENES")
+                self.LOAD = False
             elif self.RES_CHANGE:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
                 self.engine.update_screen(self.options_menu.RES, pygame.FULLSCREEN | pygame.DOUBLEBUF)
@@ -126,6 +131,9 @@ class Game:
             elif self.RES_OPTIONS:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
                 self.options_menu.show_resolution_menu()
+            elif self.SAVE_MENU:
+                self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
+                self.saves_menu.show()
 
             pygame.display.flip()
 

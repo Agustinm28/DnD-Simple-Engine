@@ -227,6 +227,7 @@ class Engine:
             - save_path: path to saved game.
         '''
         try:
+            dprint("ENGINE", f"Loading saved game from {save_path}", "CYAN")
             # If path does not exist
             if not os.path.exists(save_path):
                 raise Exception("Save path does not exist")

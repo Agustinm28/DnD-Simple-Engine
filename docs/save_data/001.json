@@ -1,0 +1,38 @@
+{
+    "id": "001",
+    "name": "Camino a Arabasta",
+    "description": "",
+    "characters": {
+        "None": {
+            "player": "",
+            "race": "",
+            "subrace": "",
+            "background": "",
+            "class": "",
+            "level": "",
+            "description": ""
+        }
+    },
+    "scenes": {
+        "Field": {
+            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/field.webp",
+            "audio_path": "./assets/audio/personalized/El culto a Pharos/field.mp3",
+            "description": ""
+        },
+        "Posada": {
+            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/posada.webp",
+            "audio_path": "./assets/audio/personalized/El culto a Pharos/posada.mp3",
+            "description": ""
+        },
+        "Bedroom": {
+            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/bedroom.webp",
+            "audio_path": "./assets/audio/personalized/El culto a Pharos/posada.mp3",
+            "description": ""
+        },
+        "Herbalist": {
+            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/herbalist.webp",
+            "audio_path": "./assets/audio/personalized/El culto a Pharos/herbalist.mp3",
+            "description": ""
+        }
+    }
+}

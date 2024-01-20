@@ -26,7 +26,7 @@ class ImageUtils:
                 extension = path[1].split(".")[-1]
                 if extension not in ["webp"]:
                     dprint("IMAGE",f"Unsupported file type: {path[1]}. Converting...", "CYAN")
-                    new_path = self.convert(path[1], extension, path[0], save_path)
+                    new_path = self.convert(path[1], extension)
                     data["scenes"][path[0]]["image_path"] = new_path
                     path[1] = new_path
                 else:
