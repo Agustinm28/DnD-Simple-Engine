@@ -19,6 +19,7 @@ class Game:
     RES_OPTIONS = False # Check if resolution options are running
     RES_CHANGE = False # Check if resolution is changed
     SCENE_NAME = None 
+    SAVE_MENU = False
     MUSIC = False
 
     def __init__(self, resolution:tuple = None, mode = None, save_path:str = None):
@@ -70,6 +71,7 @@ class Game:
         self.RES_OPTIONS = False
         self.RES_CHANGE = False
         self.MUSIC = False
+        self.SAVE_MENU = False
 
         while self.RUNNING:
             for event in pygame.event.get():
