@@ -189,8 +189,8 @@ class Engine:
         '''
         try:
             if buffer == "SCENES":
-                self.SCENES_BUFFER = {}
-                #! Esto despues
+                if len(self.SCENES_BUFFER) > 0:
+                    self.SCENES_BUFFER = {}
             elif buffer == "ENGINE":
                 self.ENGINE_BUFFER = {}
                 self.load_engine_assets(mode="CONFIG")

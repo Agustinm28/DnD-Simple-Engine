@@ -42,7 +42,7 @@ class MainMenu:
 
             # Get mouse position
             mouse_pos = pygame.mouse.get_pos()
-
+            
             # Check if mouse is over a button
             if start.collidepoint(mouse_pos):
                 for event in pygame.event.get(): 

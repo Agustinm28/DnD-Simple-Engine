@@ -28,11 +28,14 @@ class Game:
             resolution=resolution, 
             mode=mode
             )
+        self.clock = pygame.time.Clock()
+        self.save_path = save_path
+
         self.main_menu = MainMenu(self.engine, self)
         self.options_menu = OptionsMenu(self.engine, self)
         self.scene_menu = SceneMenu(self.engine, self)
         self.saves_menu = SavesMenu(self.engine, self)
-        self.save_path = save_path
+        
 
     def show_scene(self, scene_name):
         '''
@@ -89,7 +92,7 @@ class Game:
                                 self.SCENES_MENU = True
                             elif self.SCENES_MENU and not self.SCENE:
                                 pass
-                    elif event.key==pygame.K_ESCAPE: #! Si se sale al menu principal, que se descargue la memoria, cartel para usuario
+                    elif event.key==pygame.K_ESCAPE:
                         self.SCENES_MENU = False
                         self.SAVE_MENU = False
                         self.SCENE = False
@@ -135,7 +138,8 @@ class Game:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
                 self.saves_menu.show()
 
-            pygame.display.flip()
+            pygame.display.update()
+            self.clock.tick(60)
 
         self.engine.audio.quit_mixer()
         self.engine.quit_engine()
