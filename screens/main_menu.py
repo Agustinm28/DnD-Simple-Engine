@@ -3,16 +3,16 @@ from utils.debugger import dprint, error
 
 class MainMenu:
 
-    def __init__(self, display, gameStateManager, engine):
-        self.display = display
+    def __init__(self, gameStateManager, engine, mouse, exit_class):
         self.gameStateManager = gameStateManager
         self.engine = engine
-        self.clicked = False
+        self.mouse = mouse
+        self.exit_class = exit_class
 
     def run(self):
         try:
 
-            self.display.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
+            self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
             self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.ENGINE_BUFFER["main_menu"][0]
 
             scale_x = self.engine.resolution[0] / 1920
@@ -29,9 +29,9 @@ class MainMenu:
             exit_game = pygame.Rect(position_x, position_y*5, widht, height)
 
             # Draw buttons
-            pygame.gfxdraw.box(self.display, start, (0, 0, 0, 0))
-            pygame.gfxdraw.box(self.display, options, (0, 0, 0, 0))
-            pygame.gfxdraw.box(self.display, exit_game, (0, 0, 0, 0))
+            pygame.gfxdraw.box(self.engine.screen, start, (0, 0, 0, 0))
+            pygame.gfxdraw.box(self.engine.screen, options, (0, 0, 0, 0))
+            pygame.gfxdraw.box(self.engine.screen, exit_game, (0, 0, 0, 0))
 
             # Resize images
             image_button_1 = pygame.transform.scale(self.engine.ENGINE_BUFFER["start"][0], (widht, height))
@@ -39,30 +39,28 @@ class MainMenu:
             image_button_3 = pygame.transform.scale(self.engine.ENGINE_BUFFER["exit"][0], (widht, height))
 
             # Add images to buttons
-            self.display.blit(image_button_1, (position_x,position_y))
-            self.display.blit(image_button_2, (position_x,position_y*3))
-            self.display.blit(image_button_3, (position_x,position_y*5))
+            self.engine.screen.blit(image_button_1, (position_x,position_y))
+            self.engine.screen.blit(image_button_2, (position_x,position_y*3))
+            self.engine.screen.blit(image_button_3, (position_x,position_y*5))
 
             # Get mouse position
             mouse_pos = pygame.mouse.get_pos()
 
             # Check if mouse is over a button
             if start.collidepoint(mouse_pos):
-                if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                    self.clicked = True
+                if self.mouse.get_click():
+                    self.mouse.set_click('up')
                     dprint("MAIN MENU", "Start button clicked.", "BLUE")
+                    self.gameStateManager.set_state('save_menu')
             elif options.collidepoint(mouse_pos):
-                if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                    self.clicked = True
+                if self.mouse.get_click():
+                    self.mouse.set_click('up')
                     dprint("MAIN MENU", "Options button clicked.", "BLUE")
                     self.gameStateManager.set_state('options_menu')
             elif exit_game.collidepoint(mouse_pos):
-                if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                    self.clicked = True
-                    self.gameStateManager.set_state('exit')
-
-            if pygame.mouse.get_pressed()[0] == 0:
-                self.clicked = False
+                if self.mouse.get_click():
+                    self.mouse.set_click('up')
+                    self.exit_class.set_status(True)
 
             self.engine.restart_buffer(buffer="SCENES")
             

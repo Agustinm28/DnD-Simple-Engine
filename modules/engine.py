@@ -1,10 +1,11 @@
 import os
 import sys
+import time
 import pygame
 import pygame.gfxdraw
 from modules.audio import Audio
 from modules.image import ImageUtils
-from utils.debugger import dprint, error, set_break
+from utils.debugger import dprint, error, set_break, info
 import json
 
 class Engine:
@@ -227,7 +228,9 @@ class Engine:
             - save_path: path to saved game.
         '''
         try:
+            start = time.time()
             dprint("ENGINE", f"Loading saved game from {save_path}", "CYAN")
+            
             # If path does not exist
             if not os.path.exists(save_path):
                 raise Exception("Save path does not exist")
@@ -254,6 +257,10 @@ class Engine:
 
             for value in data:
                 self.add_to_scenes_buffer(value[0], value[1], value[2])
+
+            end = time.time()
+            info(f"Time to load: {end - start}") 
+
         except Exception:
             error("Error while loading saved game")
 

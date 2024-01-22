@@ -1,7 +1,8 @@
 import pygame
 from utils.debugger import info, error, dprint
+import time
 
-class OptionsMenu:
+class ResMenu:
 
     def __init__(self, gameStateManager, engine, mouse):
         self.gameStateManager = gameStateManager
@@ -9,7 +10,11 @@ class OptionsMenu:
         self.mouse = mouse
 
     def run(self):
+        '''
+        Method to show resolution menu.
+        '''
         try:
+
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
 
             scale_x = self.engine.resolution[0] / 1920
@@ -18,13 +23,13 @@ class OptionsMenu:
             #max_x = int(400 * scale_x) Este la verdad no se
             max_y = int(850 * scale_y)
 
+            options = self.engine.AVAILABLE_RESOLUTIONS
+
             coordenates = []
             x = int(50 * scale_x)
             y = int(50 * scale_y)
             widht = int(400 * scale_x)
             height = int(100 * scale_y)
-
-            options = ["Resolution", "Fullscreen"]
 
             font_size = int(36 * min(scale_x, scale_y))
             font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
@@ -48,7 +53,12 @@ class OptionsMenu:
 
             # Add images to buttons
             for name, rect in rects.items():
-                text = font.render(name, True, color)
+                
+                res_x = name.split(",")[0].split("(")[1]
+                res_y = name.split(",")[1].split(")")[0]
+                res = f"{res_x} x {res_y}"
+
+                text = font.render(res, True, color)
                 text_rect = text.get_rect(center=rect.center)
 
                 self.engine.screen.blit(scene_image, rect.topleft)
@@ -59,16 +69,19 @@ class OptionsMenu:
 
             # Check if mouse is over a button
             for name, rect in rects.items():
-                self.handle_button_event(name, rect, mouse_pos)
+                res_x = name.split(",")[0].split("(")[1]
+                res_y = name.split(",")[1].split(")")[0]
+                self.handle_resolution_event(name, rect, mouse_pos, (int(res_x), int(res_y)))
         except Exception:
-            error("Error showing options menu")
+            error("Error showing resolution menu")
 
-    def handle_button_event(self, button_name, button, mouse_pos):
+    def handle_resolution_event(self, button_name, button, mouse_pos, resolution):
         '''
-        Method to handle button events. Where:
+        Method to handle resolution events. Where:
             - button_name: name of the button.
             - button: button object.
             - mouse_pos: mouse position.
+            - resolution: resolution to change.
         '''
         try:
             if button.collidepoint(mouse_pos):
@@ -76,16 +89,8 @@ class OptionsMenu:
                     self.mouse.set_click('up')
                     if self.engine.audio.MUSIC:
                         self.engine.audio.stop()
-                    if button_name == "Resolution":
-                        dprint("OPTIONS MENU", "Resolution button clicked.", "BLUE")
-                        self.gameStateManager.set_state('res_menu')
-                    elif button_name == "Fullscreen":
-                        if self.engine.ENGINE_BUFFER["fullscreen"]:
-                            dprint("OPTIONS MENU", "Windowed mode.", "CYAN")
-                            self.engine.toggle_fullscreen(mode=False)
-                        else:
-                            self.engine.toggle_fullscreen(mode=True)
-                        dprint("OPTIONS MENU", "Fullscreen button clicked.", "BLUE")
-
+                    self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
+                    self.engine.update_screen(resolution, self.engine.mode)
+                    dprint("OPTIONS MENU", f"Resolution button clicked. Resolution: {resolution}", "BLUE")
         except Exception:
-            error("Error handling button event")
+            error("Error handling resolution event")

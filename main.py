@@ -1,4 +1,4 @@
-from modules.game_rework import Game
+from modules.game import Game
 
 def main():
     

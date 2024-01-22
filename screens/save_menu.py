@@ -2,17 +2,17 @@ import json
 import os
 import pygame
 from utils.debugger import dprint, error
+import time
 
-class SavesMenu:
+class SaveMenu:
 
-    def __init__(self, engine, game):
+    def __init__(self, gameStateManager, engine, mouse, loading):
+        self.gameStateManager = gameStateManager
         self.engine = engine
-        self.game = game
-
-    def show(self):
-        '''
-        Method to show saves menu.
-        '''
+        self.mouse = mouse
+        self.loading = loading
+     
+    def run(self):
         try:
             scale_x = self.engine.resolution[0] / 1920
             scale_y = self.engine.resolution[1] / 1080
@@ -84,17 +84,16 @@ class SavesMenu:
         '''
         try:
             if button.collidepoint(mouse_pos):
-                for event in pygame.event.get():
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if self.engine.audio.MUSIC:
-                            self.engine.audio.stop()
-                        if button_name == "+ New campaign":
-                            dprint("SAVES MENU", f"New campaign", "BLUE")
-                        else:
-                            self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
-                            self.game.save_path = save_path
-                            self.game.SAVE_MENU = False
-                            self.game.SCENES_MENU = True
+                if self.mouse.get_click():
+                    self.mouse.set_click('up')
+                    if self.engine.audio.MUSIC:
+                        self.engine.audio.stop()
+                    if button_name == "+ New campaign":
+                        dprint("SAVES MENU", f"New campaign", "BLUE")
+                    else:
+                        self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
+                        self.loading.set_save_path(save_path)
+                        self.gameStateManager.set_state('loading')
                             
         except Exception:
             error("Error handling button event")
