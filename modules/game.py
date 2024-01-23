@@ -10,6 +10,7 @@ from screens.save_menu import SaveMenu
 from screens.scene import Scene
 from screens.scenes_menu import SceneMenu
 from screens.loading import Loading
+from screens.new_save_menu import NewSaveMenu
 from modules.exit import Exit
 from utils.debugger import info, error, dprint
 from modules.mouse import Mouse
@@ -26,9 +27,11 @@ class Game:
         self.exit = Exit()
 
         self.game_state_manager = GameStateManager('main_menu')
+
         self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit)
         self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
-        self.res_menu = ResMenu(self.game_state_manager, self.engine, self.mouse)
+        self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse)
+        self.res_menu = ResMenu(self.game_state_manager, self.engine, self.mouse, self.new_save_menu)
         self.loading = Loading(self.game_state_manager, self.engine, self.mouse)
         self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading)
         self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
@@ -39,6 +42,7 @@ class Game:
             'options_menu': self.options_menu,
             'res_menu': self.res_menu,
             'save_menu': self.save_menu,
+            'new_save_menu': self.new_save_menu,
             'loading': self.loading,
             'scenes_menu': self.scenes_menu,
             'scene': self.scene
@@ -51,7 +55,8 @@ class Game:
         self.RUNNING = True
 
         while self.RUNNING:
-            for event in pygame.event.get():
+            events = pygame.event.get()
+            for event in events:
                 ### Key events
                 if event.type == pygame.QUIT:
                     self.RUNNING = False
@@ -64,10 +69,12 @@ class Game:
                         dprint('GAME REWORK','Escape key pressed.', 'GREEN')
                         if self.engine.audio.MUSIC:
                             self.engine.audio.stop()
+                        self.new_save_menu.set_handler(False)
                         self.game_state_manager.set_state('main_menu')
-                    elif event.key==pygame.K_p:
-                        dprint('GAME REWORK','Options', 'GREEN')
-                        self.game_state_manager.set_state('options_menu')
+                
+                if self.new_save_menu.get_handler():
+                    self.new_save_menu.name_manager.process_events(event)
+                    self.new_save_menu.desc_manager.process_events(event)
 
             # Look for the key of screen to run
             self.states[self.game_state_manager.get_state()].run()

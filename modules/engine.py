@@ -113,8 +113,10 @@ class Engine:
             pygame.display.toggle_fullscreen()
             if mode == False:
                 self.ENGINE_BUFFER["fullscreen"] = False
+                self.mode = pygame.RESIZABLE | pygame.DOUBLEBUF
             else:
                 self.ENGINE_BUFFER["fullscreen"] = True
+                self.mode = pygame.FULLSCREEN | pygame.DOUBLEBUF
         except Exception:
             error("Error while toggling fullscreen")
     
@@ -213,8 +215,10 @@ class Engine:
 
             if mode == "CONFIG":
                 config = engine_data["config"]
+                theme = engine_data["theme"]
                 for name, value in config.items():
                     self.add_to_engine_buffer(name, value, value="CONFIG")
+                self.add_to_engine_buffer("theme", theme, value="CONFIG")
             elif mode == "ASSETS":
                 images = engine_data["assets"]["images"]
                 for image_name, image_path in images.items():

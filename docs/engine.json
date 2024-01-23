@@ -17,5 +17,6 @@
             "scene": "./assets/images/buttons/scene.webp",
             "icon": "./assets/images/icons/icon.webp"
         }
-    }
+    },
+    "theme": "./docs/theme.json"
 }

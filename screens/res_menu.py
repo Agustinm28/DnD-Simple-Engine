@@ -4,10 +4,11 @@ import time
 
 class ResMenu:
 
-    def __init__(self, gameStateManager, engine, mouse):
+    def __init__(self, gameStateManager, engine, mouse, new_save_menu):
         self.gameStateManager = gameStateManager
         self.engine = engine
         self.mouse = mouse
+        self.new_save_menu = new_save_menu
 
     def run(self):
         '''
@@ -91,6 +92,7 @@ class ResMenu:
                         self.engine.audio.stop()
                     self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
                     self.engine.update_screen(resolution, self.engine.mode)
+                    self.new_save_menu.update_ui(resolution)
                     dprint("OPTIONS MENU", f"Resolution button clicked. Resolution: {resolution}", "BLUE")
         except Exception:
             error("Error handling resolution event")
