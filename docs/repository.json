@@ -2,5 +2,7 @@
     "images": {
         "Posada": "./assets/images/repository/posada.webp"
     },
-    "audios": {}
+    "audios": {
+        "Betian": "./assets/audio/repository/betian.mp3"
+    }
 }

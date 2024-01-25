@@ -57,7 +57,7 @@ class Audio:
         except Exception:
             error("Error quitting mixer")
 
-    def check(self, paths:list, save_path:str):
+    def check(self, audio_path:SystemError):
         '''
         Method to check if audio is optimized, if not, optimize it. Where:
             - paths: list of paths to check.
@@ -66,28 +66,19 @@ class Audio:
         try:
             dprint("AUDIO", f"Checking audio...", "CYAN")
 
-            with open(save_path, "r") as save_file:
-                data = json.load(save_file)
-
-            for path in paths:
-                extension = path[2].split(".")[-1]
-                if extension not in ["mp3"]:
-                    dprint("IMAGE",f"Unsupported file type: {path[2]}. Converting...", "CYAN")
-                    audio = AudioSegment.from_file(file=path[2], format=extension)
-                    target_db = -25.0
-                    change_in_db = target_db - audio.dBFS
-                    normalized_audio = audio.apply_gain(change_in_db)
-                    new_path = f"{path[2].split(f'.{extension}')[0]}.mp3"
-                    normalized_audio.export(new_path, format="mp3")
-                    os.remove(path[2])
-                    data["scenes"][path[0]]["audio_path"] = new_path
-                    path[2] = new_path
-                else:
-                    pass
+            extension = audio_path.split(".")[-1]
+            if extension not in ["mp3"]:
+                dprint("IMAGE",f"Unsupported file type: {audio_path}. Converting...", "CYAN")
+                audio = AudioSegment.from_file(file=audio_path, format=extension)
+                target_db = -25.0
+                change_in_db = target_db - audio.dBFS
+                normalized_audio = audio.apply_gain(change_in_db)
+                new_path = f"{audio_path.split(f'.{extension}')[0]}.mp3"
+                normalized_audio.export(new_path, format="mp3")
+                os.remove(audio_path)
+            else:
+                new_path = audio_path
             
-            with open(save_path, "w") as save_file:
-                json.dump(data, save_file, indent=4)
-            
-            return paths
+            return new_path
         except Exception:
             error("Error checking audio")
