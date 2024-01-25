@@ -1,4 +1,6 @@
 {
-    "images": [],
-    "audios": []
+    "images": {
+        "Posada": "./assets/images/repository/posada.webp"
+    },
+    "audios": {}
 }

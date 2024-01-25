@@ -3,6 +3,7 @@ import pygame
 import pygame.gfxdraw
 from modules.engine import Engine
 from modules.game_state import GameStateManager
+from modules.image import ImageUtils
 from screens.main_menu import MainMenu
 from screens.options_menu import OptionsMenu
 from screens.res_menu import ResMenu
@@ -26,6 +27,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.mouse = Mouse()
         self.exit = Exit()
+        self.image_optimizer = ImageUtils()
 
         self.game_state_manager = GameStateManager('main_menu')
 
@@ -36,7 +38,7 @@ class Game:
         self.loading = Loading(self.game_state_manager, self.engine, self.mouse)
         self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading)
         self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
-        self.repository = Repository(self.game_state_manager, self.engine, self.mouse)
+        self.repository = Repository(self.game_state_manager, self.engine, self.mouse, self.image_optimizer)
         self.scenes_menu = SceneMenu(self.game_state_manager, self.engine, self.mouse, self.scene)
 
         self.states = {
@@ -80,13 +82,7 @@ class Game:
                     self.new_save_menu.desc_manager.process_events(event)
 
                 if self.repository.get_handler():
-                    self.repository.image_manager.process_events(event)
-                    self.repository.name_manager.process_events(event)
-                    self.repository.select_manager.process_events(event)
-                    self.repository.file_manager.process_events(event)
-                    self.repository.select_label_manager.process_events(event)
-                    self.repository.save_manager.process_events(event)
-                    self.repository.alert_manager.process_events(event)
+                    self.repository.handle_events(event)
 
             # Look for the key of screen to run
             self.states[self.game_state_manager.get_state()].run()

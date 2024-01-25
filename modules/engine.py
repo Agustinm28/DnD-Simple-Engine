@@ -256,10 +256,7 @@ class Engine:
             for scene_name, scene_data in scenes.items():
                 scenes_data.append([scene_name, scene_data["image_path"], scene_data["audio_path"]])
 
-            data = self.image.check(scenes_data, save_path)
-            data = self.audio.check(data, save_path)
-
-            for value in data:
+            for value in scenes_data:
                 self.add_to_scenes_buffer(value[0], value[1], value[2])
 
             end = time.time()

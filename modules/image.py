@@ -11,31 +11,20 @@ class ImageUtils:
     def __init__(self):
         pass
 
-    def check(self, paths:list, save_path:str):
+    def check(self, image_path:str):
         '''
         Method to check if images are optimized, if not, optimize them. Where:
             - paths: list of paths to check.
             - save_path: path to save file.
         '''
         try:
-            dprint("IMAGE",f"Checking images...", "CYAN")
-            with open(save_path, "r") as save_file:
-                data = json.load(save_file)
-
-            for path in paths:
-                extension = path[1].split(".")[-1]
-                if extension not in ["webp"]:
-                    dprint("IMAGE",f"Unsupported file type: {path[1]}. Converting...", "CYAN")
-                    new_path = self.convert(path[1], extension)
-                    data["scenes"][path[0]]["image_path"] = new_path
-                    path[1] = new_path
-                else:
-                    pass
-            
-            with open(save_path, "w") as save_file:
-                json.dump(data, save_file, indent=4)
-            
-            return paths
+            extension = image_path.split(".")[-1]
+            if extension not in ["webp"]:
+                dprint("IMAGE",f"Unsupported file type: {image_path}. Converting...", "CYAN")
+                new_path = self.convert(image_path, extension)
+            else:
+                new_path = image_path
+            return new_path
         except Exception:
             error("Error checking images")
             return False
