@@ -14,7 +14,7 @@ class NewSaveMenu:
         self.scale_x = self.engine.resolution[0] / 1920
         self.scale_y = self.engine.resolution[1] / 1080
  
-        self.widht = int(400 * self.scale_x)
+        self.widht = int(600 * self.scale_x)
         self.height = int(60 * self.scale_y)
 
         self.position_x = int(50 * self.scale_x)
@@ -35,17 +35,19 @@ class NewSaveMenu:
         # Name input box
         self.name_rect = pygame.Rect(self.position_x, self.position_y*2, self.widht, self.height)
         self.name_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.name_rect, manager=self.name_manager, object_id="#name_input")
+        self.name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.name_rect, manager=self.name_manager, object_id="#name_input").set_text_length_limit(30)
 
         # Desc input box
-        self.desc_rect = pygame.Rect(self.position_x, self.position_y*5, self.widht, self.height*6)
+        self.desc_rect = pygame.Rect(self.position_x, self.position_y*5, self.widht, self.height*10)
         self.desc_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.desc_input = pygame_gui.elements.UITextEntryBox(relative_rect=self.desc_rect, manager=self.desc_manager, object_id="#desc_input")
+
+        #! VER EN pygame_gui, hay distintos modulos utiles para la seleccion de escenas, hay uno que te abre una ventana para seleccion de archivos, otro te muestra listas, etc.
 
     def run(self):
 
         self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
-        self.handler = True
+        self.set_handler(True)
 
         # Name label
         name_label = self.font.render("Name", True, (0, 0, 0))
@@ -54,6 +56,10 @@ class NewSaveMenu:
         # Desc label
         description_label = self.font.render("Description", True, (0, 0, 0))
         self.engine.screen.blit(description_label, (self.position_x, self.position_y*4))
+
+        # Scenes label
+        scenes_label = self.font.render("Scenes", True, (0, 0, 0))
+        self.engine.screen.blit(scenes_label, (self.position_x*18, self.position_y))
 
         self.name_manager.update(pygame.time.Clock().tick(60) / 1000)
         self.desc_manager.update(pygame.time.Clock().tick(60) / 1000)
@@ -73,7 +79,7 @@ class NewSaveMenu:
         self.scale_x = res[0] / 1920
         self.scale_y = res[1] / 1080
  
-        self.widht = int(400 * self.scale_x)
+        self.widht = int(600 * self.scale_x)
         self.height = int(60 * self.scale_y)
 
         self.position_x = int(50 * self.scale_x)
@@ -96,12 +102,12 @@ class NewSaveMenu:
         name_label = self.font.render("Name", True, (0, 0, 0))
         self.engine.screen.blit(name_label, (self.position_x, self.position_y))
 
-        self.desc_rect = pygame.Rect(self.position_x, self.position_y*5, self.widht, self.height*6)
+        self.desc_rect = pygame.Rect(self.position_x, self.position_y*5, self.widht, self.height*10)
         description_label = self.font.render("Description", True, (0, 0, 0))
         self.engine.screen.blit(description_label, (self.position_x, self.position_y*4))
 
         self.name_manager = pygame_gui.UIManager(res, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.name_rect, manager=self.name_manager, object_id="#name_input")
+        self.name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.name_rect, manager=self.name_manager, object_id="#name_input").set_text_length_limit(30)
 
         self.desc_manager = pygame_gui.UIManager(res, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.desc_input = pygame_gui.elements.UITextEntryBox(relative_rect=self.desc_rect, manager=self.desc_manager, object_id="#desc_input")

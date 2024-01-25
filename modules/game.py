@@ -11,6 +11,7 @@ from screens.scene import Scene
 from screens.scenes_menu import SceneMenu
 from screens.loading import Loading
 from screens.new_save_menu import NewSaveMenu
+from screens.repository import Repository
 from modules.exit import Exit
 from utils.debugger import info, error, dprint
 from modules.mouse import Mouse
@@ -19,7 +20,7 @@ class Game:
 
     RUNNING = False
 
-    def __init__(self, resolution:tuple = None, mode = None, save_path:str = None):
+    def __init__(self, resolution:tuple = None, mode = None):
         
         self.engine = Engine(resolution=resolution, mode=mode)
         self.clock = pygame.time.Clock()
@@ -35,6 +36,7 @@ class Game:
         self.loading = Loading(self.game_state_manager, self.engine, self.mouse)
         self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading)
         self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
+        self.repository = Repository(self.game_state_manager, self.engine, self.mouse)
         self.scenes_menu = SceneMenu(self.game_state_manager, self.engine, self.mouse, self.scene)
 
         self.states = {
@@ -45,6 +47,7 @@ class Game:
             'new_save_menu': self.new_save_menu,
             'loading': self.loading,
             'scenes_menu': self.scenes_menu,
+            'repository': self.repository,
             'scene': self.scene
         }
 
@@ -66,15 +69,24 @@ class Game:
                     self.mouse.set_click('up')
                 elif event.type==pygame.KEYDOWN:
                     if event.key==pygame.K_ESCAPE:
-                        dprint('GAME REWORK','Escape key pressed.', 'GREEN')
                         if self.engine.audio.MUSIC:
                             self.engine.audio.stop()
                         self.new_save_menu.set_handler(False)
+                        self.repository.set_handler(False)
                         self.game_state_manager.set_state('main_menu')
                 
                 if self.new_save_menu.get_handler():
                     self.new_save_menu.name_manager.process_events(event)
                     self.new_save_menu.desc_manager.process_events(event)
+
+                if self.repository.get_handler():
+                    self.repository.image_manager.process_events(event)
+                    self.repository.name_manager.process_events(event)
+                    self.repository.select_manager.process_events(event)
+                    self.repository.file_manager.process_events(event)
+                    self.repository.select_label_manager.process_events(event)
+                    self.repository.save_manager.process_events(event)
+                    self.repository.alert_manager.process_events(event)
 
             # Look for the key of screen to run
             self.states[self.game_state_manager.get_state()].run()

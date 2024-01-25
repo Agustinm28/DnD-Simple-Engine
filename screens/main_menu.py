@@ -11,58 +11,84 @@ class MainMenu:
 
     def run(self):
         try:
-
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
             self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.ENGINE_BUFFER["main_menu"][0]
 
             scale_x = self.engine.resolution[0] / 1920
             scale_y = self.engine.resolution[1] / 1080
 
+            #max_x = int(400 * scale_x) Este la verdad no se
+            max_y = int(850 * scale_y)
+
+            coordenates = []
+            x = int(50 * scale_x)
+            y = int(50 * scale_y)
             widht = int(400 * scale_x)
             height = int(100 * scale_y)
 
-            position_x = int(50 * scale_x)
-            position_y = int(50 * scale_y)
+            options = ["Start", "Repository", "Options", "Exit"]
 
-            start = pygame.Rect(position_x, position_y, widht, height)
-            options = pygame.Rect(position_x, position_y*3, widht, height)
-            exit_game = pygame.Rect(position_x, position_y*5, widht, height)
+            font_size = int(36 * min(scale_x, scale_y))
+            font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
+            color = (44, 33, 46)
 
-            # Draw buttons
-            pygame.gfxdraw.box(self.engine.screen, start, (0, 0, 0, 0))
-            pygame.gfxdraw.box(self.engine.screen, options, (0, 0, 0, 0))
-            pygame.gfxdraw.box(self.engine.screen, exit_game, (0, 0, 0, 0))
+            for l in range(len(options)):
+                coordenates.append((x, y, widht, height))
+                y += height
 
-            # Resize images
-            image_button_1 = pygame.transform.scale(self.engine.ENGINE_BUFFER["start"][0], (widht, height))
-            image_button_2 = pygame.transform.scale(self.engine.ENGINE_BUFFER["options"][0], (widht, height))
-            image_button_3 = pygame.transform.scale(self.engine.ENGINE_BUFFER["exit"][0], (widht, height))
+                if y > max_y:
+                    y = int(50 * scale_y)
+                    x += widht
+
+            rects = {f'{options[i]}': pygame.Rect(coordenates) for i, coordenates in enumerate(coordenates)}
+
+            for rect in rects.values():
+                pygame.gfxdraw.box(self.engine.screen, rect, (0, 0, 0, 0))
+
+            # Resize scene buttons image
+            scene_image = pygame.transform.scale(self.engine.ENGINE_BUFFER["scene"][0], (widht,height))
 
             # Add images to buttons
-            self.engine.screen.blit(image_button_1, (position_x,position_y))
-            self.engine.screen.blit(image_button_2, (position_x,position_y*3))
-            self.engine.screen.blit(image_button_3, (position_x,position_y*5))
+            for name, rect in rects.items():
+                text = font.render(name, True, color)
+                text_rect = text.get_rect(center=rect.center)
+
+                self.engine.screen.blit(scene_image, rect.topleft)
+                self.engine.screen.blit(text, text_rect)
 
             # Get mouse position
             mouse_pos = pygame.mouse.get_pos()
 
             # Check if mouse is over a button
-            if start.collidepoint(mouse_pos):
-                if self.mouse.get_click():
-                    self.mouse.set_click('up')
-                    dprint("MAIN MENU", "Start button clicked.", "BLUE")
-                    self.gameStateManager.set_state('save_menu')
-            elif options.collidepoint(mouse_pos):
-                if self.mouse.get_click():
-                    self.mouse.set_click('up')
-                    dprint("MAIN MENU", "Options button clicked.", "BLUE")
-                    self.gameStateManager.set_state('options_menu')
-            elif exit_game.collidepoint(mouse_pos):
-                if self.mouse.get_click():
-                    self.mouse.set_click('up')
-                    self.exit_class.set_status(True)
-
-            self.engine.restart_buffer(buffer="SCENES")
-            
+            for name, rect in rects.items():
+                self.handle_button_event(name, rect, mouse_pos)
         except Exception:
-            error("Error showing main menu")
+            error("Error showing options menu")
+
+    def handle_button_event(self, button_name, button, mouse_pos):
+        '''
+        Method to handle button events. Where:
+            - button_name: name of the button.
+            - button: button object.
+            - mouse_pos: mouse position.
+        '''
+        try:
+            if button.collidepoint(mouse_pos):
+                if self.mouse.get_click():
+                    self.mouse.set_click('up')
+                    if self.engine.audio.MUSIC:
+                        self.engine.audio.stop()
+                    if button_name == "Start":
+                        dprint("MAIN MENU", "Start button clicked.", "BLUE")
+                        self.gameStateManager.set_state('save_menu')
+                    elif button_name == "Repository":
+                        dprint("MAIN MENU", "Reposiroty button clicked.", "BLUE")
+                        self.gameStateManager.set_state('repository')
+                    elif button_name == "Options":
+                        dprint("MAIN MENU", "Options button clicked.", "BLUE")
+                        self.gameStateManager.set_state('options_menu')
+                    elif button_name == "Exit":
+                        self.exit_class.set_status(True)
+
+        except Exception:
+            error("Error handling button event")

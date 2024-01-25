@@ -4,8 +4,7 @@ def main():
     
     Game(
         resolution = None,
-        mode = None,
-        save_path = "./docs/save_data/000.json"
+        mode = None
     ).run()
 
 if __name__ == "__main__":
