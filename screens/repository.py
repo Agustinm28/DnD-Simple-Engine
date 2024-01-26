@@ -389,6 +389,7 @@ class Repository:
                 self.set_optimice_manager_list([self.confirmation_manager, self.image_manager])
                 self.delete_in_repository(self.image, "image")
                 self.update_ui("images")
+                self.update_ui("audios")
                 dprint("REPOSITORY", "Image deleted.", "GREEN")
             # Press Cancel delete rect
             elif self.confirmation_dialog.cancel_button.check_pressed():
@@ -444,6 +445,7 @@ class Repository:
                         self.save_in_repository(name, str(new_path), "image")
                         dprint("REPOSITORY", "Image saved.", "GREEN")
                         self.update_ui("images")
+                        self.update_ui("audios")
 
             ### AUDIOS INPUT ###
                         
@@ -473,6 +475,7 @@ class Repository:
                 self.audio_selector.disable()
                 self.set_optimice_manager_list([self.audio_confirmation_manager, self.audio_manager])
                 self.delete_in_repository(self.audio, "audio")
+                self.update_ui("images")
                 self.update_ui("audios")
                 dprint("REPOSITORY", "Audio deleted.", "GREEN")
             # Press Cancel delete rect
@@ -528,4 +531,5 @@ class Repository:
                         new_path = self.copy_and_optimize(str(self.audio_path), "audio")
                         self.save_in_repository(name, str(new_path), "audio")
                         dprint("REPOSITORY", "Audio saved.", "GREEN")
+                        self.update_ui("images")
                         self.update_ui("audios")

@@ -33,12 +33,12 @@ class Game:
 
         self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit)
         self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
-        self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse)
-        self.res_menu = ResMenu(self.game_state_manager, self.engine, self.mouse, self.new_save_menu)
         self.loading = Loading(self.game_state_manager, self.engine, self.mouse)
-        self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading)
         self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
         self.repository = Repository(self.game_state_manager, self.engine, self.mouse, self.image_optimizer)
+        self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse, self.repository)
+        self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading, self.new_save_menu)
+        self.res_menu = ResMenu(self.game_state_manager, self.engine, self.mouse, self.new_save_menu)
         self.scenes_menu = SceneMenu(self.game_state_manager, self.engine, self.mouse, self.scene)
 
         self.states = {
@@ -78,8 +78,7 @@ class Game:
                         self.game_state_manager.set_state('main_menu')
                 
                 if self.new_save_menu.get_handler():
-                    self.new_save_menu.name_manager.process_events(event)
-                    self.new_save_menu.desc_manager.process_events(event)
+                    self.new_save_menu.handle_events(event)
 
                 if self.repository.get_handler():
                     self.repository.handle_events(event)

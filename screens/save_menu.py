@@ -6,14 +6,18 @@ import time
 
 class SaveMenu:
 
-    def __init__(self, gameStateManager, engine, mouse, loading):
+    def __init__(self, gameStateManager, engine, mouse, loading, new_save):
         self.gameStateManager = gameStateManager
         self.engine = engine
         self.mouse = mouse
         self.loading = loading
+        self.new_save = new_save
      
     def run(self):
         try:
+
+            self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
+            
             scale_x = self.engine.resolution[0] / 1920
             scale_y = self.engine.resolution[1] / 1080
 
@@ -90,6 +94,7 @@ class SaveMenu:
                         self.engine.audio.stop()
                     if button_name == "+ New campaign":
                         dprint("SAVES MENU", f"New campaign", "BLUE")
+                        self.new_save.update_ui()
                         self.gameStateManager.set_state('new_save_menu')
                     else:
                         self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
