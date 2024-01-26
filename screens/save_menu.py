@@ -94,7 +94,7 @@ class SaveMenu:
                         self.engine.audio.stop()
                     if button_name == "+ New campaign":
                         dprint("SAVES MENU", f"New campaign", "BLUE")
-                        self.new_save.update_ui()
+                        self.new_save.update_ui(complete = True)
                         self.gameStateManager.set_state('new_save_menu')
                     else:
                         self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))

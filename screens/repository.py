@@ -14,37 +14,7 @@ class Repository:
         self.mouse = mouse
         self.image_optimizer = image_optimizer
 
-        self.handler = False
-        self.images, self.audios = self.load_repository()
-        self.image_path = ""
-        self.audio_path = ""
-        self.image = None
-        self.selection = False
-
-        self.scale_x = self.engine.resolution[0] / 1920
-        self.scale_y = self.engine.resolution[1] / 1080
- 
-        self.widht = int(300 * self.scale_x)
-        self.height = int(60 * self.scale_y)
-
-        self.position_x = int(50 * self.scale_x)
-        self.position_y = int(50 * self.scale_y)
-
-        font_size = int(36 * min(self.scale_x, self.scale_y))
-        self.font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
-
-        with open("./docs/theme.json", "r") as f:
-            theme = json.load(f)
-        
-        theme["#name_input"]["font"][0]["size"] = str(font_size)
-        theme["#desc_input"]["font"][0]["size"] = str(font_size)
-
-        with open("./docs/theme.json", "w") as f:
-            json.dump(theme, f, indent=4)
-
-        ### IMAGES UI ###
-        self.update_ui("images")
-        self.update_ui("audios")
+        self.update_ui()
 
     def run(self):
         try:
@@ -53,8 +23,8 @@ class Repository:
 
             self.update_managers(self.optimice_manager, update=True, draw=True)
             self.update_managers(self.manager_list, update=False, draw=True)
+            
             mouse_pos = pygame.mouse.get_pos()
-
             self.check_mouse_input(mouse_pos)
 
         except Exception:
@@ -125,6 +95,17 @@ class Repository:
         with open("./docs/repository.json", "w") as f:
             json.dump(repository, f, indent=4)
 
+    def get_path_from_repository(self, name, media_type):
+        with open("./docs/repository.json", "r") as f:
+            repository = json.load(f)
+        
+        if media_type == "audio":
+            path = repository["audios"][name]
+        elif media_type == "image":
+            path = repository["images"][name]
+
+        return path
+
     def update_managers(self, manager_list, update=False, draw=False):
         for manager in manager_list:
             if update:
@@ -142,7 +123,7 @@ class Repository:
     def get_manager_list(self):
         return self.manager_list
 
-    def update_ui(self, ui:str):
+    def update_ui(self):
 
         self.handler = False
         self.images, self.audios = self.load_repository()
@@ -172,12 +153,6 @@ class Repository:
         with open("./docs/theme.json", "w") as f:
             json.dump(theme, f, indent=4)
 
-        if ui == "images":
-            self.update_images_ui()
-        elif ui == "audios":
-            self.update_audios_ui()
-
-    def update_images_ui(self):
         ### IMAGES UI ###
         # Images label
         self.images_rect = pygame.Rect(self.position_x, self.position_y, self.widht*2, self.height)
@@ -247,23 +222,6 @@ class Repository:
         self.alert_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.alert_label = pygame_gui.elements.UILabel(relative_rect=self.alert_rect, manager=self.alert_manager, object_id="#alert_label", text="")
 
-        self.manager_list = [
-            self.image_manager, 
-            self.name_manager, 
-            self.select_manager, 
-            self.select_label_manager, 
-            self.file_manager, 
-            self.save_manager, 
-            self.alert_manager, 
-            self.confirmation_manager, 
-            self.images_manager, 
-            self.name_label_manager
-            ]
-        self.optimice_manager = []
-
-        self.update_managers(self.manager_list, update=True, draw=True)
-
-    def update_audios_ui(self):
         ### AUDIOS UI ###
         x_distance = 15
         # Audios label
@@ -340,10 +298,8 @@ class Repository:
             self.name_manager, 
             self.select_manager, 
             self.select_label_manager, 
-            self.file_manager, 
             self.save_manager, 
             self.alert_manager, 
-            self.confirmation_manager, 
             self.images_manager, 
             self.name_label_manager,
             self.audios_manager,
@@ -351,11 +307,13 @@ class Repository:
             self.audio_name_manager,
             self.audio_select_manager,
             self.audio_select_label_manager,
-            self.audio_file_manager,
             self.audio_save_manager,
             self.audio_alert_manager,
-            self.audio_confirmation_manager,
-            self.audio_name_label_manager
+            self.audio_name_label_manager,
+            self.file_manager, 
+            self.audio_file_manager,
+            self.confirmation_manager, 
+            self.audio_confirmation_manager
             ]
         self.optimice_manager = []
 
@@ -388,8 +346,7 @@ class Repository:
                 self.image_selector.disable()
                 self.set_optimice_manager_list([self.confirmation_manager, self.image_manager])
                 self.delete_in_repository(self.image, "image")
-                self.update_ui("images")
-                self.update_ui("audios")
+                self.update_ui()
                 dprint("REPOSITORY", "Image deleted.", "GREEN")
             # Press Cancel delete rect
             elif self.confirmation_dialog.cancel_button.check_pressed():
@@ -444,8 +401,7 @@ class Repository:
                         new_path = self.copy_and_optimize(str(self.image_path), "image")
                         self.save_in_repository(name, str(new_path), "image")
                         dprint("REPOSITORY", "Image saved.", "GREEN")
-                        self.update_ui("images")
-                        self.update_ui("audios")
+                        self.update_ui()
 
             ### AUDIOS INPUT ###
                         
@@ -475,8 +431,7 @@ class Repository:
                 self.audio_selector.disable()
                 self.set_optimice_manager_list([self.audio_confirmation_manager, self.audio_manager])
                 self.delete_in_repository(self.audio, "audio")
-                self.update_ui("images")
-                self.update_ui("audios")
+                self.update_ui()
                 dprint("REPOSITORY", "Audio deleted.", "GREEN")
             # Press Cancel delete rect
             elif self.audio_confirmation_dialog.cancel_button.check_pressed():
@@ -531,5 +486,4 @@ class Repository:
                         new_path = self.copy_and_optimize(str(self.audio_path), "audio")
                         self.save_in_repository(name, str(new_path), "audio")
                         dprint("REPOSITORY", "Audio saved.", "GREEN")
-                        self.update_ui("images")
-                        self.update_ui("audios")
+                        self.update_ui()

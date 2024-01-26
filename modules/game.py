@@ -14,6 +14,7 @@ from screens.loading import Loading
 from screens.new_save_menu import NewSaveMenu
 from screens.repository import Repository
 from modules.exit import Exit
+from modules.save import Save
 from utils.debugger import info, error, dprint
 from modules.mouse import Mouse
 
@@ -28,15 +29,16 @@ class Game:
         self.mouse = Mouse()
         self.exit = Exit()
         self.image_optimizer = ImageUtils()
+        self.save = Save()
 
         self.game_state_manager = GameStateManager('main_menu')
 
-        self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit)
+        self.repository = Repository(self.game_state_manager, self.engine, self.mouse, self.image_optimizer)
+        self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit, self.repository)
         self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
         self.loading = Loading(self.game_state_manager, self.engine, self.mouse)
         self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
-        self.repository = Repository(self.game_state_manager, self.engine, self.mouse, self.image_optimizer)
-        self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse, self.repository)
+        self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse, self.repository, self.image_optimizer, self.save)
         self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading, self.new_save_menu)
         self.res_menu = ResMenu(self.game_state_manager, self.engine, self.mouse, self.new_save_menu)
         self.scenes_menu = SceneMenu(self.game_state_manager, self.engine, self.mouse, self.scene)

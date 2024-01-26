@@ -92,7 +92,6 @@ class ResMenu:
                         self.engine.audio.stop()
                     self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
                     self.engine.update_screen(resolution, self.engine.mode)
-                    self.new_save_menu.update_ui(resolution)
                     dprint("OPTIONS MENU", f"Resolution button clicked. Resolution: {resolution}", "BLUE")
         except Exception:
             error("Error handling resolution event")

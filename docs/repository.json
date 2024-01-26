@@ -1,10 +1,10 @@
 {
     "images": {
-        "Posada": "./assets/images/repository/posada.webp",
-        "Taverna": "./assets/images/repository/tavern.webp"
+        "Taverna": "./assets/images/repository/tavern.webp",
+        "Betian": "./assets/images/repository/betian.webp",
+        "Temple": "./assets/images/repository/temple.webp"
     },
     "audios": {
-        "Betian": "./assets/audio/repository/betian.mp3",
         "Taverna": "./assets/audio/repository/Tavern.mp3"
     }
 }

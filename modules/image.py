@@ -2,6 +2,7 @@ import json
 import os
 from PIL import Image
 from utils.debugger import error, dprint
+import pygame
 
 class ImageUtils:
     '''
@@ -46,4 +47,16 @@ class ImageUtils:
         
         except Exception:
             error("Error converting image")
+            return None
+        
+    def load_image(self, path):
+        '''
+        Method to load an image. Where:
+            - path: path to image.
+        '''
+        try:
+            image = pygame.image.load(path).convert_alpha()
+            return image
+        except Exception:
+            error("Error loading image")
             return None
