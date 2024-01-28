@@ -8,7 +8,7 @@ The idea of the project is to provide a simple story generation engine, in which
 
 ## 🔧 How to use:
 
-1. Download the latest release from the [releases](https://github.com/Agustinm28/DnD-Simple-Engine/releases) section and unzip it.
+1. Download the latest release from the [releases](https://github.com/Agustinm28/DnD-Simple-Engine/releases) section and unzip it. Execute the `Simple-Dnd-Engine.exe` file in the root folder.
 
 2. Go to the repository tab and add your assets, both images and audio, these will be shared between campaigns.
 
