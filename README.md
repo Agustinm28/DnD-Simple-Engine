@@ -6,52 +6,19 @@ The idea of the project is to provide a simple story generation engine, in which
 
 **NOTE:** The project is still in its alpha phase, so there may be bugs or missing features that will be added later.
 
-**VERSION NOTE:** The current version is 0.1.x, so the generation of scenes for the game must be defined manually in a json file, until we can implement a solution within the engine. The steps are listed below.
+## 🔧 How to use:
 
-## 🔧 Setup:
+1. Download the latest release from the [releases](https://github.com/Agustinm28/DnD-Simple-Engine/releases) section and unzip it. Execute the `Simple-Dnd-Engine.exe` file in the root folder.
 
-1. Download de latest release. In the engine folder, go to the `assets/images/personalized` folder and create a folder with the name of your campaign, for example: `my-campaign`.
+2. Go to the repository tab and add your assets, both images and audio, these will be shared between campaigns.
 
-2. Put the images you want to use in the folder you just created.
+3. Go to start, create a new campaign using the "+ New campaign" button.
 
-3. Then, go to the `assets/audio/personalized` folder and create a folder with the name of your campaign again, for example: `my-campaign`.
+4. Double click on the campaign in the campaign menu to start it.
 
-4. Put the audios you want to use in the folder you just created.
+    - In the campaign menu, you can either edit or delete the campaigns.
 
-5. Define your campaign. Go to the `docs/save_data` folder and edit the `000.json` file, put your configuration, in `character` leave it as it is since it has not yet been implemented, in the `scenes` section, add the scenes you want to use. Example:
-
-```json
-{
-    "id": "000",
-    "name": "The Pharos Cult",
-    "description": "",
-    "characters": {
-        "Name": {
-            "player": "",
-            "race": "",
-            "subrace": "",
-            "background": "",
-            "class": "",
-            "level": "",
-            "description": ""
-        }
-    },
-    "scenes": {
-        "Taverna": {
-            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/tavern.webp",
-            "audio_path": "./assets/audio/personalized/El culto a Pharos/Tavern.mp3",
-            "description": ""
-        },
-        "Travel path": {
-            "image_path": "./assets/images/personalized/El culto a Pharos/scenes/travel_path.webp",
-            "audio_path": "./assets/audio/personalized/El culto a Pharos/travel_path.mp3",
-            "description": ""
-        }
-    }
-}
-```
-
-6. All done, now you can run the engine through the `Simple-Dnd-Engine.exe` file in the root folder.
+5. All done, now you can run the engine through the `Simple-Dnd-Engine.exe` file in the root folder.
 
 ## ⚡Requirements
 

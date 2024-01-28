@@ -1,0 +1,14 @@
+{
+    "images": {
+        "Tavern": "./assets/images/repository/tavern.webp",
+        "Betian": "./assets/images/repository/betian.webp",
+        "Herbalist": "./assets/images/repository/herbalist.webp",
+        "Temple": "./assets/images/repository/temple.webp"
+    },
+    "audios": {
+        "Betian": "./assets/audio/repository/betian.mp3",
+        "Tavern": "./assets/audio/repository/Tavern.mp3",
+        "Herbalist": "./assets/audio/repository/herbalist.mp3",
+        "Temple": "./assets/audio/repository/temple.mp3"
+    }
+}

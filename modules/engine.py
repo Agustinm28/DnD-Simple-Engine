@@ -1,10 +1,11 @@
 import os
 import sys
+import time
 import pygame
 import pygame.gfxdraw
 from modules.audio import Audio
 from modules.image import ImageUtils
-from utils.debugger import dprint, error, set_break
+from utils.debugger import dprint, error, set_break, info
 import json
 
 class Engine:
@@ -112,12 +113,14 @@ class Engine:
             pygame.display.toggle_fullscreen()
             if mode == False:
                 self.ENGINE_BUFFER["fullscreen"] = False
+                self.mode = pygame.RESIZABLE | pygame.DOUBLEBUF
             else:
                 self.ENGINE_BUFFER["fullscreen"] = True
+                self.mode = pygame.FULLSCREEN | pygame.DOUBLEBUF
         except Exception:
             error("Error while toggling fullscreen")
     
-    def add_to_buffer(self, buffer:str, name:str, scene_path:str, audio_path:str = None, value:str = None):
+    def add_to_buffer(self, buffer:str, name:str, scene_path:str, audio_path:str = None, value:str = None, save_path:str = None):
         '''
         Method to add an element to a buffer. Where:
             - buffer: buffer to add the element. -> [SCENES, ENGINE]
@@ -141,8 +144,20 @@ class Engine:
                     scene_extension = scene_path.split(".")[-1]
                     if scene_extension not in SUPPORTED:
                         raise Exception("Unsupported file type")
-                    memory_scene = pygame.image.load(scene_path).convert_alpha()
-                    memory_scene = pygame.transform.scale(memory_scene, self.resolution)
+                    try:
+                        memory_scene = pygame.image.load(scene_path).convert_alpha()
+                        memory_scene = pygame.transform.scale(memory_scene, self.resolution)
+                    except FileNotFoundError:
+                        # Delete the element from the save_path file
+                        with open(save_path, "r") as save_file:
+                            save = json.load(save_file)
+
+                        scenes = save["scenes"]
+                        scenes.pop(name)
+
+                        with open(save_path, "w") as save_file:
+                            json.dump(save, save_file, indent=4)
+
                     if audio_path is not None and audio_path.split(".")[-1] in SUPPORTED:
                         memory_audio = audio_path
                     else:
@@ -167,7 +182,7 @@ class Engine:
         except Exception:
             error("Error while adding element to engine buffer")
 
-    def add_to_scenes_buffer(self, name:str, image_path:str, audio_path:str = None):
+    def add_to_scenes_buffer(self, name:str, image_path:str, audio_path:str = None, save_path:str = None):
         '''
         Method to add an element to the scenes buffer. Where:
             - name: name of the element.
@@ -177,7 +192,7 @@ class Engine:
         try:
             if image_path is None or image_path == "":
                 raise Exception("Scene path is required")
-            self.add_to_buffer("SCENES", name, image_path, audio_path, value="IMAGE")
+            self.add_to_buffer("SCENES", name, image_path, audio_path, value="IMAGE", save_path=save_path)
             dprint("ENGINE", f"Element {name} added to scene buffer", "GREEN")
         except Exception:
             error("Error while adding element to scene buffer")
@@ -189,8 +204,8 @@ class Engine:
         '''
         try:
             if buffer == "SCENES":
-                self.SCENES_BUFFER = {}
-                #! Esto despues
+                if len(self.SCENES_BUFFER) > 0:
+                    self.SCENES_BUFFER = {}
             elif buffer == "ENGINE":
                 self.ENGINE_BUFFER = {}
                 self.load_engine_assets(mode="CONFIG")
@@ -212,8 +227,10 @@ class Engine:
 
             if mode == "CONFIG":
                 config = engine_data["config"]
+                theme = engine_data["theme"]
                 for name, value in config.items():
                     self.add_to_engine_buffer(name, value, value="CONFIG")
+                self.add_to_engine_buffer("theme", theme, value="CONFIG")
             elif mode == "ASSETS":
                 images = engine_data["assets"]["images"]
                 for image_name, image_path in images.items():
@@ -227,6 +244,9 @@ class Engine:
             - save_path: path to saved game.
         '''
         try:
+            start = time.time()
+            dprint("ENGINE", f"Loading saved game from {save_path}", "CYAN")
+            
             # If path does not exist
             if not os.path.exists(save_path):
                 raise Exception("Save path does not exist")
@@ -246,13 +266,14 @@ class Engine:
             scenes_data = []
 
             for scene_name, scene_data in scenes.items():
-                scenes_data.append([scene_name, scene_data["image_path"], scene_data["audio_path"]])
+                scenes_data.append([scene_name, scene_data["image_path"], scene_data["audio_path"][1]])
 
-            data = self.image.check(scenes_data, save_path)
-            data = self.audio.check(data, save_path)
+            for value in scenes_data:
+                self.add_to_scenes_buffer(value[0], value[1], value[2], save_path=save_path)
 
-            for value in data:
-                self.add_to_scenes_buffer(value[0], value[1], value[2])
+            end = time.time()
+            info(f"Time to load: {end - start}") 
+
         except Exception:
             error("Error while loading saved game")
 

@@ -2,130 +2,99 @@ import time
 import pygame
 import pygame.gfxdraw
 from modules.engine import Engine
-from modules.screens.scene_menu import SceneMenu
-from modules.screens.main_menu import MainMenu
-from modules.screens.options_menu import OptionsMenu
-from utils.debugger import info, error
+from modules.game_state import GameStateManager
+from modules.image import ImageUtils
+from screens.main_menu import MainMenu
+from screens.options_menu import OptionsMenu
+from screens.save_menu import SaveMenu
+from screens.scene import Scene
+from screens.scenes_menu import SceneMenu
+from screens.loading import Loading
+from screens.new_save_menu import NewSaveMenu
+from screens.repository import Repository
+from modules.exit import Exit
+from modules.save import Save
+from utils.debugger import info, error, dprint
+from modules.mouse import Mouse
 
 class Game:
 
-    RUNNING = False # Check if game is running
-    MAIN_MENU = False # Check if main menu is running
-    SCENES_MENU = False # Check if scenes menu is running
-    SCENE = False # Check if scene is running
-    LOAD = False # Check if campaign data is loaded
-    LOAD_SCREEN = False # Check if load screen is running
-    OPTIONS = False # Check if options menu is running
-    RES_OPTIONS = False # Check if resolution options are running
-    RES_CHANGE = False # Check if resolution is changed
-    SCENE_NAME = None 
-    MUSIC = False
+    RUNNING = False
 
-    def __init__(self, resolution:tuple = None, mode = None, save_path:str = None):
-        self.engine = Engine(
-            resolution=resolution, 
-            mode=mode
-            )
-        self.main_menu = MainMenu(self.engine, self)
-        self.options_menu = OptionsMenu(self.engine, self)
-        self.scene_menu = SceneMenu(self.engine, self)
-        self.save_path = save_path
+    def __init__(self, resolution:tuple = None, mode = None):
+        
+        self.engine = Engine(resolution=resolution, mode=mode)
+        self.clock = pygame.time.Clock()
+        self.mouse = Mouse()
+        self.exit = Exit()
+        self.image_optimizer = ImageUtils()
+        self.save = Save()
 
-    def show_scene(self, scene_name):
-        '''
-        Method to show a scene. Where:
-            - scene_name: name of the scene to show.
-        '''
-        self.MAIN_MENU = False
-        self.SCENES_MENU = False
-        self.SCENE = True
-        self.SCENE_NAME = scene_name
+        self.game_state_manager = GameStateManager('main_menu')
 
-    def load_game(self, save_path:str):
-        '''
-        Method to load a saved game. Where:
-            - save_path: path to saved game.
-        '''
-        try:
-            if not self.LOAD:
-                start = time.time()
-                self.engine.load_saved_game(save_path)
-                self.LOAD = True
-                end = time.time()
-                info(f"Time to load: {end - start}") 
-        except Exception:
-            error("Error loading saved game")
+        self.repository = Repository(self.game_state_manager, self.engine, self.mouse, self.image_optimizer)
+        self.loading = Loading(self.game_state_manager, self.engine, self.mouse)
+        self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse, self.repository, self.image_optimizer, self.save)
+        self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading, self.new_save_menu, self.save, self.repository)
+        self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit, self.repository, self.save_menu)
+        self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
+        self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
+        self.scenes_menu = SceneMenu(self.game_state_manager, self.engine, self.mouse, self.scene)
+
+        self.states = {
+            'main_menu': self.main_menu,
+            'options_menu': self.options_menu,
+            'save_menu': self.save_menu,
+            'new_save_menu': self.new_save_menu,
+            'loading': self.loading,
+            'scenes_menu': self.scenes_menu,
+            'repository': self.repository,
+            'scene': self.scene
+        }
 
     def run(self):
         '''
         Method to run the game.
         '''
         self.RUNNING = True
-        self.MAIN_MENU = True
-        self.SCENES_MENU = False
-        self.SCENE = False
-        self.LOAD = False
-        self.LOAD_SCREEN = False
-        self.OPTIONS = False
-        self.RES_OPTIONS = False
-        self.RES_CHANGE = False
-        self.MUSIC = False
 
         while self.RUNNING:
-            for event in pygame.event.get():
+            events = pygame.event.get()
+            for event in events:
                 ### Key events
                 if event.type == pygame.QUIT:
                     self.RUNNING = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.mouse.set_click('down')
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    self.mouse.set_click('up')
                 elif event.type==pygame.KEYDOWN:
-                    if event.key==pygame.K_m:
-                        if not self.MAIN_MENU:
-                            if self.SCENES_MENU and self.SCENE:
-                                self.SCENES_MENU = False
-                            elif not self.SCENES_MENU and self.SCENE:
-                                self.SCENES_MENU = True
-                            elif self.SCENES_MENU and not self.SCENE:
-                                pass
-                    elif event.key==pygame.K_ESCAPE: #! Si se sale al menu principal, que se descargue la memoria, cartel para usuario
-                        self.SCENES_MENU = False
-                        self.SCENE = False
-                        self.OPTIONS = False
-                        self.MAIN_MENU = True
+                    if event.key==pygame.K_ESCAPE:
                         if self.engine.audio.MUSIC:
                             self.engine.audio.stop()
-                    elif event.key==pygame.K_a: #! Ver para que esto funcione solo durante la partida (se puede poner desde el menu)
-                        self.engine.audio.play("./assets/audio/personalized/El culto a Pharos/battle.mp3")
-            
-            ### SHOW SCREENS FROM BUFFER
-            self.engine.screen.fill((0,0,0))
+                        self.states[self.game_state_manager.get_state()].set_handler(False)
+                        self.game_state_manager.set_state(self.game_state_manager.get_last_state())
+                
+                if self.new_save_menu.get_handler():
+                    self.new_save_menu.handle_events(event)
 
-            if self.MAIN_MENU:
-                self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
-                self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.ENGINE_BUFFER["main_menu"][0]
-                self.main_menu.show()
-            elif self.RES_CHANGE:
-                self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
-                self.engine.update_screen(self.options_menu.RES, pygame.FULLSCREEN | pygame.DOUBLEBUF)
-                self.RES_CHANGE = False
-                self.RES_OPTIONS = False
-                self.OPTIONS = True
-            elif self.SCENES_MENU and self.SCENE:
-                self.engine.screen.blit(self.engine.SCENES_BUFFER[self.SCENE_NAME][0], (0,0))
-                self.load_game(self.save_path)
-                self.scene_menu.show()
-            elif self.SCENES_MENU:
-                self.engine.screen.blit(self.engine.ENGINE_BUFFER["scenes_menu"][0], (0,0))
-                self.load_game(self.save_path)
-                self.scene_menu.show()
-            elif self.SCENE:
-                self.engine.screen.blit(self.engine.SCENES_BUFFER[self.SCENE_NAME][0], (0,0))
-            elif self.OPTIONS:
-                self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
-                self.options_menu.show()
-            elif self.RES_OPTIONS:
-                self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
-                self.options_menu.show_resolution_menu()
+                if self.repository.get_handler():
+                    self.repository.handle_events(event)
 
-            pygame.display.flip()
+                if self.save_menu.get_handler():
+                    self.save_menu.handle_events(event)
+
+                if self.options_menu.get_handler():
+                    self.options_menu.handle_events(event)
+
+            # Look for the key of screen to run
+            self.states[self.game_state_manager.get_state()].run()
+
+            if self.exit.get_status():
+                self.RUNNING = False
+
+            pygame.display.update()
+            self.clock.tick(60)
 
         self.engine.audio.quit_mixer()
         self.engine.quit_engine()
