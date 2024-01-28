@@ -127,13 +127,17 @@ class NewSaveMenu:
         self.position_y = int(50 * self.scale_y)
 
         font_size = int(36 * min(self.scale_x, self.scale_y))
+        button_font_size = int(28 * min(self.scale_x, self.scale_y))
         self.font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
 
         with open("./docs/theme.json", "r") as f:
             theme = json.load(f)
         
-        theme["#name_input"]["font"][0]["size"] = str(font_size)
-        theme["#desc_input"]["font"][0]["size"] = str(font_size)
+        theme["#ui_input"]["font"][0]["size"] = str(font_size)
+        theme["#ui_label"]["font"][0]["size"] = str(font_size)
+        theme["#ui_selector"]["font"][0]["size"] = str(font_size)
+        theme["#ui_button"]["font"][0]["size"] = str(button_font_size)
+        theme["#ui_dialog"]["font"][0]["size"] = str(button_font_size)
 
         with open("./docs/theme.json", "w") as f:
             json.dump(theme, f, indent=4)
@@ -142,21 +146,21 @@ class NewSaveMenu:
         if skip == False:
             self.name_rect = pygame.Rect(self.position_x, self.position_y*2, self.widht, self.height)
             self.name_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-            self.name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.name_rect, manager=self.name_manager, object_id="#name_input")
+            self.name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.name_rect, manager=self.name_manager, object_id="#ui_input")
             self.name_input.set_text_length_limit(30)
 
             # Desc input box
             self.desc_rect = pygame.Rect(self.position_x, self.position_y*5, self.widht, self.height*10)
             self.desc_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-            self.desc_input = pygame_gui.elements.UITextEntryBox(relative_rect=self.desc_rect, manager=self.desc_manager, object_id="#desc_input")
+            self.desc_input = pygame_gui.elements.UITextEntryBox(relative_rect=self.desc_rect, manager=self.desc_manager, object_id="#ui_input")
 
         # Scenes selector
         self.scenes_rect = pygame.Rect(self.position_x*15, self.position_y*2, self.widht*1.7, self.height*8)
         self.scenes_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.scenes_selector = pygame_gui.elements.UISelectionList(relative_rect=self.scenes_rect, manager=self.scenes_manager, object_id="#scene_selector", item_list=self.scenes)
+        self.scenes_selector = pygame_gui.elements.UISelectionList(relative_rect=self.scenes_rect, manager=self.scenes_manager, object_id="#ui_selector", item_list=self.scenes)
 
         # Confirmation dialog
-        self.confirmation_rect = pygame.Rect(self.position_x*5, self.position_y*6, self.widht*2, self.height*5)
+        self.confirmation_rect = pygame.Rect(self.position_x*5, self.position_y*6, self.widht*1.5, self.height*5)
         self.confirmation_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.confirmation_dialog = pygame_gui.windows.UIConfirmationDialog(
             rect=self.confirmation_rect,
@@ -165,7 +169,7 @@ class NewSaveMenu:
             action_long_desc="Do you want to delete this scene from the list?",
             action_short_name="Delete from list",
             blocking=True,
-            object_id="#confirmation_dialog"
+            object_id="#ui_dialog"
         )
         self.confirmation_dialog.hide()
 
@@ -186,7 +190,7 @@ class NewSaveMenu:
             relative_rect=self.image_dropdown_rect,
             manager=self.image_dropdown_manager,
             starting_option="Select image",
-            object_id="#image_dropdown"
+            object_id="#ui_dropdown"
         )
 
         # Audio dropdown selector
@@ -197,7 +201,7 @@ class NewSaveMenu:
             relative_rect=self.audio_dropdown_rect,
             manager=self.audio_dropdown_manager,
             starting_option="None",
-            object_id="#audio_dropdown"
+            object_id="#ui_dropdown"
         )
 
         # Add button
@@ -207,7 +211,7 @@ class NewSaveMenu:
             relative_rect=self.add_button_rect,
             manager=self.add_button_manager,
             text="Add",
-            object_id="#add_button"
+            object_id="#ui_button"
         )
 
         # Create campaign button
@@ -217,7 +221,7 @@ class NewSaveMenu:
             relative_rect=self.create_button_rect,
             manager=self.create_button_manager,
             text="Create campaign",
-            object_id="#create_button"
+            object_id="#ui_button"
         )
 
         # Edit campaign button
@@ -227,9 +231,9 @@ class NewSaveMenu:
             relative_rect=self.edit_button_rect,
             manager=self.edit_button_manager,
             text="Edit campaign",
-            object_id="#edit_button"
+            object_id="#ui_button"
         )
-        self.edit_button.hide() #! DARLE FUNCIONALIDAD AL BOTON
+        self.edit_button.hide() 
 
         if self.preloaded_data["save_id"] != "":
             self.create_button.hide()

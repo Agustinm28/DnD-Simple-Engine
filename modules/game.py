@@ -6,7 +6,6 @@ from modules.game_state import GameStateManager
 from modules.image import ImageUtils
 from screens.main_menu import MainMenu
 from screens.options_menu import OptionsMenu
-from screens.res_menu import ResMenu
 from screens.save_menu import SaveMenu
 from screens.scene import Scene
 from screens.scenes_menu import SceneMenu
@@ -40,13 +39,11 @@ class Game:
         self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit, self.repository, self.save_menu)
         self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
         self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
-        self.res_menu = ResMenu(self.game_state_manager, self.engine, self.mouse, self.new_save_menu)
         self.scenes_menu = SceneMenu(self.game_state_manager, self.engine, self.mouse, self.scene)
 
         self.states = {
             'main_menu': self.main_menu,
             'options_menu': self.options_menu,
-            'res_menu': self.res_menu,
             'save_menu': self.save_menu,
             'new_save_menu': self.new_save_menu,
             'loading': self.loading,

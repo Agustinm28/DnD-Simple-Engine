@@ -23,7 +23,7 @@
             "unfilled_bar": "#CCCCCC"
         }
     },
-    "#name_input": {
+    "#ui_input": {
         "misc": {
             "shape": "rounded_rectangle",
             "shape_corner_radius": "5"
@@ -36,7 +36,30 @@
             }
         ]
     },
-    "#desc_input": {
+    "#ui_label": {
+        "font": [
+            {
+                "name": "Ancient",
+                "size": "24",
+                "regular_path": "./assets/fonts/ancient.ttf"
+            }
+        ]
+    },
+    "#ui_selector": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "list_item_height": "30"
+        },
+        "font": [
+            {
+                "name": "Ancient",
+                "size": "24",
+                "regular_path": "./assets/fonts/ancient.ttf"
+            }
+        ]
+    },
+    "#ui_button": {
         "misc": {
             "shape": "rounded_rectangle",
             "shape_corner_radius": "5"
@@ -44,7 +67,33 @@
         "font": [
             {
                 "name": "Ancient",
-                "size": "24",
+                "size": "18",
+                "regular_path": "./assets/fonts/ancient.ttf"
+            }
+        ]
+    },
+    "#ui_dialog": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "5"
+        },
+        "font": [
+            {
+                "name": "Ancient",
+                "size": "18",
+                "regular_path": "./assets/fonts/ancient.ttf"
+            }
+        ]
+    },
+    "#ui_dropdown": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "5"
+        },
+        "font": [
+            {
+                "name": "Ancient",
+                "size": "18",
                 "regular_path": "./assets/fonts/ancient.ttf"
             }
         ]

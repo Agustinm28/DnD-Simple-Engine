@@ -167,13 +167,17 @@ class Repository:
         self.position_y = int(50 * self.scale_y)
 
         font_size = int(36 * min(self.scale_x, self.scale_y))
+        button_font_size = int(28 * min(self.scale_x, self.scale_y))
         self.font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
 
         with open("./docs/theme.json", "r") as f:
             theme = json.load(f)
         
-        theme["#name_input"]["font"][0]["size"] = str(font_size)
-        theme["#desc_input"]["font"][0]["size"] = str(font_size)
+        theme["#ui_input"]["font"][0]["size"] = str(font_size)
+        theme["#ui_label"]["font"][0]["size"] = str(font_size)
+        theme["#ui_selector"]["font"][0]["size"] = str(font_size)
+        theme["#ui_button"]["font"][0]["size"] = str(button_font_size)
+        theme["#ui_dialog"]["font"][0]["size"] = str(button_font_size)
 
         with open("./docs/theme.json", "w") as f:
             json.dump(theme, f, indent=4)
@@ -182,32 +186,32 @@ class Repository:
         # Images label
         self.images_rect = pygame.Rect(self.position_x, self.position_y, self.widht*2, self.height)
         self.images_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.images_label = pygame_gui.elements.UILabel(relative_rect=self.images_rect, manager=self.images_manager, object_id="#images_label", text="Images")
+        self.images_label = pygame_gui.elements.UILabel(relative_rect=self.images_rect, manager=self.images_manager, object_id="#ui_label", text="Images")
 
         self.image_rect = pygame.Rect(self.position_x, self.position_y*2, self.widht*2, self.height*10)
         self.image_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.image_selector = pygame_gui.elements.UISelectionList(relative_rect=self.image_rect, manager=self.image_manager, object_id="#image_selector", item_list=self.images)
+        self.image_selector = pygame_gui.elements.UISelectionList(relative_rect=self.image_rect, manager=self.image_manager, object_id="#ui_selector", item_list=self.images)
         
         # Name label
         self.name_label_rect = pygame.Rect(self.position_x, self.position_y*15, self.widht/2, self.height)
         self.name_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.name_label = pygame_gui.elements.UILabel(relative_rect=self.name_label_rect, manager=self.name_label_manager, object_id="#name_label", text="Name")
+        self.name_label = pygame_gui.elements.UILabel(relative_rect=self.name_label_rect, manager=self.name_label_manager, object_id="#ui_label", text="Name")
 
         # Name input box
         self.name_rect = pygame.Rect(self.position_x*4, self.position_y*15, self.widht*1.5, self.height)
         self.name_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.name_rect, manager=self.name_manager, object_id="#name_input")
+        self.name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.name_rect, manager=self.name_manager, object_id="#ui_input")
         self.name_input.set_text_length_limit(30)
 
         # Selection button
         self.select_rect = pygame.Rect(self.position_x, self.position_y*17, self.widht/1.5, self.height)
         self.select_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.select_button = pygame_gui.elements.UIButton(relative_rect=self.select_rect, manager=self.select_manager, object_id="#select_button", text="Select Image")
+        self.select_button = pygame_gui.elements.UIButton(relative_rect=self.select_rect, manager=self.select_manager, object_id="#ui_button", text="Select Image")
 
         # Selection label
         self.select_label_rect = pygame.Rect(self.position_x*5, self.position_y*17, self.widht, self.height)
         self.select_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.select_label = pygame_gui.elements.UILabel(relative_rect=self.select_label_rect, manager=self.select_label_manager, object_id="#select_label", text="No image selected")
+        self.select_label = pygame_gui.elements.UILabel(relative_rect=self.select_label_rect, manager=self.select_label_manager, object_id="#ui_label", text="No image selected")
 
         # File selection manager
         self.file_rect = pygame.Rect(self.position_x, self.position_y*5, self.widht*2, self.height*10)
@@ -219,7 +223,8 @@ class Repository:
                     initial_file_path=self.last_image_path,
                     allow_existing_files_only=True,
                     allow_picking_directories=False,
-                    allowed_suffixes={".png", ".jpg", ".jpeg", ".webp", ".gif"}
+                    allowed_suffixes={".png", ".jpg", ".jpeg", ".webp", ".gif"},
+                    object_id="#ui_dialog"
                 )
         self.file_dialog.hide()
 
@@ -233,52 +238,52 @@ class Repository:
             action_long_desc="Do you want to delete this image?",
             action_short_name="Delete",
             blocking=True,
-            object_id="#confirmation_dialog"
+            object_id="#ui_dialog"
         )
         self.confirmation_dialog.hide()
 
         # Save button
         self.save_rect = pygame.Rect(self.position_x, self.position_y*19, self.widht/1.5, self.height)
         self.save_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.save_button = pygame_gui.elements.UIButton(relative_rect=self.save_rect, manager=self.save_manager, object_id="#save_button", text="Save")
+        self.save_button = pygame_gui.elements.UIButton(relative_rect=self.save_rect, manager=self.save_manager, object_id="#ui_button", text="Save")
 
         # Alert label
         self.alert_rect = pygame.Rect(self.position_x*5, self.position_y*19, self.widht, self.height)
         self.alert_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.alert_label = pygame_gui.elements.UILabel(relative_rect=self.alert_rect, manager=self.alert_manager, object_id="#alert_label", text="")
+        self.alert_label = pygame_gui.elements.UILabel(relative_rect=self.alert_rect, manager=self.alert_manager, object_id="#ui_label", text="")
 
         ### AUDIOS UI ###
         x_distance = 15
         # Audios label
         self.audios_rect = pygame.Rect(self.position_x*x_distance, self.position_y, self.widht*2, self.height)
         self.audios_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audios_label = pygame_gui.elements.UILabel(relative_rect=self.audios_rect, manager=self.audios_manager, object_id="#audios_label", text="Audios")
+        self.audios_label = pygame_gui.elements.UILabel(relative_rect=self.audios_rect, manager=self.audios_manager, object_id="#ui_label", text="Audios")
 
         # Audio selector
         self.audio_rect = pygame.Rect(self.position_x*x_distance, self.position_y*2, self.widht*2, self.height*10)
         self.audio_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_selector = pygame_gui.elements.UISelectionList(relative_rect=self.audio_rect, manager=self.audio_manager, object_id="#audio_selector", item_list=self.audios)
+        self.audio_selector = pygame_gui.elements.UISelectionList(relative_rect=self.audio_rect, manager=self.audio_manager, object_id="#ui_selector", item_list=self.audios)
         
         # Name label
         self.audio_name_label_rect = pygame.Rect(self.position_x*x_distance, self.position_y*15, self.widht/2, self.height)
         self.audio_name_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_name_label = pygame_gui.elements.UILabel(relative_rect=self.audio_name_label_rect, manager=self.audio_name_label_manager, object_id="#audio_name_label", text="Name")
+        self.audio_name_label = pygame_gui.elements.UILabel(relative_rect=self.audio_name_label_rect, manager=self.audio_name_label_manager, object_id="#ui_label", text="Name")
 
         # Name input box
         self.audio_name_rect = pygame.Rect(self.position_x*(x_distance+3), self.position_y*15, self.widht*1.5, self.height)
         self.audio_name_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.audio_name_rect, manager=self.audio_name_manager, object_id="#name_input")
+        self.audio_name_input = pygame_gui.elements.UITextEntryLine(relative_rect=self.audio_name_rect, manager=self.audio_name_manager, object_id="#ui_input")
         self.audio_name_input.set_text_length_limit(30)
 
         # Selection button
         self.audio_select_rect = pygame.Rect(self.position_x*x_distance, self.position_y*17, self.widht/1.5, self.height)
         self.audio_select_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_select_button = pygame_gui.elements.UIButton(relative_rect=self.audio_select_rect, manager=self.audio_select_manager, object_id="#audio_select_button", text="Select Audio")
+        self.audio_select_button = pygame_gui.elements.UIButton(relative_rect=self.audio_select_rect, manager=self.audio_select_manager, object_id="#ui_button", text="Select Audio")
 
         # Selection label
         self.audio_select_label_rect = pygame.Rect(self.position_x*(4+x_distance), self.position_y*17, self.widht, self.height)
         self.audio_select_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_select_label = pygame_gui.elements.UILabel(relative_rect=self.audio_select_label_rect, manager=self.audio_select_label_manager, object_id="#audio_select_label", text="No audio selected")
+        self.audio_select_label = pygame_gui.elements.UILabel(relative_rect=self.audio_select_label_rect, manager=self.audio_select_label_manager, object_id="#ui_label", text="No audio selected")
 
         # File selection manager
         self.audio_file_rect = pygame.Rect(self.position_x*x_distance, self.position_y*5, self.widht*2, self.height*10)
@@ -290,7 +295,8 @@ class Repository:
                     initial_file_path=self.last_audio_path,
                     allow_existing_files_only=True,
                     allow_picking_directories=False,
-                    allowed_suffixes={".mp3", ".wav", ".ogg", ".flac"}
+                    allowed_suffixes={".mp3", ".wav", ".ogg", ".flac"},
+                    object_id="#ui_dialog"
                 )
         self.audio_file_dialog.hide()
 
@@ -304,19 +310,19 @@ class Repository:
             action_long_desc="Do you want to delete this audio?",
             action_short_name="Delete",
             blocking=True,
-            object_id="#audio_confirmation_dialog"
+            object_id="#ui_dialog"
         )
         self.audio_confirmation_dialog.hide()
 
         # Save button
         self.audio_save_rect = pygame.Rect(self.position_x*x_distance, self.position_y*19, self.widht/1.5, self.height)
         self.audio_save_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_save_button = pygame_gui.elements.UIButton(relative_rect=self.audio_save_rect, manager=self.audio_save_manager, object_id="#audio_save_button", text="Save")
+        self.audio_save_button = pygame_gui.elements.UIButton(relative_rect=self.audio_save_rect, manager=self.audio_save_manager, object_id="#ui_button", text="Save")
 
         # Alert label
         self.audio_alert_rect = pygame.Rect(self.position_x*(4+x_distance), self.position_y*19, self.widht, self.height)
         self.audio_alert_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_alert_label = pygame_gui.elements.UILabel(relative_rect=self.audio_alert_rect, manager=self.audio_alert_manager, object_id="#audio_alert_label", text="")
+        self.audio_alert_label = pygame_gui.elements.UILabel(relative_rect=self.audio_alert_rect, manager=self.audio_alert_manager, object_id="#ui_label", text="")
 
         self.manager_list = [
             self.image_manager, 

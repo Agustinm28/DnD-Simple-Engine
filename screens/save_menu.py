@@ -142,13 +142,17 @@ class SaveMenu:
         self.position_y = int(50 * self.scale_y)
 
         font_size = int(36 * min(self.scale_x, self.scale_y))
+        button_font_size = int(28 * min(self.scale_x, self.scale_y))
         self.font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
 
         with open("./docs/theme.json", "r") as f:
             theme = json.load(f)
         
-        theme["#name_input"]["font"][0]["size"] = str(font_size)
-        theme["#desc_input"]["font"][0]["size"] = str(font_size)
+        theme["#ui_input"]["font"][0]["size"] = str(font_size)
+        theme["#ui_label"]["font"][0]["size"] = str(font_size)
+        theme["#ui_selector"]["font"][0]["size"] = str(font_size)
+        theme["#ui_button"]["font"][0]["size"] = str(button_font_size)
+        theme["#ui_dialog"]["font"][0]["size"] = str(button_font_size)
 
         with open("./docs/theme.json", "w") as f:
             json.dump(theme, f, indent=4)
@@ -156,7 +160,7 @@ class SaveMenu:
         # Saves selector
         self.saves_rect = pygame.Rect(self.position_x*10, self.position_y, self.widht*1.5, self.height*12)
         self.saves_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.saves_selector = pygame_gui.elements.UISelectionList(relative_rect=self.saves_rect, manager=self.saves_manager, object_id="#saves_selector", item_list=self.saves, allow_double_clicks=True)
+        self.saves_selector = pygame_gui.elements.UISelectionList(relative_rect=self.saves_rect, manager=self.saves_manager, object_id="#ui_selector", item_list=self.saves, allow_double_clicks=True)
 
         # New campaign button
         self.new_button_rect = pygame.Rect(self.position_x*16, self.position_y*16, self.widht/2, self.height)
@@ -165,7 +169,7 @@ class SaveMenu:
             relative_rect=self.new_button_rect,
             manager=self.new_button_manager,
             text="+ New campaign",
-            object_id="#new_button"
+            object_id="#ui_button"
         )
 
         # Edit campaign button
@@ -175,7 +179,7 @@ class SaveMenu:
             relative_rect=self.edit_button_rect,
             manager=self.edit_button_manager,
             text="Edit",
-            object_id="#edit_button"
+            object_id="#ui_button"
         )
         self.edit_button.hide()
         
@@ -186,7 +190,7 @@ class SaveMenu:
             relative_rect=self.delete_button_rect,
             manager=self.delete_button_manager,
             text="Delete",
-            object_id="#delete_button"
+            object_id="#ui_button"
         )
         self.delete_button.hide()
 
@@ -200,7 +204,7 @@ class SaveMenu:
             action_long_desc=f"Do you want to delete this campaign?",
             action_short_name="Delete campaign",
             blocking=True,
-            object_id="#confirmation_dialog"
+            object_id="#ui_dialog"
         )
         self.confirmation_dialog.hide()
 

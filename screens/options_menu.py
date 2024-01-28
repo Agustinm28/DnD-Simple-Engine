@@ -74,13 +74,17 @@ class OptionsMenu:
         self.position_y = int(50 * self.scale_y)
 
         font_size = int(36 * min(self.scale_x, self.scale_y))
+        button_font_size = int(28 * min(self.scale_x, self.scale_y))
         self.font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
 
         with open("./docs/theme.json", "r") as f:
             theme = json.load(f)
         
-        theme["#name_input"]["font"][0]["size"] = str(font_size)
-        theme["#desc_input"]["font"][0]["size"] = str(font_size)
+        theme["#ui_input"]["font"][0]["size"] = str(font_size)
+        theme["#ui_label"]["font"][0]["size"] = str(font_size)
+        theme["#ui_selector"]["font"][0]["size"] = str(font_size)
+        theme["#ui_button"]["font"][0]["size"] = str(button_font_size)
+        theme["#ui_dialog"]["font"][0]["size"] = str(button_font_size)
 
         with open("./docs/theme.json", "w") as f:
             json.dump(theme, f, indent=4)
@@ -88,7 +92,7 @@ class OptionsMenu:
         # Resolution label
         self.resolution_label_rect = pygame.Rect(self.position_x*2, self.position_y, self.widht, self.height)
         self.resolution_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.resolution_label_label = pygame_gui.elements.UILabel(relative_rect=self.resolution_label_rect, manager=self.resolution_label_manager, object_id="#resolution_label", text="Resolution")
+        self.resolution_label_label = pygame_gui.elements.UILabel(relative_rect=self.resolution_label_rect, manager=self.resolution_label_manager, object_id="#ui_label", text="Resolution")
 
         self.resolutions = []
         for resolution in self.engine.AVAILABLE_RESOLUTIONS:
@@ -102,13 +106,13 @@ class OptionsMenu:
             relative_rect=self.resolution_dropdown_rect,
             manager=self.resolution_dropdown_manager,
             starting_option=self.actual_resolution,
-            object_id="#resolution_dropdown"
+            object_id="#ui_dropdown"
         )
 
         # Window label
         self.window_label_rect = pygame.Rect(self.position_x*12, self.position_y, self.widht, self.height)
         self.window_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.window_label_label = pygame_gui.elements.UILabel(relative_rect=self.window_label_rect, manager=self.window_label_manager, object_id="#window_label", text="Window mode")
+        self.window_label_label = pygame_gui.elements.UILabel(relative_rect=self.window_label_rect, manager=self.window_label_manager, object_id="#ui_label", text="Window mode")
 
         
         # Window mode button
@@ -118,7 +122,7 @@ class OptionsMenu:
             relative_rect=self.window_button_rect,
             manager=self.window_button_manager,
             text=self.actual_mode,
-            object_id="#window_button"
+            object_id="#ui_button"
         )
 
         self.manager_list = [
