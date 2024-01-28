@@ -3,12 +3,13 @@ from utils.debugger import dprint, error
 
 class MainMenu:
 
-    def __init__(self, gameStateManager, engine, mouse, exit_class, repository):
+    def __init__(self, gameStateManager, engine, mouse, exit_class, repository, save_menu):
         self.gameStateManager = gameStateManager
         self.engine = engine
         self.mouse = mouse
         self.exit_class = exit_class
         self.repository = repository
+        self.save_menu = save_menu
 
     def run(self):
         try:
@@ -81,6 +82,7 @@ class MainMenu:
                         self.engine.audio.stop()
                     if button_name == "Start":
                         dprint("MAIN MENU", "Start button clicked.", "BLUE")
+                        self.save_menu.update_ui()
                         self.gameStateManager.set_state('save_menu')
                     elif button_name == "Repository":
                         dprint("MAIN MENU", "Reposiroty button clicked.", "BLUE")

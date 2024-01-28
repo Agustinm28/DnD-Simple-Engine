@@ -11,6 +11,9 @@ class Scene:
 
     def run(self):
         try:
+            if self.gameStateManager.get_last_state() != 'save_menu':
+                self.gameStateManager.set_last_state('save_menu')
+
             self.engine.screen.blit(self.engine.SCENES_BUFFER[self.scene][0], (0,0))
 
             keys = pygame.key.get_pressed()

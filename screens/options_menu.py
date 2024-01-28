@@ -10,6 +10,10 @@ class OptionsMenu:
 
     def run(self):
         try:
+
+            if self.gameStateManager.get_last_state() != 'main_menu':
+                self.gameStateManager.set_last_state('main_menu')
+
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
 
             scale_x = self.engine.resolution[0] / 1920

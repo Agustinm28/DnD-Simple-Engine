@@ -26,3 +26,21 @@ class Save:
 
         with open(file_path, 'w') as f:
             json.dump(campaign_dict, f, indent=4)
+
+    def delete_campaign(self, campaign_name):
+
+        campaign = self.get_campaign(campaign_name)
+        campaign_id = campaign["id"]
+
+        file_path = f"./docs/save_data/{campaign_id}.json"
+        os.remove(file_path)
+
+    def get_campaign(self, campaign_name):
+
+        saves = os.listdir("./docs/save_data")
+
+        for save in saves:
+            with open(f"./docs/save_data/{save}", "r") as f:
+                campaign = json.load(f)
+                if campaign["name"] == campaign_name:
+                    return campaign

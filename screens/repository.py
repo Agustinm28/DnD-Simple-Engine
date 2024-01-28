@@ -18,6 +18,7 @@ class Repository:
 
     def run(self):
         try:
+
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
             self.set_handler(True)
 

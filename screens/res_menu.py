@@ -16,6 +16,9 @@ class ResMenu:
         '''
         try:
 
+            if self.gameStateManager.get_last_state() != 'options_menu':
+                self.gameStateManager.set_last_state('options_menu')
+
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
 
             scale_x = self.engine.resolution[0] / 1920

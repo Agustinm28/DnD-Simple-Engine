@@ -34,12 +34,12 @@ class Game:
         self.game_state_manager = GameStateManager('main_menu')
 
         self.repository = Repository(self.game_state_manager, self.engine, self.mouse, self.image_optimizer)
-        self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit, self.repository)
-        self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
         self.loading = Loading(self.game_state_manager, self.engine, self.mouse)
-        self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
         self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse, self.repository, self.image_optimizer, self.save)
-        self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading, self.new_save_menu)
+        self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading, self.new_save_menu, self.save)
+        self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit, self.repository, self.save_menu)
+        self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
+        self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
         self.res_menu = ResMenu(self.game_state_manager, self.engine, self.mouse, self.new_save_menu)
         self.scenes_menu = SceneMenu(self.game_state_manager, self.engine, self.mouse, self.scene)
 
@@ -77,7 +77,7 @@ class Game:
                             self.engine.audio.stop()
                         self.new_save_menu.set_handler(False)
                         self.repository.set_handler(False)
-                        self.game_state_manager.set_state('main_menu')
+                        self.game_state_manager.set_state(self.game_state_manager.get_last_state())
                 
                 if self.new_save_menu.get_handler():
                     self.new_save_menu.handle_events(event)

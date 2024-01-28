@@ -14,12 +14,22 @@ class NewSaveMenu:
         self.imageutils = imageutils
         self.save = save
         self.campaign = Campaign()
+        self.new_update = False
 
         self.scenes = []
+        self.preloaded_data = {
+            "save_id": "",
+            "name": "",
+            "description": "",
+            "scenes": [] # [(image, audio), (image, audio)]
+        }
 
         self.update_ui()
 
     def run(self):
+
+        if self.gameStateManager.get_last_state() != 'save_menu':
+            self.gameStateManager.set_last_state('save_menu')
 
         self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
         self.set_handler(True)
@@ -38,15 +48,15 @@ class NewSaveMenu:
 
         # Add label
         add_label = self.font.render("Add an scene", True, (255, 255, 255))
-        self.engine.screen.blit(add_label, (self.position_x*23.5, self.position_y*12))
+        self.engine.screen.blit(add_label, (self.position_x*21.5, self.position_y*12))
 
         # Image label
         image_label = self.font.render("Image", True, (255, 255, 255))
-        self.engine.screen.blit(image_label, (self.position_x*19.5, self.position_y*13))
+        self.engine.screen.blit(image_label, (self.position_x*18, self.position_y*13))
 
         # Audio label
         audio_label = self.font.render("Associated audio", True, (255, 255, 255))
-        self.engine.screen.blit(audio_label, (self.position_x*28, self.position_y*13))
+        self.engine.screen.blit(audio_label, (self.position_x*25, self.position_y*13))
 
         self.update_managers(self.optimice_manager, update=True, draw=True)
         self.update_managers(self.manager_list, update=False, draw=True)
@@ -59,6 +69,20 @@ class NewSaveMenu:
 
     def set_handler(self, handler):
         self.handler = handler
+    
+    def get_new_update(self):
+        return self.new_update
+    
+    def set_new_update(self, new_update):
+        self.new_update = new_update
+
+    def get_preloaded_data(self):
+        return self.preloaded_data
+    
+    def set_preloaded_data(self, name:str, desc:str, scenes:list):
+        self.preloaded_data["name"] = name
+        self.preloaded_data["description"] = desc
+        self.preloaded_data["scenes"] = scenes
 
     def set_optimice_manager_list(self, manager_list):
         self.optimice_manager = manager_list
@@ -144,7 +168,7 @@ class NewSaveMenu:
         )
         self.confirmation_dialog.hide()
 
-        self.show_image_rect = pygame.Rect(self.position_x*16, self.position_y*15.5, self.widht/1.4, self.height*4) 
+        self.show_image_rect = pygame.Rect(self.position_x*15, self.position_y*15.5, self.widht/1.5, self.height*4) 
         self.show_image_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.show_image = pygame_gui.elements.UIImage(
             relative_rect=self.show_image_rect,
@@ -154,7 +178,7 @@ class NewSaveMenu:
         )
 
         # Image dropdown selector
-        self.image_dropdown_rect = pygame.Rect(self.position_x*16, self.position_y*14, self.widht/1.4, self.height)
+        self.image_dropdown_rect = pygame.Rect(self.position_x*15, self.position_y*14, self.widht/1.5, self.height)
         self.image_dropdown_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.image_dropdown = pygame_gui.elements.UIDropDownMenu(
             options_list=self.images,
@@ -165,7 +189,7 @@ class NewSaveMenu:
         )
 
         # Audio dropdown selector
-        self.audio_dropdown_rect = pygame.Rect(self.position_x*26, self.position_y*14, self.widht/1.4, self.height)
+        self.audio_dropdown_rect = pygame.Rect(self.position_x*23.5, self.position_y*14, self.widht/1.5, self.height)
         self.audio_dropdown_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.audio_dropdown = pygame_gui.elements.UIDropDownMenu(
             options_list=self.audios,
@@ -176,7 +200,7 @@ class NewSaveMenu:
         )
 
         # Add button
-        self.add_button_rect = pygame.Rect(self.position_x*28, self.position_y*16, self.widht/3, self.height)
+        self.add_button_rect = pygame.Rect(self.position_x*33, self.position_y*16, self.widht/3, self.height)
         self.add_button_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.add_button = pygame_gui.elements.UIButton(
             relative_rect=self.add_button_rect,
@@ -186,7 +210,7 @@ class NewSaveMenu:
         )
 
         # Create campaign button
-        self.create_button_rect = pygame.Rect(self.position_x*27, self.position_y*18, self.widht/2, self.height)
+        self.create_button_rect = pygame.Rect(self.position_x*32.5, self.position_y*18, self.widht/2.3, self.height)
         self.create_button_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.create_button = pygame_gui.elements.UIButton(
             relative_rect=self.create_button_rect,
@@ -195,6 +219,29 @@ class NewSaveMenu:
             object_id="#create_button"
         )
 
+        # Edit campaign button
+        self.edit_button_rect = pygame.Rect(self.position_x*32.5, self.position_y*18, self.widht/2.3, self.height)
+        self.edit_button_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
+        self.edit_button = pygame_gui.elements.UIButton(
+            relative_rect=self.edit_button_rect,
+            manager=self.edit_button_manager,
+            text="Edit campaign",
+            object_id="#edit_button"
+        )
+        self.edit_button.hide() #! DARLE FUNCIONALIDAD AL BOTON
+
+        if self.preloaded_data["save_id"] != "":
+            self.create_button.hide()
+            self.edit_button.show()
+
+        if self.preloaded_data["name"] != "":
+            self.name_input.set_text(self.preloaded_data["name"])
+        if self.preloaded_data["description"] != "":
+            self.desc_input.set_text(self.preloaded_data["description"])
+        if self.preloaded_data["scenes"] != []:
+            self.scenes = self.preloaded_data["scenes"]
+            self.scenes_selector.set_item_list(self.scenes)
+
         self.manager_list = [
             self.name_manager,
             self.desc_manager,
@@ -202,6 +249,7 @@ class NewSaveMenu:
             self.show_image_manager,
             self.add_button_manager,
             self.create_button_manager,
+            self.edit_button_manager,
             self.image_dropdown_manager,
             self.audio_dropdown_manager,
             self.confirmation_manager
@@ -224,13 +272,12 @@ class NewSaveMenu:
         
     def get_path_scenes(self, scenes):
         complete_scenes = []
-        for scene in scenes:
-            dprint("NEW SAVE", scene, "MAGENTA")   
+        for scene in scenes: 
             if scene[1] == "None" or scene[1] == None:
                 # Name, image_path, audio_path
                 complete_scenes.append([scene[0], self.repository.get_path_from_repository(scene[0], "image"), ""])
             else:
-                complete_scenes.append([scene[0], self.repository.get_path_from_repository(scene[0], "image"), self.repository.get_path_from_repository(scene[1], "audio")])
+                complete_scenes.append([scene[0], self.repository.get_path_from_repository(scene[0], "image"), [scene[1], self.repository.get_path_from_repository(scene[1], "audio")]])
 
         return complete_scenes
 
@@ -252,7 +299,9 @@ class NewSaveMenu:
             self.confirmation_dialog.confirm_button.pressed = False
             self.confirmation_dialog.hide()
             self.scenes_selector.disable()
-            self.scenes.pop(self.scenes.index(self.scene))
+            for scene in self.scenes:
+                if scene[0] == self.scene:
+                    self.scenes.remove(scene)
             self.set_optimice_manager_list([self.scenes_manager, self.confirmation_manager])
             self.update_ui(skip=True)
             dprint("NEW SAVE", "Scene deleted.", "GREEN")
@@ -298,7 +347,7 @@ class NewSaveMenu:
                     dprint("NEW SAVE", "Add button clicked.", "BLUE")
                 else:
                     dprint("NEW SAVE", "No image selected.", "RED")
-        elif self.create_button_rect.collidepoint(mouse_pos):
+        elif self.create_button_rect.collidepoint(mouse_pos) and self.selection == False:
             self.set_optimice_manager_list([self.create_button_manager])
             if self.create_button.check_pressed():
                 self.create_button.pressed = False
@@ -307,10 +356,10 @@ class NewSaveMenu:
                     self.campaign.set_description(self.desc_input.get_text())
                     complete_scenes = self.get_path_scenes(self.scenes)
                     self.campaign.set_scenes(complete_scenes)
-
                     self.save.save_campaign(self.campaign)
-
                     dprint("NEW SAVE", "Campaign created", "BLUE")
+                    self.set_new_update(True)
+                    self.gameStateManager.set_state('save_menu')
                 else:
                     dprint("NEW SAVE", "No name, description or scenes selected.", "RED")
         

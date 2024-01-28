@@ -1,10 +1,12 @@
 {
     "images": {
-        "Taverna": "./assets/images/repository/tavern.webp",
+        "Tavern": "./assets/images/repository/tavern.webp",
         "Betian": "./assets/images/repository/betian.webp",
-        "Temple": "./assets/images/repository/temple.webp"
+        "Herbalist": "./assets/images/repository/herbalist.webp"
     },
     "audios": {
-        "Taverna": "./assets/audio/repository/Tavern.mp3"
+        "Betian": "./assets/audio/repository/betian.mp3",
+        "Tavern": "./assets/audio/repository/Tavern.mp3",
+        "Herbalist": "./assets/audio/repository/herbalist.mp3"
     }
 }

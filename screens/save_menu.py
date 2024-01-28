@@ -7,17 +7,26 @@ import pygame_gui
 
 class SaveMenu:
 
-    def __init__(self, gameStateManager, engine, mouse, loading, new_save):
+    def __init__(self, gameStateManager, engine, mouse, loading, new_save, save_utils):
         self.gameStateManager = gameStateManager
         self.engine = engine
         self.mouse = mouse
         self.loading = loading
         self.new_save = new_save
+        self.save_utils = save_utils
 
         self.update_ui()
      
     def run(self):
         try:
+
+            if self.gameStateManager.get_last_state() != 'main_menu':
+                self.gameStateManager.set_last_state('main_menu')
+
+            if self.new_save.get_new_update():
+                self.update_ui()
+                self.update_managers(self.manager_list, update=True, draw=True)
+                self.new_save.set_new_update(False)
 
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
             self.set_handler(True)
@@ -43,9 +52,53 @@ class SaveMenu:
     def get_manager_list(self):
         return self.manager_list
     
+    def get_path(self, campaign):
+        for save in self.saves:
+            if save[0] == campaign:
+                return save[1]
+            
+    def get_campaign_data(self, campaign):
+        path = self.get_path(campaign)
+
+        with open(path, "r") as save_file:
+            data = json.load(save_file)
+        
+        file_id = path.split("/")[-1].split(".")[0]
+
+        return {
+            "id": file_id,
+            "name": data["name"],
+            "description": data["description"],
+            "date": data["date"]
+        }
+
+    
     def handle_events(self, event):
         for manager in self.optimice_manager:
             manager.process_events(event)
+
+            if event.type == pygame_gui.UI_SELECTION_LIST_DOUBLE_CLICKED_SELECTION:
+                self.selection = True
+                self.set_optimice_manager_list([self.saves_manager])
+                self.campaign = self.saves_selector.get_single_selection()
+                if self.campaign != None:
+                    self.save = self.get_path(self.campaign)
+                self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
+                self.loading.set_save_path(self.save)
+                self.gameStateManager.set_state('loading')
+            elif event.type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION:
+                self.set_optimice_manager_list([self.saves_manager])
+                self.campaign = self.saves_selector.get_single_selection()
+                if self.campaign != None:
+                    self.save = self.get_path(self.campaign)
+                self.edit_button.show()
+                self.delete_button.show()
+                self.update_managers(self.manager_list, update=True, draw=True)
+            elif event.type == pygame_gui.UI_SELECTION_LIST_DROPPED_SELECTION:
+                self.set_optimice_manager_list([self.saves_manager])
+                self.edit_button.hide()
+                self.delete_button.hide()
+                self.update_managers(self.manager_list, update=True, draw=True)
 
     def update_managers(self, manager_list, update=False, draw=False):
         for manager in manager_list:
@@ -59,6 +112,7 @@ class SaveMenu:
         self.handler = False
         self.selection = False
         self.campaign = None
+        self.save = ""
 
         self.paths = ['./docs/save_data/' + save for save in os.listdir('./docs/save_data')]
         self.saves = []
@@ -93,7 +147,7 @@ class SaveMenu:
         # Saves selector
         self.saves_rect = pygame.Rect(self.position_x*10, self.position_y, self.widht*1.5, self.height*12)
         self.saves_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.saves_selector = pygame_gui.elements.UISelectionList(relative_rect=self.saves_rect, manager=self.saves_manager, object_id="#saves_selector", item_list=self.saves)
+        self.saves_selector = pygame_gui.elements.UISelectionList(relative_rect=self.saves_rect, manager=self.saves_manager, object_id="#saves_selector", item_list=self.saves, allow_double_clicks=True)
 
         # New campaign button
         self.new_button_rect = pygame.Rect(self.position_x*16, self.position_y*16, self.widht/2, self.height)
@@ -105,9 +159,48 @@ class SaveMenu:
             object_id="#new_button"
         )
 
+        # Edit campaign button
+        self.edit_button_rect = pygame.Rect(self.position_x*29, self.position_y*7, self.widht/2.5, self.height)
+        self.edit_button_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
+        self.edit_button = pygame_gui.elements.UIButton(
+            relative_rect=self.edit_button_rect,
+            manager=self.edit_button_manager,
+            text="Edit",
+            object_id="#edit_button"
+        )
+        self.edit_button.hide()
+        
+        # Delete campaign button
+        self.delete_button_rect = pygame.Rect(self.position_x*29, self.position_y*9, self.widht/2.5, self.height)
+        self.delete_button_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
+        self.delete_button = pygame_gui.elements.UIButton(
+            relative_rect=self.delete_button_rect,
+            manager=self.delete_button_manager,
+            text="Delete",
+            object_id="#delete_button"
+        )
+        self.delete_button.hide()
+
+        # Confirmation dialog
+        self.confirmation_rect = pygame.Rect(self.position_x*5, self.position_y*6, self.widht, self.height*3)
+        self.confirmation_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
+        self.confirmation_dialog = pygame_gui.windows.UIConfirmationDialog(
+            rect=self.confirmation_rect,
+            manager=self.confirmation_manager,
+            window_title="Delete",
+            action_long_desc=f"Do you want to delete this campaign?",
+            action_short_name="Delete campaign",
+            blocking=True,
+            object_id="#confirmation_dialog"
+        )
+        self.confirmation_dialog.hide()
+
         self.manager_list = [
             self.saves_manager,
-            self.new_button_manager
+            self.new_button_manager,
+            self.edit_button_manager,
+            self.delete_button_manager,
+            self.confirmation_manager
         ]
         self.optimice_manager = []
 
@@ -115,13 +208,8 @@ class SaveMenu:
 
     def check_mouse_input(self, mouse_pos):
         if self.saves_rect.collidepoint(mouse_pos) and self.selection == False:
-            self.saves_selector.pressed = False
-            self.saves_selector.enable()
             self.set_optimice_manager_list([self.saves_manager])
-            self.campaign = self.saves_selector.get_single_selection()
-            if self.campaign != None:
-                self.set_optimice_manager_list([self.saves_manager])
-                #! Que aparezcan los botones para cargar, editar u borrar
+            self.saves_selector.enable()
         elif self.new_button_rect.collidepoint(mouse_pos):
             self.set_optimice_manager_list([self.new_button_manager])
             if self.new_button.check_pressed():
@@ -130,8 +218,47 @@ class SaveMenu:
                 self.set_optimice_manager_list([self.new_button_manager])
                 self.new_save.update_ui(complete = True)
                 self.gameStateManager.set_state('new_save_menu')
-
-        #! ACA DEJO LA LOGICA DE CARGAR UNA PARTIDA
-        # self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
-        # self.loading.set_save_path(save_path)
-        # self.gameStateManager.set_state('loading')
+        elif self.edit_button_rect.collidepoint(mouse_pos):
+            self.set_optimice_manager_list([self.edit_button_manager])
+            if self.edit_button.check_pressed():
+                self.edit_button.pressed = False
+                dprint("SAVE MENU", "Edit campaign button clicked.", "BLUE")
+                # Setear los datos en el new_save_menu
+        elif self.delete_button_rect.collidepoint(mouse_pos):
+            self.set_optimice_manager_list([self.delete_button_manager])
+            if self.delete_button.check_pressed():
+                self.delete_button.pressed = False
+                self.selection = True
+                self.set_optimice_manager_list([self.saves_manager, self.confirmation_manager])
+                self.confirmation_dialog.show()
+                self.confirmation_dialog.rebuild()
+                dprint("SAVE MENU", "Delete campaign button clicked.", "BLUE")
+        elif self.confirmation_rect.collidepoint(mouse_pos):
+            self.set_optimice_manager_list([self.confirmation_manager])
+        elif self.confirmation_dialog.confirm_button.check_pressed():
+            self.confirmation_dialog.confirm_button.pressed = False
+            self.confirmation_dialog.hide()
+            self.saves_selector.disable()
+            self.save_utils.delete_campaign(self.campaign)
+            self.set_optimice_manager_list([self.saves_manager, self.confirmation_manager])
+            self.update_ui()
+            self.selection = False
+            dprint("NEW SAVE", "Campaign deleted.", "GREEN")
+        elif self.confirmation_dialog.cancel_button.check_pressed():
+            self.confirmation_dialog.cancel_button.pressed = False
+            self.confirmation_dialog.hide()
+            self.saves_selector.disable()
+            self.edit_button.hide()
+            self.delete_button.hide()
+            self.set_optimice_manager_list([self.saves_manager, self.confirmation_manager, self.delete_button_manager, self.edit_button_manager])
+            self.selection = False
+            dprint("NEW SAVE", "Campaign deletion canceled.", "GREEN")
+        elif self.confirmation_dialog.close_window_button.check_pressed():
+            self.confirmation_dialog.close_window_button.pressed = False
+            self.confirmation_dialog.hide()
+            self.saves_selector.disable()
+            self.edit_button.hide()
+            self.delete_button.hide()
+            self.set_optimice_manager_list([self.saves_manager, self.confirmation_manager, self.delete_button_manager, self.edit_button_manager])
+            self.selection = False
+            dprint("NEW SAVE", "Campaign deletion canceled.", "GREEN")
