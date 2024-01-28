@@ -1,14 +1,16 @@
 {
     "images": {
-        "Tavern": "./assets/images/repository/tavern.webp",
         "Betian": "./assets/images/repository/betian.webp",
+        "Farm": "./assets/images/repository/farm.webp",
         "Herbalist": "./assets/images/repository/herbalist.webp",
+        "Posada": "./assets/images/repository/posada.webp",
         "Temple": "./assets/images/repository/temple.webp"
     },
     "audios": {
         "Betian": "./assets/audio/repository/betian.mp3",
-        "Tavern": "./assets/audio/repository/Tavern.mp3",
+        "Farm": "./assets/audio/repository/farm.mp3",
         "Herbalist": "./assets/audio/repository/herbalist.mp3",
+        "Posada": "./assets/audio/repository/posada.mp3",
         "Temple": "./assets/audio/repository/temple.mp3"
     }
 }

@@ -8,6 +8,7 @@ class Scene:
         self.engine = engine
         self.mouse = mouse
         self.scene = None
+        self.handler = False
 
     def run(self):
         '''
@@ -33,3 +34,9 @@ class Scene:
 
     def set_scene(self, scene):
         self.scene = scene
+
+    def get_handler(self):
+        return self.handler
+    
+    def set_handler(self, handler):
+        self.handler = handler
