@@ -36,7 +36,7 @@ class Game:
         self.repository = Repository(self.game_state_manager, self.engine, self.mouse, self.image_optimizer)
         self.loading = Loading(self.game_state_manager, self.engine, self.mouse)
         self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse, self.repository, self.image_optimizer, self.save)
-        self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading, self.new_save_menu, self.save)
+        self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading, self.new_save_menu, self.save, self.repository)
         self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit, self.repository, self.save_menu)
         self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
         self.scene = Scene(self.game_state_manager, self.engine, self.mouse)

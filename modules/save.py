@@ -27,6 +27,15 @@ class Save:
         with open(file_path, 'w') as f:
             json.dump(campaign_dict, f, indent=4)
 
+    def edit_campaign(self, campaign):
+
+        file_path = f"./docs/save_data/{campaign.get_id()}.json"
+
+        campaign_dict = campaign.toJson()
+
+        with open(file_path, 'w') as f:
+            json.dump(campaign_dict, f, indent=4)
+
     def delete_campaign(self, campaign_name):
 
         campaign = self.get_campaign(campaign_name)

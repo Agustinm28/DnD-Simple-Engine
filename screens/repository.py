@@ -14,10 +14,16 @@ class Repository:
         self.mouse = mouse
         self.image_optimizer = image_optimizer
 
+        self.in_repository = False
+        self.last_image_path = "c:/"
+        self.last_audio_path = "c:/"
+
         self.update_ui()
 
     def run(self):
         try:
+
+            self.set_in_repository(True)
 
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
             self.set_handler(True)
@@ -36,6 +42,24 @@ class Repository:
     
     def set_handler(self, handler):
         self.handler = handler
+
+    def get_in_repository(self):
+        return self.in_repository
+    
+    def set_in_repository(self, in_repository):
+        self.in_repository = in_repository
+
+    def get_last_image_path(self):
+        return self.last_image_path
+    
+    def set_last_image_path(self, last_path):
+        self.last_image_path = last_path
+
+    def get_last_audio_path(self):
+        return self.last_audio_path
+    
+    def set_last_audio_path(self, last_path):
+        self.last_audio_path = last_path
 
     def load_repository(self):
         with open("./docs/repository.json", "r") as f:
@@ -192,7 +216,7 @@ class Repository:
                     rect=self.file_rect,
                     manager=self.file_manager,
                     window_title="Select Image",
-                    initial_file_path="./assets/personalized", #! Despues cambiar por c:/
+                    initial_file_path=self.last_image_path,
                     allow_existing_files_only=True,
                     allow_picking_directories=False,
                     allowed_suffixes={".png", ".jpg", ".jpeg", ".webp", ".gif"}
@@ -263,7 +287,7 @@ class Repository:
                     rect=self.audio_file_rect,
                     manager=self.audio_file_manager,
                     window_title="Select Audio",
-                    initial_file_path="./assets/audio/personalized", #! Despues cambiar por c:/
+                    initial_file_path=self.last_audio_path,
                     allow_existing_files_only=True,
                     allow_picking_directories=False,
                     allowed_suffixes={".mp3", ".wav", ".ogg", ".flac"}
@@ -371,18 +395,21 @@ class Repository:
                 self.file_dialog.hide()
                 self.set_optimice_manager_list([self.select_manager, self.select_label_manager, self.file_manager])
                 self.image_path = self.file_dialog.current_file_path
+                self.set_last_image_path(self.file_dialog.current_directory_path)
                 self.select_label.set_text(str(self.image_path).split("\\")[-1])
             # Press Cancel path rect
             elif self.file_dialog.cancel_button.check_pressed():
                 self.selection = False
                 self.file_dialog.cancel_button.pressed = False
                 self.file_dialog.hide()
+                self.set_last_image_path(self.file_dialog.current_directory_path)
                 self.set_optimice_manager_list([self.select_manager, self.select_label_manager, self.file_manager])
             # Press Close path rect
             elif self.file_dialog.close_window_button.check_pressed():
                 self.selection = False
                 self.file_dialog.close_window_button.pressed = False
                 self.file_dialog.hide()
+                self.set_last_image_path(self.file_dialog.current_directory_path)
                 self.set_optimice_manager_list([self.select_manager, self.select_label_manager, self.file_manager])
             
             # Hover Path selector rect
@@ -456,18 +483,21 @@ class Repository:
                 self.audio_file_dialog.hide()
                 self.set_optimice_manager_list([self.audio_select_manager, self.audio_select_label_manager, self.audio_file_manager])
                 self.audio_path = self.audio_file_dialog.current_file_path
+                self.set_last_audio_path(self.audio_file_dialog.current_directory_path)
                 self.audio_select_label.set_text(str(self.audio_path).split("\\")[-1])
             # Press Cancel path rect
             elif self.audio_file_dialog.cancel_button.check_pressed():
                 self.selection = False
                 self.audio_file_dialog.cancel_button.pressed = False
                 self.audio_file_dialog.hide()
+                self.set_last_audio_path(self.audio_file_dialog.current_directory_path)
                 self.set_optimice_manager_list([self.audio_select_manager, self.audio_select_label_manager, self.audio_file_manager])
             # Press Close path rect
             elif self.audio_file_dialog.close_window_button.check_pressed():
                 self.selection = False
                 self.audio_file_dialog.close_window_button.pressed = False
                 self.audio_file_dialog.hide()
+                self.set_last_audio_path(self.audio_file_dialog.current_directory_path)
                 self.set_optimice_manager_list([self.audio_select_manager, self.audio_select_label_manager, self.audio_file_manager])
             
             # Hover Path selector rect

@@ -7,18 +7,22 @@ import pygame_gui
 
 class SaveMenu:
 
-    def __init__(self, gameStateManager, engine, mouse, loading, new_save, save_utils):
+    def __init__(self, gameStateManager, engine, mouse, loading, new_save, save_utils, repository):
         self.gameStateManager = gameStateManager
         self.engine = engine
         self.mouse = mouse
         self.loading = loading
         self.new_save = new_save
         self.save_utils = save_utils
+        self.repository = repository
 
         self.update_ui()
      
     def run(self):
         try:
+
+            if self.repository.get_in_repository():
+                self.repository.set_in_repository(False)
 
             if self.gameStateManager.get_last_state() != 'main_menu':
                 self.gameStateManager.set_last_state('main_menu')
@@ -65,19 +69,24 @@ class SaveMenu:
         
         file_id = path.split("/")[-1].split(".")[0]
 
+        scenes = []
+
+        for scene in data["scenes"]:
+            scenes.append((scene, data["scenes"][scene]["audio_path"][0]))
+
         return {
             "id": file_id,
             "name": data["name"],
             "description": data["description"],
-            "date": data["date"]
+            "characters": data["characters"],
+            "scenes": scenes
         }
-
     
     def handle_events(self, event):
         for manager in self.optimice_manager:
             manager.process_events(event)
 
-            if event.type == pygame_gui.UI_SELECTION_LIST_DOUBLE_CLICKED_SELECTION:
+            if event.type == pygame_gui.UI_SELECTION_LIST_DOUBLE_CLICKED_SELECTION and self.repository.get_in_repository() == False:
                 self.selection = True
                 self.set_optimice_manager_list([self.saves_manager])
                 self.campaign = self.saves_selector.get_single_selection()
@@ -86,7 +95,7 @@ class SaveMenu:
                 self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
                 self.loading.set_save_path(self.save)
                 self.gameStateManager.set_state('loading')
-            elif event.type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION:
+            elif event.type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION and self.repository.get_in_repository() == False:
                 self.set_optimice_manager_list([self.saves_manager])
                 self.campaign = self.saves_selector.get_single_selection()
                 if self.campaign != None:
@@ -94,7 +103,7 @@ class SaveMenu:
                 self.edit_button.show()
                 self.delete_button.show()
                 self.update_managers(self.manager_list, update=True, draw=True)
-            elif event.type == pygame_gui.UI_SELECTION_LIST_DROPPED_SELECTION:
+            elif event.type == pygame_gui.UI_SELECTION_LIST_DROPPED_SELECTION and self.repository.get_in_repository() == False:
                 self.set_optimice_manager_list([self.saves_manager])
                 self.edit_button.hide()
                 self.delete_button.hide()
@@ -216,6 +225,7 @@ class SaveMenu:
                 self.new_button.pressed = False
                 dprint("SAVE MENU", "New campaign button clicked.", "BLUE")
                 self.set_optimice_manager_list([self.new_button_manager])
+                self.new_save.set_preloaded_data(file_id="", name="", desc="", scenes=[])
                 self.new_save.update_ui(complete = True)
                 self.gameStateManager.set_state('new_save_menu')
         elif self.edit_button_rect.collidepoint(mouse_pos):
@@ -223,7 +233,11 @@ class SaveMenu:
             if self.edit_button.check_pressed():
                 self.edit_button.pressed = False
                 dprint("SAVE MENU", "Edit campaign button clicked.", "BLUE")
-                # Setear los datos en el new_save_menu
+                # Setear los datos en el new_save_menu 
+                data = self.get_campaign_data(self.campaign)
+                self.new_save.set_preloaded_data(file_id=data["id"], name=data["name"], desc=data["description"], scenes=data["scenes"])
+                self.new_save.update_ui()
+                self.gameStateManager.set_state('new_save_menu')
         elif self.delete_button_rect.collidepoint(mouse_pos):
             self.set_optimice_manager_list([self.delete_button_manager])
             if self.delete_button.check_pressed():

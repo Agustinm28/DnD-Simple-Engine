@@ -79,7 +79,8 @@ class NewSaveMenu:
     def get_preloaded_data(self):
         return self.preloaded_data
     
-    def set_preloaded_data(self, name:str, desc:str, scenes:list):
+    def set_preloaded_data(self, file_id:str, name:str, desc:str, scenes:list):
+        self.preloaded_data["save_id"] = file_id
         self.preloaded_data["name"] = name
         self.preloaded_data["description"] = desc
         self.preloaded_data["scenes"] = scenes
@@ -220,7 +221,7 @@ class NewSaveMenu:
         )
 
         # Edit campaign button
-        self.edit_button_rect = pygame.Rect(self.position_x*32.5, self.position_y*18, self.widht/2.3, self.height)
+        self.edit_button_rect = pygame.Rect(self.position_x*32.5, self.position_y*19, self.widht/2.3, self.height)
         self.edit_button_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.edit_button = pygame_gui.elements.UIButton(
             relative_rect=self.edit_button_rect,
@@ -232,7 +233,10 @@ class NewSaveMenu:
 
         if self.preloaded_data["save_id"] != "":
             self.create_button.hide()
+            self.create_button.disable()
             self.edit_button.show()
+            self.edit_button.enable()
+            self.campaign.set_id(self.preloaded_data["save_id"])
 
         if self.preloaded_data["name"] != "":
             self.name_input.set_text(self.preloaded_data["name"])
@@ -358,6 +362,21 @@ class NewSaveMenu:
                     self.campaign.set_scenes(complete_scenes)
                     self.save.save_campaign(self.campaign)
                     dprint("NEW SAVE", "Campaign created", "BLUE")
+                    self.set_new_update(True)
+                    self.gameStateManager.set_state('save_menu')
+                else:
+                    dprint("NEW SAVE", "No name, description or scenes selected.", "RED")
+        elif self.edit_button_rect.collidepoint(mouse_pos):
+            self.set_optimice_manager_list([self.edit_button_manager])
+            if self.edit_button.check_pressed():
+                self.edit_button.pressed = False
+                if self.check_campaign():
+                    self.campaign.set_name(self.name_input.get_text())
+                    self.campaign.set_description(self.desc_input.get_text())
+                    complete_scenes = self.get_path_scenes(self.scenes)
+                    self.campaign.set_scenes(complete_scenes)
+                    self.save.edit_campaign(self.campaign)
+                    dprint("NEW SAVE", "Campaign edited", "BLUE")
                     self.set_new_update(True)
                     self.gameStateManager.set_state('save_menu')
                 else:
