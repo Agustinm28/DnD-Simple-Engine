@@ -9,6 +9,7 @@ class Scene:
         self.mouse = mouse
         self.scene = None
         self.handler = False
+        self.battle = False
 
     def run(self):
         '''
@@ -18,11 +19,9 @@ class Scene:
             if self.gameStateManager.get_last_state() != 'save_menu':
                 self.gameStateManager.set_last_state('save_menu')
 
-            self.engine.screen.blit(self.engine.SCENES_BUFFER[self.scene][0], (0,0))
+            self.set_handler(True)
 
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_m]:
-                self.gameStateManager.set_state('scenes_menu')
+            self.engine.screen.blit(self.engine.SCENES_BUFFER[self.scene][0], (0,0))
 
         except Exception:
             error("Error showing scene")
@@ -40,3 +39,17 @@ class Scene:
     
     def set_handler(self, handler):
         self.handler = handler
+
+    def handle_events(self, event):
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_a:
+                if self.battle == False:
+                    self.battle = True
+                    self.engine.audio.play(self.engine.ENGINE_BUFFER['battle'])
+                    dprint("BATTLE", "Battle activated", "MAGENTA")
+                else:
+                    self.battle = False
+                    self.engine.audio.play(self.engine.SCENES_BUFFER[f"{self.scene}"][1])
+            elif event.key == pygame.K_m:
+                self.gameStateManager.set_state('scenes_menu')

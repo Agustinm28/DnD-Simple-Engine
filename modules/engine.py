@@ -163,6 +163,8 @@ class Engine:
                     else:
                         memory_audio = None
                     buffer[name] = [memory_scene, memory_audio]
+                elif value == "AUDIO":
+                    buffer[name] = audio_path
         except Exception:
             error("Error while adding element to buffer")
 
@@ -175,8 +177,6 @@ class Engine:
             - value: value of the element. -> [CONFIG, IMAGE]
         '''
         try:
-            if image_path is None or image_path == "":
-                raise Exception("Asset value is required")
             self.add_to_buffer("ENGINE", name, image_path, audio_path, value=value)
             dprint("ENGINE", f"Element {name} added to engine buffer", "GREEN")
         except Exception:
@@ -233,8 +233,11 @@ class Engine:
                 self.add_to_engine_buffer("theme", theme, value="CONFIG")
             elif mode == "ASSETS":
                 images = engine_data["assets"]["images"]
+                audios = engine_data["assets"]["audios"]
                 for image_name, image_path in images.items():
                     self.add_to_engine_buffer(image_name, image_path, value="IMAGE")
+                for audio_name, audio_path in audios.items():
+                    self.add_to_engine_buffer(audio_name, audio_path=audio_path, value="AUDIO")
         except Exception:
             error("Error while loading engine assets")
 
