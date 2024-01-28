@@ -88,6 +88,9 @@ class Game:
                 if self.save_menu.get_handler():
                     self.save_menu.handle_events(event)
 
+                if self.options_menu.get_handler():
+                    self.options_menu.handle_events(event)
+
             # Look for the key of screen to run
             self.states[self.game_state_manager.get_state()].run()
 

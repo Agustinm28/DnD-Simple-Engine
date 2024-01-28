@@ -1,8 +1,8 @@
 {
     "config": {
         "resolution": [
-            1920,
-            1080
+            1280,
+            720
         ],
         "fullscreen": false
     },

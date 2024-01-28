@@ -31,7 +31,7 @@
         "font": [
             {
                 "name": "Ancient",
-                "size": "36",
+                "size": "24",
                 "regular_path": "./assets/fonts/ancient.ttf"
             }
         ]
@@ -44,7 +44,7 @@
         "font": [
             {
                 "name": "Ancient",
-                "size": "36",
+                "size": "24",
                 "regular_path": "./assets/fonts/ancient.ttf"
             }
         ]
