@@ -19,6 +19,9 @@ class SaveMenu:
         self.update_ui()
      
     def run(self):
+        '''
+        Method to run the save menu.
+        '''
         try:
 
             if self.repository.get_in_repository():
@@ -44,11 +47,16 @@ class SaveMenu:
         except Exception:
             error("Error showing saves menu")
 
+    ## Getters and Setters
+
     def get_handler(self):
         return self.handler
 
     def set_handler(self, handler):
         self.handler = handler
+
+    def get_optimice_manager_list(self):
+        return self.optimice_manager
 
     def set_optimice_manager_list(self, manager_list):
         self.optimice_manager = manager_list
@@ -56,12 +64,23 @@ class SaveMenu:
     def get_manager_list(self):
         return self.manager_list
     
+    def set_manager_list(self, manager_list):
+        self.manager_list = manager_list
+    
     def get_path(self, campaign):
+        '''
+        Method to get the path of a campaign. Where:
+            - campaign: campaign name.
+        '''
         for save in self.saves:
             if save[0] == campaign:
                 return save[1]
             
     def get_campaign_data(self, campaign):
+        '''
+        Method to get the data of a campaign. Where:
+            - campaign: campaign name.
+        '''
         path = self.get_path(campaign)
 
         with open(path, "r") as save_file:
@@ -83,6 +102,10 @@ class SaveMenu:
         }
     
     def handle_events(self, event):
+        '''
+        Method to handle events. Where:
+            - event: pygame event.
+        '''
         for manager in self.optimice_manager:
             manager.process_events(event)
 
@@ -110,6 +133,10 @@ class SaveMenu:
                 self.update_managers(self.manager_list, update=True, draw=True)
 
     def update_managers(self, manager_list, update=False, draw=False):
+        '''
+        Method to update managers. Where:
+            - manager_list: list of managers.
+        '''
         for manager in manager_list:
             if update:
                 manager.update(pygame.time.Clock().tick(60) / 1000)
@@ -117,6 +144,9 @@ class SaveMenu:
                 manager.draw_ui(self.engine.screen)
 
     def update_ui(self):
+        '''
+        Method to update the UI.
+        '''
 
         self.handler = False
         self.selection = False
@@ -220,6 +250,10 @@ class SaveMenu:
         self.update_managers(self.manager_list, update=True, draw=True)
 
     def check_mouse_input(self, mouse_pos):
+        '''
+        Method to check mouse input. Where:
+            - mouse_pos: mouse position.
+        '''
         if self.saves_rect.collidepoint(mouse_pos) and self.selection == False:
             self.set_optimice_manager_list([self.saves_manager])
             self.saves_selector.enable()

@@ -5,9 +5,6 @@ from utils.debugger import error, dprint
 import pygame
 
 class ImageUtils:
-    '''
-    Class to handle image operations.
-    '''
 
     def __init__(self):
         pass

@@ -21,6 +21,9 @@ class Repository:
         self.update_ui()
 
     def run(self):
+        '''
+        Method to run the repository.
+        '''
         try:
 
             self.set_in_repository(True)
@@ -36,6 +39,8 @@ class Repository:
 
         except Exception:
             error("Error while displaying repository menu")
+
+    ## Getters and Setters
 
     def get_handler(self):
         return self.handler
@@ -61,7 +66,18 @@ class Repository:
     def set_last_audio_path(self, last_path):
         self.last_audio_path = last_path
 
+    def get_manager_list(self):
+        return self.manager_list
+    
+    def set_optimice_manager_list(self, manager_list):
+        self.optimice_manager = manager_list
+
+    ## Methods
+
     def load_repository(self):
+        '''
+        Method to load the repository.
+        '''
         with open("./docs/repository.json", "r") as f:
             repository = json.load(f)
 
@@ -71,6 +87,11 @@ class Repository:
         return images_list, audios_list
     
     def check_data(self, name, path):
+        '''
+        Methof to check the data from the form. Where:
+            - name: name of the image.
+            - path: path of the image.
+        '''
         if name == "":
             self.alert_label.set_text("Name can't be empty")
             return False
@@ -82,6 +103,11 @@ class Repository:
             return True
 
     def copy_and_optimize(self, path, file_type):
+        '''
+        Method to copy and optimize the image. Where:
+            - path: path of the image.
+            - file_type: type of the file.
+        '''
         if file_type == "image":
             new_path = f"./assets/images/repository/{path.split('\\')[-1]}"
             shutil.copy(path, new_path)
@@ -93,6 +119,12 @@ class Repository:
         return new_path
     
     def save_in_repository(self, name, path, media_type):
+        '''
+        Method to save the image in the repository. Where:
+            - name: name of the image.
+            - path: path of the image.
+            - media_type: type of the media.
+        '''
         with open("./docs/repository.json", "r") as f:
             repository = json.load(f)
         
@@ -105,6 +137,11 @@ class Repository:
             json.dump(repository, f, indent=4)
 
     def delete_in_repository(self, name, media_type):
+        '''
+        Method to delete the image in the repository. Where:
+            - name: name of the image.
+            - media_type: type of the media.
+        '''
         with open("./docs/repository.json", "r") as f:
             repository = json.load(f)
         
@@ -121,6 +158,11 @@ class Repository:
             json.dump(repository, f, indent=4)
 
     def get_path_from_repository(self, name, media_type):
+        '''
+        Method to get the path from the repository. Where:
+            - name: name of the image.
+            - media_type: type of the media.
+        '''
         with open("./docs/repository.json", "r") as f:
             repository = json.load(f)
         
@@ -132,6 +174,12 @@ class Repository:
         return path
 
     def update_managers(self, manager_list, update=False, draw=False):
+        '''
+        Method to update the managers. Where:
+            - manager_list: list of managers.
+            - update: update the managers.
+            - draw: draw the managers.
+        '''
         for manager in manager_list:
             if update:
                 manager.update(pygame.time.Clock().tick(60) / 1000)
@@ -139,16 +187,17 @@ class Repository:
                 manager.draw_ui(self.engine.screen)
 
     def handle_events(self, event):
+        '''
+        Method to handle events. Where:
+            - event: pygame event.
+        '''
         for manager in self.optimice_manager:
             manager.process_events(event)
 
-    def set_optimice_manager_list(self, manager_list):
-        self.optimice_manager = manager_list
-
-    def get_manager_list(self):
-        return self.manager_list
-
     def update_ui(self):
+        '''
+        Method to update the UI.
+        '''
 
         self.handler = False
         self.images, self.audios = self.load_repository()
@@ -351,6 +400,10 @@ class Repository:
         self.update_managers(self.manager_list, update=True, draw=True)
 
     def check_mouse_input(self, mouse_pos):
+            '''
+            Method to check the mouse input. Where:
+                - mouse_pos: mouse position.
+            '''
          # Hover Select path rect
             if self.select_rect.collidepoint(mouse_pos):
                 self.set_optimice_manager_list([self.select_manager])

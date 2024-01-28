@@ -12,6 +12,9 @@ class MainMenu:
         self.save_menu = save_menu
 
     def run(self):
+        '''
+        Method to run the main menu.
+        '''
         try:
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
             self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.ENGINE_BUFFER["main_menu"][0]

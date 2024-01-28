@@ -13,6 +13,9 @@ class OptionsMenu:
         self.update_ui()
 
     def run(self):
+        '''
+        Method to run the options menu.
+        '''
         try:
 
             if self.gameStateManager.get_last_state() != 'main_menu':
@@ -30,11 +33,16 @@ class OptionsMenu:
         except Exception:
             error("Error showing options menu")
     
+    ## Getters and Setters
+
     def get_handler(self):
         return self.handler
 
     def set_handler(self, handler):
         self.handler = handler
+
+    def get_optimice_manager_list(self):
+        return self.optimice_manager
     
     def set_optimice_manager_list(self, manager_list):
         self.optimice_manager = manager_list
@@ -42,11 +50,26 @@ class OptionsMenu:
     def get_manager_list(self):
         return self.manager_list
     
+    def set_manager_list(self, manager_list):
+        self.manager_list = manager_list
+
+    ## Methods
+    
     def handle_events(self, event):
+        '''
+        Method to handle events. Where:
+            - event: pygame event.
+        '''
         for manager in self.optimice_manager:
             manager.process_events(event)
 
     def update_managers(self, manager_list, update=False, draw=False):
+        '''
+        Method to update managers. Where:
+            - manager_list: list of managers.
+            - update: update flag.
+            - draw: draw flag.
+        '''
         for manager in manager_list:
             if update:
                 manager.update(pygame.time.Clock().tick(60) / 1000)
@@ -54,6 +77,9 @@ class OptionsMenu:
                 manager.draw_ui(self.engine.screen)
 
     def update_ui(self):
+        '''
+        Method to update the UI.
+        '''
 
         self.handler = False
         self.selection = False
@@ -136,6 +162,10 @@ class OptionsMenu:
         self.update_managers(self.manager_list, update=True, draw=True)
     
     def check_mouse_input(self, mouse_pos):
+        '''
+        Method to check mouse input. Where:
+            - mouse_pos: mouse position.
+        '''
         # Manager updating
         if self.resolution_label_rect.collidepoint(mouse_pos):
             self.set_optimice_manager_list([self.resolution_label_manager])

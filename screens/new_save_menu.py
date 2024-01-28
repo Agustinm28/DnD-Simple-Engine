@@ -27,6 +27,9 @@ class NewSaveMenu:
         self.update_ui()
 
     def run(self):
+        '''
+        Method to run the options menu.
+        '''
 
         if self.gameStateManager.get_last_state() != 'save_menu':
             self.gameStateManager.set_last_state('save_menu')
@@ -64,6 +67,8 @@ class NewSaveMenu:
         mouse_pos = pygame.mouse.get_pos()
         self.check_mouse_input(mouse_pos)
 
+    ## Getters and Setters
+
     def get_handler(self):
         return self.handler
 
@@ -85,17 +90,33 @@ class NewSaveMenu:
         self.preloaded_data["description"] = desc
         self.preloaded_data["scenes"] = scenes
 
+    def get_optimice_manager_list(self):
+        return self.optimice_manager
+
     def set_optimice_manager_list(self, manager_list):
         self.optimice_manager = manager_list
 
     def get_manager_list(self):
         return self.manager_list
     
+    def set_manager_list(self, manager_list):
+        self.manager_list = manager_list\
+
+    ## Methods
+    
     def handle_events(self, event):
+        '''
+        Method to handle events. Where:
+            - event: pygame event.
+        '''
         for manager in self.optimice_manager:
             manager.process_events(event)
 
     def update_managers(self, manager_list, update=False, draw=False):
+        '''
+        Method to update managers. Where:
+            - manager_list: list of managers.
+        '''
         for manager in manager_list:
             if update:
                 manager.update(pygame.time.Clock().tick(60) / 1000)
@@ -103,6 +124,11 @@ class NewSaveMenu:
                 manager.draw_ui(self.engine.screen)
 
     def update_ui(self, skip = False, complete = False):
+        '''
+        Method to update the UI. Where:
+            - skip: skip flag. Skips the name and description input boxes.
+            - complete: complete flag. Reset also the scenes.
+        '''
         
         self.handler = False
         self.image = None
@@ -267,18 +293,27 @@ class NewSaveMenu:
         self.update_managers(self.manager_list, update=True, draw=True)
 
     def check_scene(self):
+        '''
+        Method to check if a image has been selected.
+        '''
         if self.actual_image == "Select image":
             return False
         else:
             return True
         
     def check_campaign(self):
+        '''
+        Method to check if the form is complete.
+        '''
         if self.name_input.get_text() == "" or self.desc_input.get_text() == "" or self.scenes == []:
             return False
         else:
             return True
         
     def get_path_scenes(self, scenes):
+        '''
+        Method to get the path of the scenes.
+        '''
         complete_scenes = []
         for scene in scenes: 
             if scene[1] == "None" or scene[1] == None:
@@ -290,6 +325,10 @@ class NewSaveMenu:
         return complete_scenes
 
     def check_mouse_input(self, mouse_pos):
+        '''
+        Method to check mouse input. Where:
+            - mouse_pos: mouse position.
+        '''
         if self.name_rect.collidepoint(mouse_pos):
             self.set_optimice_manager_list([self.name_manager])
         elif self.desc_rect.collidepoint(mouse_pos):

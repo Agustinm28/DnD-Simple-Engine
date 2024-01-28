@@ -10,6 +10,9 @@ class SceneMenu:
         self.scene = scene
 
     def run(self):
+        '''
+        Method to run the scene menu.
+        '''
         try:
 
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["scenes_menu"][0], (0,0))
@@ -17,7 +20,6 @@ class SceneMenu:
             scale_x = self.engine.resolution[0] / 1920
             scale_y = self.engine.resolution[1] / 1080
 
-            #max_x = int(400 * scale_x) Este la verdad no se
             max_y = int(850 * scale_y)
 
             coordenates = []

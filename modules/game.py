@@ -72,8 +72,7 @@ class Game:
                     if event.key==pygame.K_ESCAPE:
                         if self.engine.audio.MUSIC:
                             self.engine.audio.stop()
-                        self.new_save_menu.set_handler(False)
-                        self.repository.set_handler(False)
+                        self.states[self.game_state_manager.get_state()].set_handler(False)
                         self.game_state_manager.set_state(self.game_state_manager.get_last_state())
                 
                 if self.new_save_menu.get_handler():

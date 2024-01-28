@@ -10,6 +10,9 @@ class Scene:
         self.scene = None
 
     def run(self):
+        '''
+        Method to run the scene.
+        '''
         try:
             if self.gameStateManager.get_last_state() != 'save_menu':
                 self.gameStateManager.set_last_state('save_menu')
@@ -22,6 +25,11 @@ class Scene:
 
         except Exception:
             error("Error showing scene")
+
+    ## Getters and Setters
+
+    def get_scene(self):
+        return self.scene
 
     def set_scene(self, scene):
         self.scene = scene
