@@ -108,6 +108,14 @@ class Repository:
             - path: path of the image.
             - file_type: type of the file.
         '''
+        # if folder repository doesn't exist, create it
+        if not os.path.exists("./assets/images/repository"):
+            os.makedirs("./assets/images/repository")
+
+        # if folder repository doesn't exist, create it
+        if not os.path.exists("./assets/audio/repository"):
+            os.makedirs("./assets/audio/repository")
+
         if file_type == "image":
             new_path = f"./assets/images/repository/{path.split('\\')[-1]}"
             shutil.copy(path, new_path)

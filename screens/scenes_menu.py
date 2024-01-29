@@ -9,6 +9,8 @@ class SceneMenu:
         self.mouse = mouse
         self.scene = scene
 
+        self.handler = False
+
     def run(self):
         '''
         Method to run the scene menu.
@@ -83,3 +85,9 @@ class SceneMenu:
                 self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.SCENES_BUFFER[f"{button_name}"][0]
                 self.scene.set_scene(button_name)
                 self.gameStateManager.set_state('scene')
+
+    def set_handler(self, handler):
+        self.handler = handler
+
+    def get_handler(self):
+        return self.handler
