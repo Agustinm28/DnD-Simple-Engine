@@ -1,0 +1,59 @@
+{
+    "lenguage": "English",
+    "main_menu": {
+        "start_button":"Start",
+        "repository_button":"Repository",
+        "options_button":"Options",
+        "exit_button":"Exit"
+    },
+    "options_menu":{
+        "resolution_label":"Resolution",
+        "window_label":"Window mode",
+        "modes":["Windowed","Fullscreen"],
+        "language_label":"Lenguage"
+    },
+    "repository":{
+        "images_label":"Images",
+        "audios_label":"Audios",
+        "name_label":"Name",
+        "image_selection_button":"Select Image",
+        "audio_selection_button":"Select Audio",
+        "no_name_label":"Name can't be empty",
+        "no_image_label":"No image selected",
+        "no_audio_label":"No audio selected",
+        "save_button":"Save",
+        "delete_confirmation_name":"Delete",
+        "delete_image_confirmation_message":"Are you sure you want to delete this image?",
+        "delete_audio_confirmation_message":"Are you sure you want to delete this audio?",
+        "delete_confirmation_yes":"Yes",
+        "delete_confirmation_no":"No",
+        "image_file_title":"Select an Image file",
+        "audio_file_title":"Select an Audio file"
+    },
+    "saves_menu":{
+        "new_campaign_button":"+ New Campaign",
+        "edit_button":"Edit",
+        "delete_button":"Delete",
+        "delete_confirmation_name":"Delete",
+        "delete_confirmation_message":"Are you sure you want to delete this campaign?",
+        "delete_confirmation_yes":"Yes",
+        "delete_confirmation_no":"No"
+    },
+    "new_save_menu":{
+        "name_label":"Name",
+        "description_label":"Description",
+        "scenes_label":"Scenes",
+        "add_scene_label":"Add an scene",
+        "images_label":"Images",
+        "audios_label":"Associated audio",
+        "image_selection_button":"Select Image",
+        "audio_selection_button":"None",
+        "add_button":"Add",
+        "create_button":"Create campaign",
+        "edit_button":"Edit campaign",
+        "delete_confirmation_name":"Delete",
+        "delete_confirmation_message":"Are you sure you want to delete this campaign from the list?",
+        "delete_confirmation_yes":"Yes",
+        "delete_confirmation_no":"No"
+    }
+}

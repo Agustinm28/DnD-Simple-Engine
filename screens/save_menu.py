@@ -16,6 +16,7 @@ class SaveMenu:
         self.save_utils = save_utils
         self.repository = repository
 
+        self.language = self.engine.ENGINE_BUFFER["language"]["saves_menu"]
         self.update_ui()
      
     def run(self):
@@ -152,6 +153,7 @@ class SaveMenu:
         self.selection = False
         self.campaign = None
         self.save = ""
+        self.language = self.engine.ENGINE_BUFFER["language"]["saves_menu"]
 
         self.paths = ['./docs/save_data/' + save for save in os.listdir('./docs/save_data')]
         self.saves = []
@@ -198,7 +200,7 @@ class SaveMenu:
         self.new_button = pygame_gui.elements.UIButton(
             relative_rect=self.new_button_rect,
             manager=self.new_button_manager,
-            text="+ New campaign",
+            text=self.language["new_campaign_button"],
             object_id="#ui_button"
         )
 
@@ -208,7 +210,7 @@ class SaveMenu:
         self.edit_button = pygame_gui.elements.UIButton(
             relative_rect=self.edit_button_rect,
             manager=self.edit_button_manager,
-            text="Edit",
+            text=self.language["edit_button"],
             object_id="#ui_button"
         )
         self.edit_button.hide()
@@ -219,7 +221,7 @@ class SaveMenu:
         self.delete_button = pygame_gui.elements.UIButton(
             relative_rect=self.delete_button_rect,
             manager=self.delete_button_manager,
-            text="Delete",
+            text=self.language["delete_button"],
             object_id="#ui_button"
         )
         self.delete_button.hide()
@@ -230,9 +232,9 @@ class SaveMenu:
         self.confirmation_dialog = pygame_gui.windows.UIConfirmationDialog(
             rect=self.confirmation_rect,
             manager=self.confirmation_manager,
-            window_title="Delete",
-            action_long_desc=f"Do you want to delete this campaign?",
-            action_short_name="Delete campaign",
+            window_title=self.language["delete_confirmation_name"],
+            action_long_desc=self.language["delete_confirmation_message"],
+            action_short_name=self.language["delete_confirmation_yes"],
             blocking=True,
             object_id="#ui_dialog"
         )

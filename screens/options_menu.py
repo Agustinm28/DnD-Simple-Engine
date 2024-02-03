@@ -5,10 +5,13 @@ from utils.debugger import info, error, dprint
 
 class OptionsMenu:
 
-    def __init__(self, gameStateManager, engine, mouse):
+    def __init__(self, gameStateManager, engine, mouse, lang):
         self.gameStateManager = gameStateManager
         self.engine = engine
         self.mouse = mouse
+        self.lang = lang
+
+        self.language = self.engine.ENGINE_BUFFER["language"]["options_menu"]
 
         self.update_ui()
 
@@ -85,10 +88,12 @@ class OptionsMenu:
         self.selection = False
         self.actual_resolution = f"{self.engine.resolution[0]} x {self.engine.resolution[1]}"
         mode_status = self.engine.ENGINE_BUFFER["fullscreen"]
+        self.language = self.engine.ENGINE_BUFFER["language"]["options_menu"]
         if mode_status:
-            self.actual_mode = "Fullscreen"
+            self.actual_mode = self.language["modes"][1] # Fullscreen
         else:
-            self.actual_mode = "Windowed"
+            self.actual_mode = self.language["modes"][0] # Windowed
+        self.actual_lenguage = self.lang.get_lang(self.engine.ENGINE_BUFFER["lang"])
 
         self.scale_x = self.engine.resolution[0] / 1920
         self.scale_y = self.engine.resolution[1] / 1080
@@ -118,14 +123,14 @@ class OptionsMenu:
         # Resolution label
         self.resolution_label_rect = pygame.Rect(self.position_x*2, self.position_y, self.widht, self.height)
         self.resolution_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.resolution_label_label = pygame_gui.elements.UILabel(relative_rect=self.resolution_label_rect, manager=self.resolution_label_manager, object_id="#ui_label", text="Resolution")
+        self.resolution_label_label = pygame_gui.elements.UILabel(relative_rect=self.resolution_label_rect, manager=self.resolution_label_manager, object_id="#ui_label", text=self.language["resolution_label"])
 
         self.resolutions = []
         for resolution in self.engine.AVAILABLE_RESOLUTIONS:
             self.resolutions.append(f"{resolution[0]} x {resolution[1]}")
 
         # Resolution dropdown selector
-        self.resolution_dropdown_rect = pygame.Rect(self.position_x, self.position_y*2, self.widht*1.5, self.height)
+        self.resolution_dropdown_rect = pygame.Rect(self.position_x, self.position_y*2.5, self.widht*1.5, self.height)
         self.resolution_dropdown_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.resolution_dropdown = pygame_gui.elements.UIDropDownMenu(
             options_list=self.resolutions,
@@ -138,11 +143,11 @@ class OptionsMenu:
         # Window label
         self.window_label_rect = pygame.Rect(self.position_x*12, self.position_y, self.widht, self.height)
         self.window_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.window_label_label = pygame_gui.elements.UILabel(relative_rect=self.window_label_rect, manager=self.window_label_manager, object_id="#ui_label", text="Window mode")
+        self.window_label_label = pygame_gui.elements.UILabel(relative_rect=self.window_label_rect, manager=self.window_label_manager, object_id="#ui_label", text=self.language["window_label"])
 
         
         # Window mode button
-        self.window_button_rect = pygame.Rect(self.position_x*12, self.position_y*2, self.widht, self.height)
+        self.window_button_rect = pygame.Rect(self.position_x*12, self.position_y*2.5, self.widht, self.height)
         self.window_button_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
         self.window_button = pygame_gui.elements.UIButton(
             relative_rect=self.window_button_rect,
@@ -151,11 +156,31 @@ class OptionsMenu:
             object_id="#ui_button"
         )
 
+        # Lenguage label
+        self.lenguage_label_rect = pygame.Rect(self.position_x*21, self.position_y, self.widht, self.height)
+        self.lenguage_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
+        self.lenguage_label_label = pygame_gui.elements.UILabel(relative_rect=self.lenguage_label_rect, manager=self.lenguage_label_manager, object_id="#ui_label", text=self.language["language_label"])
+
+        lang_list = self.lang.get_lenguages()
+
+        # Lenguage dropdown selector
+        self.lenguage_dropdown_rect = pygame.Rect(self.position_x*20, self.position_y*2.5, self.widht*1.5, self.height)
+        self.lenguage_dropdown_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
+        self.lenguage_dropdown = pygame_gui.elements.UIDropDownMenu(
+            options_list=lang_list,
+            relative_rect=self.lenguage_dropdown_rect,
+            manager=self.lenguage_dropdown_manager,
+            starting_option=self.actual_lenguage,
+            object_id="#ui_dropdown"
+        )
+
         self.manager_list = [
             self.resolution_label_manager,
             self.window_label_manager,
             self.window_button_manager,
-            self.resolution_dropdown_manager
+            self.resolution_dropdown_manager,
+            self.lenguage_label_manager,
+            self.lenguage_dropdown_manager
         ]
         self.optimice_manager = []
 
@@ -177,13 +202,15 @@ class OptionsMenu:
             self.set_optimice_manager_list([self.window_button_manager])
             if self.window_button.check_pressed():
                 self.window_button.pressed = False
-                if self.actual_mode == "Fullscreen":
-                    self.actual_mode = "Windowed"
+                if self.actual_mode == self.language["modes"][1]:
+                    self.actual_mode = self.language["modes"][0]
                     self.engine.toggle_fullscreen(mode=False)
-                else:
-                    self.actual_mode = "Fullscreen"
+                elif self.actual_mode == self.language["modes"][0]:
+                    self.actual_mode = self.language["modes"][1]
                     self.engine.toggle_fullscreen(mode=True)
                 self.update_ui()
+        elif self.lenguage_dropdown_rect.collidepoint(mouse_pos):
+            self.set_optimice_manager_list([self.lenguage_dropdown_manager])
 
         # Actions
         elif self.resolution_dropdown.selected_option != self.actual_resolution:
@@ -195,4 +222,10 @@ class OptionsMenu:
             self.actual_resolution = self.resolution_dropdown.selected_option
             self.update_ui()
             dprint("OPTIONS MENU", f"Resolution changed to {self.actual_resolution}", "BLUE")
+        elif self.lenguage_dropdown.selected_option != self.actual_lenguage:
+            self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
+            self.actual_lenguage = self.lenguage_dropdown.selected_option
+            self.lang.change_lenguage(self.actual_lenguage)
+            dprint("OPTIONS MENU", f"Lenguage changed to {self.actual_lenguage}", "BLUE")
+            self.update_ui()
             

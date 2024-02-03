@@ -1,0 +1,59 @@
+{
+    "lenguage":"Español",
+    "main_menu": {
+        "start_button":"Comenzar",
+        "repository_button":"Repositorio",
+        "options_button":"Opciones",
+        "exit_button":"Salir"
+    },
+    "options_menu":{
+        "resolution_label":"Resolución",
+        "window_label":"Modo de ventana",
+        "modes":["Ventana","Pantalla completa"],
+        "language_label":"Idioma"
+    },
+    "repository":{
+        "images_label":"Imágenes",
+        "audios_label":"Audios",
+        "name_label":"Nombre",
+        "image_selection_button":"Seleccionar",
+        "audio_selection_button":"Seleccionar",
+        "no_name_label":"Nombre vacío",
+        "no_image_label":"Seleccionar imagen",
+        "no_audio_label":"Seleccionar audio",
+        "save_button":"Guardar",
+        "delete_confirmation_name":"Borrar",
+        "delete_image_confirmation_message":"¿Seguro que quieres borrar esta imagen?",
+        "delete_audio_confirmation_message":"¿Seguro que quieres borrar este audio?",
+        "delete_confirmation_yes":"Sí",
+        "delete_confirmation_no":"No",
+        "image_file_title":"Selecciona un archivo de imagen",
+        "audio_file_title":"Selecciona un archivo de audio"
+    },
+    "saves_menu":{
+        "new_campaign_button":"+ Nueva campaña",
+        "edit_button":"Editar",
+        "delete_button":"Borrar",
+        "delete_confirmation_name":"Borrar",
+        "delete_confirmation_message":"¿Seguro que quieres borrar esta campaña?",
+        "delete_confirmation_yes":"Sí",
+        "delete_confirmation_no":"No"
+    },
+    "new_save_menu":{
+        "name_label":"Nombre",
+        "description_label":"Descripción",
+        "scenes_label":"Escenas",
+        "add_scene_label":"Añadir una escena",
+        "images_label":"Imágenes",
+        "audios_label":"Audio asociado",
+        "image_selection_button":"Seleccionar Imagen",
+        "audio_selection_button":"Ninguno",
+        "add_button":"Añadir",
+        "create_button":"Crear campaña",
+        "edit_button":"Editar campaña",
+        "delete_confirmation_name":"Borrar",
+        "delete_confirmation_message":"¿Seguro que quieres eliminar esta campaña de la lista?",
+        "delete_confirmation_yes":"Sí",
+        "delete_confirmation_no":"No"
+    }
+}

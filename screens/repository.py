@@ -14,6 +14,7 @@ class Repository:
         self.mouse = mouse
         self.image_optimizer = image_optimizer
 
+        self.language = self.engine.ENGINE_BUFFER["language"]["repository"]
         self.in_repository = False
         self.last_image_path = "c:/"
         self.last_audio_path = "c:/"
@@ -93,10 +94,10 @@ class Repository:
             - path: path of the image.
         '''
         if name == "":
-            self.alert_label.set_text("Name can't be empty")
+            self.alert_label.set_text(self.language["no_name_label"])
             return False
         elif path == "":
-            self.alert_label.set_text("Select an image")
+            self.alert_label.set_text(self.language["no_image_label"])
             return False
         else:
             self.alert_label.set_text("")
@@ -208,6 +209,7 @@ class Repository:
         '''
 
         self.handler = False
+        self.language = self.engine.ENGINE_BUFFER["language"]["repository"]
         self.images, self.audios = self.load_repository()
         self.image_path = ""
         self.audio_path = ""
@@ -243,7 +245,7 @@ class Repository:
         # Images label
         self.images_rect = pygame.Rect(self.position_x, self.position_y, self.widht*2, self.height)
         self.images_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.images_label = pygame_gui.elements.UILabel(relative_rect=self.images_rect, manager=self.images_manager, object_id="#ui_label", text="Images")
+        self.images_label = pygame_gui.elements.UILabel(relative_rect=self.images_rect, manager=self.images_manager, object_id="#ui_label", text=self.language["images_label"])
 
         self.image_rect = pygame.Rect(self.position_x, self.position_y*2, self.widht*2, self.height*10)
         self.image_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
@@ -252,7 +254,7 @@ class Repository:
         # Name label
         self.name_label_rect = pygame.Rect(self.position_x, self.position_y*15, self.widht/2, self.height)
         self.name_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.name_label = pygame_gui.elements.UILabel(relative_rect=self.name_label_rect, manager=self.name_label_manager, object_id="#ui_label", text="Name")
+        self.name_label = pygame_gui.elements.UILabel(relative_rect=self.name_label_rect, manager=self.name_label_manager, object_id="#ui_label", text=self.language["name_label"])
 
         # Name input box
         self.name_rect = pygame.Rect(self.position_x*4, self.position_y*15, self.widht*1.5, self.height)
@@ -263,12 +265,12 @@ class Repository:
         # Selection button
         self.select_rect = pygame.Rect(self.position_x, self.position_y*17, self.widht/1.5, self.height)
         self.select_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.select_button = pygame_gui.elements.UIButton(relative_rect=self.select_rect, manager=self.select_manager, object_id="#ui_button", text="Select Image")
+        self.select_button = pygame_gui.elements.UIButton(relative_rect=self.select_rect, manager=self.select_manager, object_id="#ui_button", text=self.language["image_selection_button"])
 
         # Selection label
         self.select_label_rect = pygame.Rect(self.position_x*5, self.position_y*17, self.widht, self.height)
         self.select_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.select_label = pygame_gui.elements.UILabel(relative_rect=self.select_label_rect, manager=self.select_label_manager, object_id="#ui_label", text="No image selected")
+        self.select_label = pygame_gui.elements.UILabel(relative_rect=self.select_label_rect, manager=self.select_label_manager, object_id="#ui_label", text=self.language["no_image_label"])
 
         # File selection manager
         self.file_rect = pygame.Rect(self.position_x, self.position_y*5, self.widht*2, self.height*10)
@@ -276,7 +278,7 @@ class Repository:
         self.file_dialog = pygame_gui.windows.UIFileDialog(
                     rect=self.file_rect,
                     manager=self.file_manager,
-                    window_title="Select Image",
+                    window_title=self.language["image_file_title"],
                     initial_file_path=self.last_image_path,
                     allow_existing_files_only=True,
                     allow_picking_directories=False,
@@ -291,9 +293,9 @@ class Repository:
         self.confirmation_dialog = pygame_gui.windows.UIConfirmationDialog(
             rect=self.confirmation_rect,
             manager=self.confirmation_manager,
-            window_title="Delete",
-            action_long_desc="Do you want to delete this image?",
-            action_short_name="Delete",
+            window_title=self.language["delete_confirmation_name"],
+            action_long_desc=self.language["delete_image_confirmation_message"],
+            action_short_name=self.language["delete_confirmation_name"],
             blocking=True,
             object_id="#ui_dialog"
         )
@@ -302,7 +304,7 @@ class Repository:
         # Save button
         self.save_rect = pygame.Rect(self.position_x, self.position_y*19, self.widht/1.5, self.height)
         self.save_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.save_button = pygame_gui.elements.UIButton(relative_rect=self.save_rect, manager=self.save_manager, object_id="#ui_button", text="Save")
+        self.save_button = pygame_gui.elements.UIButton(relative_rect=self.save_rect, manager=self.save_manager, object_id="#ui_button", text=self.language["save_button"])
 
         # Alert label
         self.alert_rect = pygame.Rect(self.position_x*5, self.position_y*19, self.widht, self.height)
@@ -314,7 +316,7 @@ class Repository:
         # Audios label
         self.audios_rect = pygame.Rect(self.position_x*x_distance, self.position_y, self.widht*2, self.height)
         self.audios_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audios_label = pygame_gui.elements.UILabel(relative_rect=self.audios_rect, manager=self.audios_manager, object_id="#ui_label", text="Audios")
+        self.audios_label = pygame_gui.elements.UILabel(relative_rect=self.audios_rect, manager=self.audios_manager, object_id="#ui_label", text=self.language["audios_label"])
 
         # Audio selector
         self.audio_rect = pygame.Rect(self.position_x*x_distance, self.position_y*2, self.widht*2, self.height*10)
@@ -324,7 +326,7 @@ class Repository:
         # Name label
         self.audio_name_label_rect = pygame.Rect(self.position_x*x_distance, self.position_y*15, self.widht/2, self.height)
         self.audio_name_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_name_label = pygame_gui.elements.UILabel(relative_rect=self.audio_name_label_rect, manager=self.audio_name_label_manager, object_id="#ui_label", text="Name")
+        self.audio_name_label = pygame_gui.elements.UILabel(relative_rect=self.audio_name_label_rect, manager=self.audio_name_label_manager, object_id="#ui_label", text=self.language["name_label"])
 
         # Name input box
         self.audio_name_rect = pygame.Rect(self.position_x*(x_distance+3), self.position_y*15, self.widht*1.5, self.height)
@@ -335,12 +337,12 @@ class Repository:
         # Selection button
         self.audio_select_rect = pygame.Rect(self.position_x*x_distance, self.position_y*17, self.widht/1.5, self.height)
         self.audio_select_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_select_button = pygame_gui.elements.UIButton(relative_rect=self.audio_select_rect, manager=self.audio_select_manager, object_id="#ui_button", text="Select Audio")
+        self.audio_select_button = pygame_gui.elements.UIButton(relative_rect=self.audio_select_rect, manager=self.audio_select_manager, object_id="#ui_button", text=self.language["audio_selection_button"])
 
         # Selection label
         self.audio_select_label_rect = pygame.Rect(self.position_x*(4+x_distance), self.position_y*17, self.widht, self.height)
         self.audio_select_label_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_select_label = pygame_gui.elements.UILabel(relative_rect=self.audio_select_label_rect, manager=self.audio_select_label_manager, object_id="#ui_label", text="No audio selected")
+        self.audio_select_label = pygame_gui.elements.UILabel(relative_rect=self.audio_select_label_rect, manager=self.audio_select_label_manager, object_id="#ui_label", text=self.language["no_audio_label"])
 
         # File selection manager
         self.audio_file_rect = pygame.Rect(self.position_x*x_distance, self.position_y*5, self.widht*2, self.height*10)
@@ -348,7 +350,7 @@ class Repository:
         self.audio_file_dialog = pygame_gui.windows.UIFileDialog(
                     rect=self.audio_file_rect,
                     manager=self.audio_file_manager,
-                    window_title="Select Audio",
+                    window_title=self.language["audio_file_title"],
                     initial_file_path=self.last_audio_path,
                     allow_existing_files_only=True,
                     allow_picking_directories=False,
@@ -363,9 +365,9 @@ class Repository:
         self.audio_confirmation_dialog = pygame_gui.windows.UIConfirmationDialog(
             rect=self.audio_confirmation_rect,
             manager=self.audio_confirmation_manager,
-            window_title="Delete",
-            action_long_desc="Do you want to delete this audio?",
-            action_short_name="Delete",
+            window_title=self.language["delete_confirmation_name"],
+            action_long_desc=self.language["delete_audio_confirmation_message"],
+            action_short_name=self.language["delete_confirmation_name"],
             blocking=True,
             object_id="#ui_dialog"
         )
@@ -374,7 +376,7 @@ class Repository:
         # Save button
         self.audio_save_rect = pygame.Rect(self.position_x*x_distance, self.position_y*19, self.widht/1.5, self.height)
         self.audio_save_manager = pygame_gui.UIManager(self.engine.resolution, theme_path=self.engine.ENGINE_BUFFER["theme"])
-        self.audio_save_button = pygame_gui.elements.UIButton(relative_rect=self.audio_save_rect, manager=self.audio_save_manager, object_id="#ui_button", text="Save")
+        self.audio_save_button = pygame_gui.elements.UIButton(relative_rect=self.audio_save_rect, manager=self.audio_save_manager, object_id="#ui_button", text=self.language["save_button"])
 
         # Alert label
         self.audio_alert_rect = pygame.Rect(self.position_x*(4+x_distance), self.position_y*19, self.widht, self.height)

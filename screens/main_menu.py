@@ -11,6 +11,8 @@ class MainMenu:
         self.repository = repository
         self.save_menu = save_menu
 
+        self.language = self.engine.ENGINE_BUFFER["language"]["main_menu"]
+
     def run(self):
         '''
         Method to run the main menu.
@@ -18,6 +20,7 @@ class MainMenu:
         try:
             self.engine.screen.blit(self.engine.ENGINE_BUFFER["main_menu"][0], (0,0))
             self.engine.ENGINE_BUFFER["scenes_menu"][0] = self.engine.ENGINE_BUFFER["main_menu"][0]
+            self.language = self.engine.ENGINE_BUFFER["language"]["main_menu"]
 
             scale_x = self.engine.resolution[0] / 1920
             scale_y = self.engine.resolution[1] / 1080
@@ -31,7 +34,7 @@ class MainMenu:
             widht = int(400 * scale_x)
             height = int(100 * scale_y)
 
-            options = ["Start", "Repository", "Options", "Exit"]
+            options = [self.language["start_button"], self.language["repository_button"], self.language["options_button"], self.language["exit_button"]]
 
             font_size = int(36 * min(scale_x, scale_y))
             font = pygame.font.Font("./assets/fonts/ancient.ttf", font_size)
@@ -83,18 +86,18 @@ class MainMenu:
                     self.mouse.set_click('up')
                     if self.engine.audio.MUSIC:
                         self.engine.audio.stop()
-                    if button_name == "Start":
+                    if button_name == self.language["start_button"]:
                         dprint("MAIN MENU", "Start button clicked.", "BLUE")
                         self.save_menu.update_ui()
                         self.gameStateManager.set_state('save_menu')
-                    elif button_name == "Repository":
+                    elif button_name == self.language["repository_button"]:
                         dprint("MAIN MENU", "Reposiroty button clicked.", "BLUE")
                         self.repository.update_ui()
                         self.gameStateManager.set_state('repository')
-                    elif button_name == "Options":
+                    elif button_name == self.language["options_button"]:
                         dprint("MAIN MENU", "Options button clicked.", "BLUE")
                         self.gameStateManager.set_state('options_menu')
-                    elif button_name == "Exit":
+                    elif button_name == self.language["exit_button"]:
                         self.exit_class.set_status(True)
 
         except Exception:

@@ -16,6 +16,7 @@ class NewSaveMenu:
         self.campaign = Campaign()
         self.new_update = False
 
+        self.language = self.engine.ENGINE_BUFFER["language"]["new_save_menu"]
         self.scenes = []
         self.preloaded_data = {
             "save_id": "",
@@ -38,27 +39,27 @@ class NewSaveMenu:
         self.set_handler(True)
 
         # Name label
-        name_label = self.font.render("Name", True, (255, 255, 255))
+        name_label = self.font.render(self.language["name_label"], True, (255, 255, 255))
         self.engine.screen.blit(name_label, (self.position_x*1.5, self.position_y))
 
         # Desc label
-        description_label = self.font.render("Description", True, (255, 255, 255))
+        description_label = self.font.render(self.language["description_label"], True, (255, 255, 255))
         self.engine.screen.blit(description_label, (self.position_x*1.5, self.position_y*4))
 
         # Scenes label
-        scenes_label = self.font.render("Scenes", True, (255, 255, 255))
+        scenes_label = self.font.render(self.language["scenes_label"], True, (255, 255, 255))
         self.engine.screen.blit(scenes_label, (self.position_x*15.5, self.position_y))
 
         # Add label
-        add_label = self.font.render("Add an scene", True, (255, 255, 255))
+        add_label = self.font.render(self.language["add_scene_label"], True, (255, 255, 255))
         self.engine.screen.blit(add_label, (self.position_x*21.5, self.position_y*12))
 
         # Image label
-        image_label = self.font.render("Image", True, (255, 255, 255))
+        image_label = self.font.render(self.language["images_label"], True, (255, 255, 255))
         self.engine.screen.blit(image_label, (self.position_x*18, self.position_y*13))
 
         # Audio label
-        audio_label = self.font.render("Associated audio", True, (255, 255, 255))
+        audio_label = self.font.render(self.language["audios_label"], True, (255, 255, 255))
         self.engine.screen.blit(audio_label, (self.position_x*25, self.position_y*13))
 
         self.update_managers(self.optimice_manager, update=True, draw=True)
@@ -134,12 +135,14 @@ class NewSaveMenu:
         self.image = None
         self.audio = None
         self.selection = False
+        self.language = self.engine.ENGINE_BUFFER["language"]["new_save_menu"]
         self.images, self.audios = self.repository.load_repository()
-        self.images.append("Select image")
-        self.audios.append("None")
+        self.images.append(self.language["image_selection_button"])
+        self.audios.append(self.language["audio_selection_button"])
         self.loaded = False
-        self.actual_image = "Select image"
-        self.actual_audio = "None"
+        self.actual_image = self.language["image_selection_button"]
+        self.actual_audio = self.language["audio_selection_button"]
+        self.language = self.engine.ENGINE_BUFFER["language"]["new_save_menu"]
         if complete:
             self.scenes = []
 
@@ -191,9 +194,9 @@ class NewSaveMenu:
         self.confirmation_dialog = pygame_gui.windows.UIConfirmationDialog(
             rect=self.confirmation_rect,
             manager=self.confirmation_manager,
-            window_title="Delete",
-            action_long_desc="Do you want to delete this scene from the list?",
-            action_short_name="Delete from list",
+            window_title=self.language["delete_confirmation_name"],
+            action_long_desc=self.language["delete_confirmation_message"],
+            action_short_name=self.language["delete_confirmation_yes"],
             blocking=True,
             object_id="#ui_dialog"
         )
@@ -215,7 +218,7 @@ class NewSaveMenu:
             options_list=self.images,
             relative_rect=self.image_dropdown_rect,
             manager=self.image_dropdown_manager,
-            starting_option="Select image",
+            starting_option=self.language["image_selection_button"],
             object_id="#ui_dropdown"
         )
 
@@ -226,7 +229,7 @@ class NewSaveMenu:
             options_list=self.audios,
             relative_rect=self.audio_dropdown_rect,
             manager=self.audio_dropdown_manager,
-            starting_option="None",
+            starting_option=self.language["audio_selection_button"],
             object_id="#ui_dropdown"
         )
 
@@ -236,7 +239,7 @@ class NewSaveMenu:
         self.add_button = pygame_gui.elements.UIButton(
             relative_rect=self.add_button_rect,
             manager=self.add_button_manager,
-            text="Add",
+            text=self.language["add_button"],
             object_id="#ui_button"
         )
 
@@ -246,7 +249,7 @@ class NewSaveMenu:
         self.create_button = pygame_gui.elements.UIButton(
             relative_rect=self.create_button_rect,
             manager=self.create_button_manager,
-            text="Create campaign",
+            text=self.language["create_button"],
             object_id="#ui_button"
         )
 
@@ -256,7 +259,7 @@ class NewSaveMenu:
         self.edit_button = pygame_gui.elements.UIButton(
             relative_rect=self.edit_button_rect,
             manager=self.edit_button_manager,
-            text="Edit campaign",
+            text=self.language["edit_button"],
             object_id="#ui_button"
         )
         self.edit_button.hide() 
@@ -296,7 +299,7 @@ class NewSaveMenu:
         '''
         Method to check if a image has been selected.
         '''
-        if self.actual_image == "Select image":
+        if self.actual_image == self.language["image_selection_button"]:
             return False
         else:
             return True

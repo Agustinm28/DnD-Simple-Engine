@@ -13,6 +13,7 @@ from screens.loading import Loading
 from screens.new_save_menu import NewSaveMenu
 from screens.repository import Repository
 from modules.exit import Exit
+from modules.lenguage import Lenguage
 from modules.save import Save
 from utils.debugger import info, error, dprint
 from modules.mouse import Mouse
@@ -29,6 +30,7 @@ class Game:
         self.exit = Exit()
         self.image_optimizer = ImageUtils()
         self.save = Save()
+        self.lang = Lenguage(self.engine)
 
         self.game_state_manager = GameStateManager('main_menu')
 
@@ -37,7 +39,7 @@ class Game:
         self.new_save_menu = NewSaveMenu(self.game_state_manager, self.engine, self.mouse, self.repository, self.image_optimizer, self.save)
         self.save_menu = SaveMenu(self.game_state_manager, self.engine, self.mouse, self.loading, self.new_save_menu, self.save, self.repository)
         self.main_menu = MainMenu(self.game_state_manager, self.engine, self.mouse, self.exit, self.repository, self.save_menu)
-        self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse)
+        self.options_menu = OptionsMenu(self.game_state_manager, self.engine, self.mouse, self.lang)
         self.scene = Scene(self.game_state_manager, self.engine, self.mouse)
         self.scenes_menu = SceneMenu(self.game_state_manager, self.engine, self.mouse, self.scene)
 

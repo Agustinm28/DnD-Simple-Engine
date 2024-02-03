@@ -7,6 +7,7 @@ from modules.audio import Audio
 from modules.image import ImageUtils
 from utils.debugger import dprint, error, set_break, info
 import json
+import locale
 
 class Engine:
     '''
@@ -228,9 +229,20 @@ class Engine:
             if mode == "CONFIG":
                 config = engine_data["config"]
                 theme = engine_data["theme"]
+                language = config["lang"]
+                if language == None:
+                    local_lang = locale.getdefaultlocale()[0].split("_")[0]
+                    self.set_initial_lang(local_lang)
+                    config["lang"] = local_lang
+                    language = local_lang
+                if language == "en":
+                    language = self.load_language('./docs/languages/en.json')
+                if language == "es":
+                    language = self.load_language('./docs/languages/es.json')
                 for name, value in config.items():
                     self.add_to_engine_buffer(name, value, value="CONFIG")
                 self.add_to_engine_buffer("theme", theme, value="CONFIG")
+                self.add_to_engine_buffer("language", language, value="CONFIG")
             elif mode == "ASSETS":
                 images = engine_data["assets"]["images"]
                 audios = engine_data["assets"]["audios"]
@@ -240,6 +252,26 @@ class Engine:
                     self.add_to_engine_buffer(audio_name, audio_path=audio_path, value="AUDIO")
         except Exception:
             error("Error while loading engine assets")
+
+    def load_language(self, language_path:str = "./docs/languages/en.json"):
+        '''
+        Method to load language. Where:
+            - language_path: path to language file.
+        '''
+        try:
+            with open(language_path, "r", encoding='utf-8') as file:
+                language = json.load(file)
+            return language
+        except Exception:
+            error("Error while loading language")
+    
+    def set_initial_lang(self, language:str):
+        with open(f'./docs/engine.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            data["config"]["lang"] = language
+
+        with open(f'./docs/engine.json', 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
 
     def load_saved_game(self, save_path:str):
         '''

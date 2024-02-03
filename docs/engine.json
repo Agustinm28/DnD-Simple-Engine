@@ -4,7 +4,8 @@
             1280,
             720
         ],
-        "fullscreen": false
+        "fullscreen": false,
+        "lang": "es"
     },
     "assets": {
         "images": {
