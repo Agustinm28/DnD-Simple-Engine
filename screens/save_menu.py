@@ -116,7 +116,6 @@ class SaveMenu:
                 self.campaign = self.saves_selector.get_single_selection()
                 if self.campaign != None:
                     self.save = self.get_path(self.campaign)
-                self.engine.screen.blit(self.engine.ENGINE_BUFFER["loading"][0], (0,0))
                 self.loading.set_save_path(self.save)
                 self.gameStateManager.set_state('loading')
             elif event.type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION and self.repository.get_in_repository() == False:

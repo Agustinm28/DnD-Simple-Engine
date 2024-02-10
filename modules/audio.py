@@ -24,6 +24,8 @@ class Audio:
             pygame.mixer.music.load(audio_path)
             pygame.mixer.music.play(loops=-1, fade_ms=1000)
             self.MUSIC = True
+        except TypeError:
+            pass
         except Exception:
             error("Error playing audio")
 

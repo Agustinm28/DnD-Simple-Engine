@@ -91,7 +91,7 @@ class MainMenu:
                         self.save_menu.update_ui()
                         self.gameStateManager.set_state('save_menu')
                     elif button_name == self.language["repository_button"]:
-                        dprint("MAIN MENU", "Reposiroty button clicked.", "BLUE")
+                        dprint("MAIN MENU", "Repository button clicked.", "BLUE")
                         self.repository.update_ui()
                         self.gameStateManager.set_state('repository')
                     elif button_name == self.language["options_button"]:

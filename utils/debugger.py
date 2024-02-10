@@ -31,6 +31,8 @@ def dprint(title:str = "COMMENT", comment:str = "", color:str = "RESET"):
         color = c.WHITE
     elif color == "BLACK":
         color = c.BLACK
+    else:
+        color = c.RESET
 
     print(f"[ {color}{title}{c.RESET} ] {comment}")
 

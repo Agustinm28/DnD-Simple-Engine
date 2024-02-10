@@ -321,7 +321,7 @@ class NewSaveMenu:
         for scene in scenes: 
             if scene[1] == "None" or scene[1] == None:
                 # Name, image_path, audio_path
-                complete_scenes.append([scene[0], self.repository.get_path_from_repository(scene[0], "image"), ""])
+                complete_scenes.append([scene[0], self.repository.get_path_from_repository(scene[0], "image"), [None, None]])
             else:
                 complete_scenes.append([scene[0], self.repository.get_path_from_repository(scene[0], "image"), [scene[1], self.repository.get_path_from_repository(scene[1], "audio")]])
 
