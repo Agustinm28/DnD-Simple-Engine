@@ -50,6 +50,10 @@ class Scene:
                     dprint("BATTLE", "Battle activated", "MAGENTA")
                 else:
                     self.battle = False
-                    self.engine.audio.play(self.engine.SCENES_BUFFER[f"{self.scene}"][1])
+                    if self.engine.SCENES_BUFFER[f"{self.scene}"][1] == None:
+                        self.engine.audio.stop()
+                    else:
+                        self.engine.audio.play(self.engine.SCENES_BUFFER[f"{self.scene}"][1])
+                    dprint("BATTLE", "Battle deactivated", "MAGENTA")
             elif event.key == pygame.K_m:
                 self.gameStateManager.set_state('scenes_menu')

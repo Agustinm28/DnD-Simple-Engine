@@ -26,6 +26,8 @@ class Engine:
         pygame.mixer.pre_init(44100, -16, 2, 4096)
         pygame.init() # Initialize pygame
 
+        num_displays = pygame.display.get_num_displays() # Get number of displays
+
         self.load_engine_assets(mode="CONFIG")
 
         self.screen = self.set_screen(self.resolution, self.mode, self.caption)
